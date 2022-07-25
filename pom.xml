@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.pacifista.api</groupId>
+    <artifactId>pacifista-api</artifactId>
+    <name>PacifistaAPI</name>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+
+    <!-- Version: https://github.com/FunixProductions/FunixAPI -->
+    <parent>
+        <artifactId>funix-api</artifactId>
+        <groupId>fr.funixgaming.api</groupId>
+        <version>1.0.8</version>
+    </parent>
+
+    <modules>
+        <module>PacifistaAPI-Client</module>
+        <module>PacifistaAPI-Service</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
+
+    <description>PacifistaAPI, Api used in the gameserver Pacifista Minecraft and used on website https://pacifista.fr</description>
+    <url>https://pacifista.fr</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Antoine PRONNIER</name>
+            <email>antoine.pronnier@gmail.com</email>
+            <organization>FunixProductions</organization>
+            <organizationUrl>https://funixgaming.fr</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/PacifistaMC/PacifistaAPI.git</connection>
+        <developerConnection>scm:git:ssh://github.com:PacifistaMC/PacifistaAPI.git</developerConnection>
+        <url>http://github.com/PacifistaMC/PacifistaAPI/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.funixgaming.api.client</groupId>
+            <artifactId>funix-api-client</artifactId>
+            <version>${funixgaming.api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+</project>
