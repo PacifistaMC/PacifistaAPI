@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mariadb:latest
+    container_name: pacifista_api_db
+    volumes:
+      - ./config/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - pacifista_api_db:/var/lib/mysql
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - pacifista_api_net
+    ports:
+      - "3307:3306"
+
+  mail:
+    image: maildev/maildev
+    container_name: pacifista_api_mail
+    restart: on-failure
+    networks:
+      - pacifista_api_net
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+
+  pacifista-api:
+    build:
+      context: ../../../
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+      - mail
+    container_name: pacifista_api
+    hostname: pacifista_api
+    restart: on-failure
+    networks:
+      - pacifista_api_net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "9010:9010"
+
+networks:
+  pacifista_api_net:
+    driver: bridge
+
+volumes:
+  pacifista_api_db:
