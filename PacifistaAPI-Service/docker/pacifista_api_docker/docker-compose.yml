@@ -40,8 +40,29 @@ services:
       - pacifista_api_net
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - API_USERNAME=${API_USERNAME}
+      - API_PASSWORD=${API_PASSWORD}
     ports:
       - "9010:9010"
+
+  funixapi:
+    build:
+      context: ./funix-api
+      dockerfile: Dockerfile
+      args:
+        FUNIX_API_VERSION: ${FUNIX_API_VERSION}
+    depends_on:
+      - mysql
+      - mail
+    container_name: funixapi
+    hostname: funixapi
+    restart: on-failure
+    networks:
+      - pacifista_api_net
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8585:8080"
 
 networks:
   pacifista_api_net:
