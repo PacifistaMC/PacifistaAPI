@@ -23,6 +23,12 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>3.0.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>fr.funixgaming.api.server</groupId>
+            <artifactId>funix-api-server</artifactId>
+            <version>${funixgaming.server.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
