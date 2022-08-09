@@ -52,9 +52,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             final String code = Integer.toString(e.status());
 
             if (code.startsWith("5")) {
-                throw new ApiException("Le serveur d'authentification est indosponible.", e);
+                throw new ApiException("Le serveur d'authentification est indisponible.", e);
             } else {
-                throw new BadCredentialsException("Vous n'avez pas le bon token d'authentification. Veuillez vous re-connecter.");
+                throw new BadCredentialsException("Vous n'avez pas le bon token d'authentification. Veuillez vous reconnecter.");
             }
         }
     }
