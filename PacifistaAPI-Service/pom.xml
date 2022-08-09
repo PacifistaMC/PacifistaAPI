@@ -17,11 +17,10 @@
     <version>1.0.0</version>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
         <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>3.0.6</version>
+            <groupId>fr.pacifista.api.client</groupId>
+            <artifactId>pacifista-api-client</artifactId>
+            <version>${pacifista.api.version}</version>
         </dependency>
 
         <dependency>
