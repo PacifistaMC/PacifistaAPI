@@ -1,4 +1,4 @@
-package fr.pacifista.api.service;
+package fr.pacifista.api.service.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
