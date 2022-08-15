@@ -29,4 +29,27 @@ public class BoxTests extends PacifistaServiceTest<BoxDTO> {
         assertNull(request.getUpdatedAt());
         assertNotNull(response.getId());
     }
+
+    @Test
+    public void testBoxPatch() throws Exception {
+        final BoxDTO request = new BoxDTO();
+        request.setBoxName("testBox");
+        request.setGameMode(ServerGameMode.SURVIVAL);
+
+        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        response.setBoxName("oui");
+
+        final BoxDTO responsePatched = super.sendPatchRequest(ROUTE, response, status().isOk());
+        assertEquals(response.getBoxName(), responsePatched.getBoxName());
+    }
+
+    @Test
+    public void testBoxDelete() throws Exception {
+        final BoxDTO request = new BoxDTO();
+        request.setBoxName("testBoxDelete");
+        request.setGameMode(ServerGameMode.SURVIVAL);
+
+        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        super.sendDeleteRequest(ROUTE + "?id=" + response.getId(), status().isOk());
+    }
 }

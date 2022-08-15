@@ -2,6 +2,7 @@ package fr.pacifista.api.service.boxes.services;
 
 import fr.funixgaming.api.core.crud.services.ApiService;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
+import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.modules.boxes.dtos.BoxRewardDTO;
 import fr.pacifista.api.service.boxes.entities.Box;
 import fr.pacifista.api.service.boxes.entities.BoxReward;
@@ -10,6 +11,7 @@ import fr.pacifista.api.service.boxes.repositories.BoxRepository;
 import fr.pacifista.api.service.boxes.repositories.BoxRewardRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,7 @@ public class BoxRewardService extends ApiService<BoxRewardDTO, BoxReward, BoxRew
     }
 
     @Override
+    @Transactional
     public BoxRewardDTO create(BoxRewardDTO request) {
         final Box box = findBoxByRequest(request);
         final BoxReward boxReward = super.getMapper().toEntity(request);
@@ -42,7 +45,7 @@ public class BoxRewardService extends ApiService<BoxRewardDTO, BoxReward, BoxRew
         if (search.isPresent()) {
             return search.get();
         } else {
-            throw new ApiBadRequestException("La box id n'existe pas.");
+            throw new ApiNotFoundException("La box id n'existe pas.");
         }
     }
 }

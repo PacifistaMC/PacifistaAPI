@@ -29,7 +29,7 @@ public class Box extends ApiEntity {
     /**
      * List of box rewards
      */
-    @OneToMany(mappedBy = "box")
+    @OneToMany(mappedBy = "box", orphanRemoval = true)
     private List<BoxReward> rewards;
 
 }
