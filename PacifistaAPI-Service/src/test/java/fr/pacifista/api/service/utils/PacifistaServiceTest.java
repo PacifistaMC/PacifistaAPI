@@ -3,9 +3,7 @@ package fr.pacifista.api.service.utils;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.google.common.reflect.TypeToken;
-import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.ServerSetupTest;
 import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.client.user.dtos.UserTokenDTO;
 import fr.funixgaming.api.client.user.enums.UserRole;
@@ -16,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,13 +34,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Getter
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import({
+        MailTestConfig.class,
+        WiremockTestServer.class
+})
 public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
+
     @Autowired
     private MockMvc mockMvc;
 
-    private final GreenMail greenMail = new GreenMail(ServerSetupTest.SMTP).withConfiguration(GreenMailConfiguration.aConfig().withDisabledAuthentication());
+    @Autowired
+    private GreenMail greenMail;
 
-    private final WireMockServer wireMockServer = new WireMockServer(6643);
+    @Autowired
+    private WireMockServer wireMockServer;
 
     @Autowired
     private JsonHelper jsonHelper;
@@ -50,8 +56,6 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
 
     public PacifistaServiceTest(Class<DTO> requestClass) {
         this.requestClass = requestClass;
-        this.greenMail.start();
-        this.wireMockServer.start();
     }
 
     /**
