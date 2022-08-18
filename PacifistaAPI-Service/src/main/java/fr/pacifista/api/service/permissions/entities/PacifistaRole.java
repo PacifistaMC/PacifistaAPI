@@ -32,4 +32,7 @@ public class PacifistaRole extends ApiEntity {
     @OneToMany(mappedBy = "role", orphanRemoval = true)
     private List<PacifistaPermission> permissions;
 
+    @OneToMany(mappedBy = "role", orphanRemoval = true)
+    private List<PacifistaRoleHeritage> heritages;
+
 }
