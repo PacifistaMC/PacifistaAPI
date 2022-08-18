@@ -18,7 +18,7 @@ public class PacifistaRoleHeritage extends ApiEntity {
     private PacifistaRole role;
 
     @ManyToOne
-    @JoinColumn(name = "role_heritage_id")
+    @JoinColumn(name = "role_heritage_id", nullable = false)
     private PacifistaRole heritage;
 
 }
