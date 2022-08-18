@@ -13,17 +13,12 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PlayerBoxTests extends PacifistaServiceTest<PlayerBoxDTO> {
+public class PlayerBoxTests extends PacifistaServiceTest {
 
     private static final String ROUTE = "/box/player";
 
     @Autowired
     private BoxService boxService;
-
-    @Autowired
-    public PlayerBoxTests() {
-        super(PlayerBoxDTO.class);
-    }
 
     @Test
     public void testCreationPlayerBox() throws Exception {
@@ -37,7 +32,7 @@ public class PlayerBoxTests extends PacifistaServiceTest<PlayerBoxDTO> {
         request.setPlayerUuid(UUID.randomUUID());
         request.setAmount(10);
 
-        final PlayerBoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final PlayerBoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), PlayerBoxDTO.class);
         assertEquals(request.getBox().getId(), response.getBox().getId());
         assertEquals(request.getPlayerUuid(), response.getPlayerUuid());
         assertEquals(request.getAmount(), response.getAmount());
@@ -55,10 +50,10 @@ public class PlayerBoxTests extends PacifistaServiceTest<PlayerBoxDTO> {
         request.setPlayerUuid(UUID.randomUUID());
         request.setAmount(10);
 
-        final PlayerBoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final PlayerBoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), PlayerBoxDTO.class);
         response.setAmount(11);
 
-        final PlayerBoxDTO responsePatched = super.sendPatchRequest(ROUTE, response, status().isOk());
+        final PlayerBoxDTO responsePatched = super.sendPatchRequest(ROUTE, response, status().isOk(), PlayerBoxDTO.class);
         assertEquals(response.getAmount(), responsePatched.getAmount());
     }
 }

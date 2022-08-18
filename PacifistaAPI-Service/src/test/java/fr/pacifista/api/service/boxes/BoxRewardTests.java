@@ -11,16 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class BoxRewardTests extends PacifistaServiceTest<BoxRewardDTO> {
+public class BoxRewardTests extends PacifistaServiceTest {
 
     private static final String ROUTE = "/box/rewards";
 
     @Autowired
     private BoxService boxService;
-
-    public BoxRewardTests() {
-        super(BoxRewardDTO.class);
-    }
 
     @Test
     public void testCreationReward() throws Exception {
@@ -34,7 +30,7 @@ public class BoxRewardTests extends PacifistaServiceTest<BoxRewardDTO> {
         request.setRarity(10.f);
         request.setItemSerialized("lkqdhlh");
 
-        final BoxRewardDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final BoxRewardDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxRewardDTO.class);
         assertEquals(request.getBoxId(), response.getBoxId());
         assertEquals(request.getRarity(), response.getRarity());
         assertEquals(request.getItemSerialized(), response.getItemSerialized());
@@ -55,14 +51,14 @@ public class BoxRewardTests extends PacifistaServiceTest<BoxRewardDTO> {
         request.setRarity(10.f);
         request.setItemSerialized("lkqdhlh");
 
-        final BoxRewardDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final BoxRewardDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxRewardDTO.class);
         response.setRarity(11.f);
 
-        final BoxRewardDTO response2 = super.sendPatchRequest(ROUTE, response, status().isOk());
+        final BoxRewardDTO response2 = super.sendPatchRequest(ROUTE, response, status().isOk(), BoxRewardDTO.class);
         assertEquals(response.getRarity(), response2.getRarity());
 
         response2.setItemSerialized("blavla");
-        final BoxRewardDTO response3 = super.sendPatchRequest(ROUTE, response2, status().isOk());
+        final BoxRewardDTO response3 = super.sendPatchRequest(ROUTE, response2, status().isOk(), BoxRewardDTO.class);
         assertEquals(response2.getItemSerialized(), response3.getItemSerialized());
     }
 }

@@ -8,13 +8,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class BoxTests extends PacifistaServiceTest<BoxDTO> {
+public class BoxTests extends PacifistaServiceTest {
 
     private static final String ROUTE = "/box";
-
-    public BoxTests() {
-        super(BoxDTO.class);
-    }
 
     @Test
     public void testBoxCreation() throws Exception {
@@ -22,7 +18,7 @@ public class BoxTests extends PacifistaServiceTest<BoxDTO> {
         request.setBoxName("testBox");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
-        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
         assertEquals(request.getBoxName(), response.getBoxName());
         assertEquals(request.getGameMode(), response.getGameMode());
         assertNotNull(response.getCreatedAt());
@@ -36,10 +32,10 @@ public class BoxTests extends PacifistaServiceTest<BoxDTO> {
         request.setBoxName("testBox");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
-        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
         response.setBoxName("oui");
 
-        final BoxDTO responsePatched = super.sendPatchRequest(ROUTE, response, status().isOk());
+        final BoxDTO responsePatched = super.sendPatchRequest(ROUTE, response, status().isOk(), BoxDTO.class);
         assertEquals(response.getBoxName(), responsePatched.getBoxName());
     }
 
@@ -49,7 +45,7 @@ public class BoxTests extends PacifistaServiceTest<BoxDTO> {
         request.setBoxName("testBoxDelete");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
-        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk());
+        final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
         super.sendDeleteRequest(ROUTE + "?id=" + response.getId(), status().isOk());
     }
 }

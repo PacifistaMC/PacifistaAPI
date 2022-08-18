@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
         MailTestConfig.class,
         WiremockTestServer.class
 })
-public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
+public abstract class PacifistaServiceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,12 +51,6 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
 
     @Autowired
     private JsonHelper jsonHelper;
-
-    private final Class<DTO> requestClass;
-
-    public PacifistaServiceTest(Class<DTO> requestClass) {
-        this.requestClass = requestClass;
-    }
 
     /**
      * Method used to mock the funix api server
@@ -93,16 +87,17 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
      * @return dto response
      * @throws Exception when error
      */
-    public DTO sendPostRequest(@NonNull final String route,
-                               @NonNull final ApiDTO body,
-                               @NonNull final ResultMatcher resultMatcher) throws Exception {
+    public <DTO extends ApiDTO> DTO sendPostRequest(@NonNull final String route,
+                                                    @NonNull final ApiDTO body,
+                                                    @NonNull final ResultMatcher resultMatcher,
+                                                    @NonNull Class<DTO> type) throws Exception {
         final MvcResult result = mockMvc.perform(post(route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer tokentest")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(body))
         ).andExpect(resultMatcher).andReturn();
 
-        return jsonHelper.fromJson(result.getResponse().getContentAsString(), requestClass);
+        return jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
     }
 
     /**
@@ -112,16 +107,17 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
      * @return dto response
      * @throws Exception when error
      */
-    public DTO sendPatchRequest(@NonNull final String route,
-                                @NonNull final ApiDTO body,
-                                @NonNull final ResultMatcher resultMatcher) throws Exception {
+    public <DTO extends ApiDTO> DTO sendPatchRequest(@NonNull final String route,
+                                                     @NonNull final ApiDTO body,
+                                                     @NonNull final ResultMatcher resultMatcher,
+                                                     @NonNull Class<DTO> type) throws Exception {
         final MvcResult result = mockMvc.perform(patch(route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer tokentest")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(body))
         ).andExpect(resultMatcher).andReturn();
 
-        return jsonHelper.fromJson(result.getResponse().getContentAsString(), requestClass);
+        return jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
     }
 
     /**
@@ -131,9 +127,9 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
      * @return dto response
      * @throws Exception when error
      */
-    public List<DTO> sendPatchRequestList(@NonNull final String route,
-                                @NonNull final ApiDTO body,
-                                @NonNull final ResultMatcher resultMatcher) throws Exception {
+    public <DTO extends ApiDTO> List<DTO> sendPatchRequestList(@NonNull final String route,
+                                                               @NonNull final ApiDTO body,
+                                                               @NonNull final ResultMatcher resultMatcher) throws Exception {
         final MvcResult result = mockMvc.perform(patch(route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer tokentest")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -150,13 +146,14 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
      * @return dto response
      * @throws Exception when error
      */
-    public DTO sendGetRequest(@NonNull final String route,
-                              @NonNull final ResultMatcher resultMatcher) throws Exception {
+    public <DTO extends ApiDTO> DTO sendGetRequest(@NonNull final String route,
+                                                   @NonNull final ResultMatcher resultMatcher,
+                                                   @NonNull Class<DTO> type) throws Exception {
         final MvcResult result = mockMvc.perform(get(route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer tokentest")
         ).andExpect(resultMatcher).andReturn();
 
-        return jsonHelper.fromJson(result.getResponse().getContentAsString(), requestClass);
+        return jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
     }
 
     /**
@@ -165,8 +162,8 @@ public abstract class PacifistaServiceTest<DTO extends ApiDTO> {
      * @return dto response
      * @throws Exception when error
      */
-    public List<DTO> sendGetRequestList(@NonNull final String route,
-                                    @NonNull final ResultMatcher resultMatcher) throws Exception {
+    public <DTO extends ApiDTO> List<DTO> sendGetRequestList(@NonNull final String route,
+                                                             @NonNull final ResultMatcher resultMatcher) throws Exception {
         final MvcResult result = mockMvc.perform(get(route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer tokentest")
         ).andExpect(resultMatcher).andReturn();
