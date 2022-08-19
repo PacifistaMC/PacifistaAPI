@@ -15,16 +15,12 @@ import java.util.UUID;
 @Entity(name = "pacifista_player_role")
 public class PacifistaPlayerRole extends ApiEntity {
 
-    @Column(name = "player_uuid", nullable = false, unique = true)
+    @Column(name = "player_uuid", nullable = false, updatable = false)
     private String playerUuid;
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "role_id")
     private PacifistaRole role;
-
-    @ManyToOne
-    @JoinColumn(name = "staff_role_id")
-    private PacifistaRole staffRole;
 
     public void setPlayerUuid(UUID playerUuid) {
         this.playerUuid = playerUuid.toString();

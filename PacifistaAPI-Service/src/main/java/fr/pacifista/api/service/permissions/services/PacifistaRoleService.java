@@ -49,7 +49,6 @@ public class PacifistaRoleService extends ApiService<PacifistaRoleDTO, Pacifista
             final PacifistaRole role = search.get();
 
             this.pacifistaPlayerRoleRepository.deleteAll(this.pacifistaPlayerRoleRepository.findPacifistaPlayerRolesByRole(role));
-            this.pacifistaPlayerRoleRepository.deleteAll(this.pacifistaPlayerRoleRepository.findPacifistaPlayerRolesByStaffRole(role));
             this.roleHeritageRepository.deleteAll(this.roleHeritageRepository.findAllByRole(role));
             this.roleHeritageRepository.deleteAll(this.roleHeritageRepository.findAllByHeritage(role));
             super.getRepository().delete(role);

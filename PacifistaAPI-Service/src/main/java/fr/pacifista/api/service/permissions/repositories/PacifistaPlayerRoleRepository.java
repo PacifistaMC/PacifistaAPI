@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface PacifistaPlayerRoleRepository extends ApiRepository<PacifistaPlayerRole> {
     List<PacifistaPlayerRole> findPacifistaPlayerRolesByRole(PacifistaRole role);
-    List<PacifistaPlayerRole> findPacifistaPlayerRolesByStaffRole(PacifistaRole role);
 }
