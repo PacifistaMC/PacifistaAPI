@@ -105,9 +105,6 @@ public class PacifistaPlayerRoleTests extends PacifistaServiceTest {
 
         final List<PacifistaPlayerRoleDTO> playerRoles = super.sendGetRequestList("/gameroles/player/roles?playerUuid=" + playerUuid, status().isOk());
         assertEquals(3, playerRoles.size());
-        assertEquals(role.getUuid(), playerRoles.get(0).getId());
-        assertEquals(role2.getUuid(), playerRoles.get(1).getId());
-        assertEquals(staffRole.getUuid(), playerRoles.get(2).getId());
     }
 
 }
