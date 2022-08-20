@@ -4,6 +4,7 @@ import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.modules.permissions.dtos.PacifistaPlayerRoleDTO;
 import fr.pacifista.api.client.modules.permissions.dtos.PacifistaRoleDTO;
+import fr.pacifista.api.service.permissions.entities.PacifistaPlayerRole;
 import fr.pacifista.api.service.permissions.entities.PacifistaRole;
 import fr.pacifista.api.service.permissions.services.PacifistaPlayerRoleService;
 import fr.pacifista.api.service.utils.PacifistaServiceTest;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class PacifistaPlayerRoleTests extends PacifistaServiceTest {
 
@@ -79,6 +81,33 @@ public class PacifistaPlayerRoleTests extends PacifistaServiceTest {
             fail();
         } catch (ApiBadRequestException ignored) {
         }
+    }
+
+    @Test
+    public void testGetMultipleUserRoles() throws Exception {
+        final UUID playerUuid = UUID.randomUUID();
+        final PacifistaRole role = this.permissionComponentTest.createNewRole(false);
+        final PacifistaRole role2 = this.permissionComponentTest.createNewRole(false);
+        final PacifistaRole staffRole = this.permissionComponentTest.createNewRole(true);
+
+        PacifistaPlayerRole playerRole = new PacifistaPlayerRole();
+        playerRole.setPlayerUuid(playerUuid);
+        playerRole.setRole(role);
+        playerRoleService.getRepository().save(playerRole);
+        playerRole = new PacifistaPlayerRole();
+        playerRole.setPlayerUuid(playerUuid);
+        playerRole.setRole(role2);
+        playerRoleService.getRepository().save(playerRole);
+        playerRole = new PacifistaPlayerRole();
+        playerRole.setPlayerUuid(playerUuid);
+        playerRole.setRole(staffRole);
+        playerRoleService.getRepository().save(playerRole);
+
+        final List<PacifistaPlayerRoleDTO> playerRoles = super.sendGetRequestList("/gameroles/player/roles?playerUuid=" + playerUuid, status().isOk());
+        assertEquals(3, playerRoles.size());
+        assertEquals(role.getUuid(), playerRoles.get(0).getId());
+        assertEquals(role2.getUuid(), playerRoles.get(1).getId());
+        assertEquals(staffRole.getUuid(), playerRoles.get(2).getId());
     }
 
 }

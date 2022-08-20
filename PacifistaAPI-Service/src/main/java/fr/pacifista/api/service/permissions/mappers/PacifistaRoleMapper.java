@@ -6,7 +6,6 @@ import fr.pacifista.api.service.permissions.entities.PacifistaRole;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = {
-        PacifistaRoleHeritageMapper.class,
         PacifistaPermissionMapper.class
 })
 public interface PacifistaRoleMapper extends ApiMapper<PacifistaRole, PacifistaRoleDTO> {

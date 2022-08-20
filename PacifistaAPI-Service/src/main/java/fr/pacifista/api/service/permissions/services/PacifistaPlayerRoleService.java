@@ -10,6 +10,7 @@ import fr.pacifista.api.service.permissions.repositories.PacifistaPlayerRoleRepo
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,5 +47,15 @@ public class PacifistaPlayerRoleService extends ApiService<PacifistaPlayerRoleDT
     @Override
     public List<PacifistaPlayerRoleDTO> update(List<PacifistaPlayerRoleDTO> request) {
         throw new ApiBadRequestException("Si vous voulez mettre à jour le rôle d'un joueur. Veuillez supprimer son rôle et lui en associer un autre.");
+    }
+
+    @Transactional
+    public List<PacifistaPlayerRoleDTO> getPlayerRoles(final String playerUuid) {
+        final List<PacifistaPlayerRoleDTO> toSend = new ArrayList<>();
+
+        for (final PacifistaPlayerRole role : getRepository().findPacifistaPlayerRolesByPlayerUuid(playerUuid)) {
+            toSend.add(getMapper().toDto(role));
+        }
+        return toSend;
     }
 }

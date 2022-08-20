@@ -3,8 +3,6 @@ package fr.pacifista.api.service.permissions;
 import fr.pacifista.api.service.permissions.entities.PacifistaPermission;
 import fr.pacifista.api.service.permissions.entities.PacifistaPlayerRole;
 import fr.pacifista.api.service.permissions.entities.PacifistaRole;
-import fr.pacifista.api.service.permissions.entities.PacifistaRoleHeritage;
-import fr.pacifista.api.service.permissions.repositories.PacifistaRoleHeritageRepository;
 import fr.pacifista.api.service.permissions.services.PacifistaPermissionService;
 import fr.pacifista.api.service.permissions.services.PacifistaPlayerRoleService;
 import fr.pacifista.api.service.permissions.services.PacifistaRoleService;
@@ -27,9 +25,6 @@ public class PacifistaPermissionComponentTest {
     @Autowired
     private PacifistaPlayerRoleService playerRoleService;
 
-    @Autowired
-    private PacifistaRoleHeritageRepository roleHeritageRepository;
-
     public PacifistaRole createNewRole(boolean staff) {
         final PacifistaRole role = new PacifistaRole();
 
@@ -44,7 +39,7 @@ public class PacifistaPermissionComponentTest {
     public PacifistaPermission createPermission(final PacifistaRole role) {
         final PacifistaPermission pacifistaPermission = new PacifistaPermission();
 
-        pacifistaPermission.setPermission("test.perm");
+        pacifistaPermission.setPermission("test.perm." + UUID.randomUUID());
         pacifistaPermission.setRole(role);
         return permissionService.getRepository().save(pacifistaPermission);
     }
@@ -55,14 +50,6 @@ public class PacifistaPermissionComponentTest {
         playerRole.setPlayerUuid(UUID.randomUUID());
         playerRole.setRole(role);
         return playerRoleService.getRepository().save(playerRole);
-    }
-
-    public PacifistaRoleHeritage createNewHeritage(final PacifistaRole role, final PacifistaRole heritage) {
-        final PacifistaRoleHeritage heritageEnt = new PacifistaRoleHeritage();
-
-        heritageEnt.setRole(role);
-        heritageEnt.setHeritage(heritage);
-        return roleHeritageRepository.save(heritageEnt);
     }
 
 }
