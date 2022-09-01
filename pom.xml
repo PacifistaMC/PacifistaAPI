@@ -68,13 +68,4 @@
         </repository>
     </distributionManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>fr.funixgaming.api.client</groupId>
-            <artifactId>funix-api-client</artifactId>
-            <version>${funixgaming.api.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-
 </project>
