@@ -1,7 +1,6 @@
 package fr.pacifista.api.service.sanctions.entities;
 
 import fr.funixgaming.api.core.crud.entities.ApiEntity;
-import fr.funixgaming.api.server.converters.EncryptionString;
 import fr.pacifista.api.client.modules.sanctions.enums.SanctionType;
 import lombok.Getter;
 import lombok.Setter;
