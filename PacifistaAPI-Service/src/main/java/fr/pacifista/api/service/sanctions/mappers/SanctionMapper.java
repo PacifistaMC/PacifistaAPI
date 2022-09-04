@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.sanctions.mappers;
 
 import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.modules.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
 import fr.pacifista.api.service.sanctions.entities.Sanction;
 import org.mapstruct.*;
 

@@ -2,8 +2,8 @@ package fr.pacifista.api.service.sanctions.services;
 
 import fr.funixgaming.api.core.crud.services.ApiService;
 import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.modules.sanctions.dtos.SanctionDTO;
-import fr.pacifista.api.client.modules.sanctions.enums.SanctionType;
+import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.sanctions.entities.Sanction;
 import fr.pacifista.api.service.sanctions.mappers.SanctionMapper;
 import fr.pacifista.api.service.sanctions.repositories.SanctionRepository;

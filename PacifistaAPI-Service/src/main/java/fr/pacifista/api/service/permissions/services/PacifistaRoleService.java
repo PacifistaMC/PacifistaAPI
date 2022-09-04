@@ -3,7 +3,7 @@ package fr.pacifista.api.service.permissions.services;
 import fr.funixgaming.api.core.crud.services.ApiService;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.modules.permissions.dtos.PacifistaRoleDTO;
+import fr.pacifista.api.client.permissions.dtos.PacifistaRoleDTO;
 import fr.pacifista.api.service.permissions.entities.PacifistaRole;
 import fr.pacifista.api.service.permissions.mappers.PacifistaRoleMapper;
 import fr.pacifista.api.service.permissions.repositories.PacifistaPlayerRoleRepository;

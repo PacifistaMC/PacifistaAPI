@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.players.players_sync.services;
 
 import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.pacifista.api.client.modules.players.players_sync.dtos.PlayerMoneyDataDTO;
+import fr.pacifista.api.client.players.players_sync.dtos.PlayerMoneyDataDTO;
 import fr.pacifista.api.service.players.players_sync.entities.PlayerMoneyData;
 import fr.pacifista.api.service.players.players_sync.mappers.PlayerMoneyDataMapper;
 import fr.pacifista.api.service.players.players_sync.repositories.PlayerMoneyDataRepository;

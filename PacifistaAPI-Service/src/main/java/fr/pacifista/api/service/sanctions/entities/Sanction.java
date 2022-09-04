@@ -1,7 +1,8 @@
 package fr.pacifista.api.service.sanctions.entities;
 
 import fr.funixgaming.api.core.crud.entities.ApiEntity;
-import fr.pacifista.api.client.modules.sanctions.enums.SanctionType;
+import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.core.converters.EncryptionString;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 /**
  * For documentation please see
- * {@link fr.pacifista.api.client.modules.sanctions.dtos.SanctionDTO SanctionDTO}
+ * {@link SanctionDTO SanctionDTO}
  */
 @Getter
 @Setter

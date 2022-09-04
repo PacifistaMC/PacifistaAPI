@@ -1,8 +1,8 @@
 package fr.pacifista.api.service.boxes;
 
-import fr.pacifista.api.client.enums.ServerGameMode;
-import fr.pacifista.api.client.modules.boxes.dtos.BoxDTO;
-import fr.pacifista.api.client.modules.boxes.dtos.BoxRewardDTO;
+import fr.pacifista.api.client.boxes.dtos.BoxDTO;
+import fr.pacifista.api.client.boxes.dtos.BoxRewardDTO;
+import fr.pacifista.api.client.core.enums.ServerGameMode;
 import fr.pacifista.api.service.boxes.services.BoxService;
 import fr.pacifista.api.service.utils.PacifistaServiceTest;
 import org.junit.jupiter.api.Test;

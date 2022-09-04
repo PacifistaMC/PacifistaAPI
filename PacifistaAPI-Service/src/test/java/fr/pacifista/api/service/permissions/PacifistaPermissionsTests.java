@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.permissions;
 
-import fr.pacifista.api.client.modules.permissions.dtos.PacifistaPermissionDTO;
+import fr.pacifista.api.client.permissions.dtos.PacifistaPermissionDTO;
 import fr.pacifista.api.service.permissions.entities.PacifistaRole;
 import fr.pacifista.api.service.utils.PacifistaServiceTest;
 import org.junit.jupiter.api.Test;

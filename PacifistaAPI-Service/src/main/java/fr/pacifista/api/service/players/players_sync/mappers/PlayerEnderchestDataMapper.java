@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.players.players_sync.mappers;
 
 import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.modules.players.players_sync.dtos.PlayerEnderchestDataDTO;
+import fr.pacifista.api.client.players.players_sync.dtos.PlayerEnderchestDataDTO;
 import fr.pacifista.api.service.players.players_sync.entities.PlayerEnderchestData;
 import org.mapstruct.*;
 

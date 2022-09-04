@@ -3,7 +3,7 @@ package fr.pacifista.api.service.boxes.services;
 import fr.funixgaming.api.core.crud.services.ApiService;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.modules.boxes.dtos.BoxRewardDTO;
+import fr.pacifista.api.client.boxes.dtos.BoxRewardDTO;
 import fr.pacifista.api.service.boxes.entities.Box;
 import fr.pacifista.api.service.boxes.entities.BoxReward;
 import fr.pacifista.api.service.boxes.mappers.BoxRewardMapper;

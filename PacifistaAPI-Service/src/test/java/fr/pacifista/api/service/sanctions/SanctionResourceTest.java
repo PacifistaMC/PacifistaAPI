@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.sanctions;
 
-import fr.pacifista.api.client.modules.sanctions.dtos.SanctionDTO;
-import fr.pacifista.api.client.modules.sanctions.enums.SanctionType;
+import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.sanctions.services.SanctionService;
 import fr.pacifista.api.service.utils.PacifistaServiceTest;
 import lombok.NonNull;
