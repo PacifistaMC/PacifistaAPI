@@ -9,9 +9,9 @@ import fr.pacifista.api.service.boxes.entities.PlayerBox;
 import fr.pacifista.api.service.boxes.mappers.PlayerBoxMapper;
 import fr.pacifista.api.service.boxes.repositories.BoxRepository;
 import fr.pacifista.api.service.boxes.repositories.PlayerBoxRepository;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -27,13 +27,11 @@ public class PlayerBoxService extends ApiService<PlayerBoxDTO, PlayerBox, Player
     }
 
     @Override
-    @Transactional
-    public PlayerBoxDTO create(PlayerBoxDTO request) {
-        final Box box = findBoxByRequest(request);
-        final PlayerBox playerBox = super.getMapper().toEntity(request);
-
-        playerBox.setBox(box);
-        return super.getMapper().toDto(super.getRepository().save(playerBox));
+    public void beforeSavingEntity(@NonNull PlayerBoxDTO request, @NonNull PlayerBox entity) {
+        if (request.getId() == null) {
+            final Box box = findBoxByRequest(request);
+            entity.setBox(box);
+        }
     }
 
     private Box findBoxByRequest(final PlayerBoxDTO request) {

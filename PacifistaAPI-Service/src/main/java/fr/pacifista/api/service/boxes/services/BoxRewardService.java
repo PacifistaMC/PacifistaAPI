@@ -9,9 +9,9 @@ import fr.pacifista.api.service.boxes.entities.BoxReward;
 import fr.pacifista.api.service.boxes.mappers.BoxRewardMapper;
 import fr.pacifista.api.service.boxes.repositories.BoxRepository;
 import fr.pacifista.api.service.boxes.repositories.BoxRewardRepository;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -27,13 +27,11 @@ public class BoxRewardService extends ApiService<BoxRewardDTO, BoxReward, BoxRew
     }
 
     @Override
-    @Transactional
-    public BoxRewardDTO create(BoxRewardDTO request) {
-        final Box box = findBoxByRequest(request);
-        final BoxReward boxReward = super.getMapper().toEntity(request);
-
-        boxReward.setBox(box);
-        return super.getMapper().toDto(super.getRepository().save(boxReward));
+    public void beforeSavingEntity(@NonNull BoxRewardDTO request, @NonNull BoxReward entity) {
+        if (request.getId() == null) {
+            final Box box = findBoxByRequest(request);
+            entity.setBox(box);
+        }
     }
 
     private Box findBoxByRequest(final BoxRewardDTO request) {

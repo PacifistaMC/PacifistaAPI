@@ -1,15 +1,16 @@
 package fr.pacifista.api.service.boxes.services;
 
 import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.boxes.dtos.BoxDTO;
 import fr.pacifista.api.service.boxes.entities.Box;
+import fr.pacifista.api.service.boxes.entities.PlayerBox;
 import fr.pacifista.api.service.boxes.mappers.BoxMapper;
 import fr.pacifista.api.service.boxes.repositories.BoxRepository;
 import fr.pacifista.api.service.boxes.repositories.PlayerBoxRepository;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class BoxService extends ApiService<BoxDTO, Box, BoxMapper, BoxRepository> {
@@ -24,29 +25,9 @@ public class BoxService extends ApiService<BoxDTO, Box, BoxMapper, BoxRepository
     }
 
     @Override
-    public void delete(String id) {
-        playerBoxRepository.deleteAll(playerBoxRepository.findAllByBox(findBoxById(id)));
-
-        super.delete(id);
-    }
-
-    @Override
-    public void delete(String... ids) {
-        for (final String id : ids) {
-            playerBoxRepository.deleteAll(playerBoxRepository.findAllByBox(findBoxById(id)));
-        }
-
-        super.delete(ids);
-    }
-
-    private Box findBoxById(String id) {
-        final Optional<Box> search = super.getRepository().findByUuid(id);
-
-        if (search.isPresent()) {
-            return search.get();
-        } else {
-            throw new ApiNotFoundException(String.format("La box id %s n'existe pas.", id));
-        }
+    public void beforeDeletingEntity(@NonNull Box entity) {
+        final List<PlayerBox> playerBoxes = playerBoxRepository.findAllByBox(entity);
+        playerBoxRepository.deleteAll(playerBoxes);
     }
 
 }

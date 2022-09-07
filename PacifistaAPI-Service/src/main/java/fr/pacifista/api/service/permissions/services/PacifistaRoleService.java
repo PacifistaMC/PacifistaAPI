@@ -4,13 +4,15 @@ import fr.funixgaming.api.core.crud.services.ApiService;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.permissions.dtos.PacifistaRoleDTO;
+import fr.pacifista.api.service.permissions.entities.PacifistaPlayerRole;
 import fr.pacifista.api.service.permissions.entities.PacifistaRole;
 import fr.pacifista.api.service.permissions.mappers.PacifistaRoleMapper;
 import fr.pacifista.api.service.permissions.repositories.PacifistaPlayerRoleRepository;
 import fr.pacifista.api.service.permissions.repositories.PacifistaRoleRepository;
-import org.apache.logging.log4j.util.Strings;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,27 +29,9 @@ public class PacifistaRoleService extends ApiService<PacifistaRoleDTO, Pacifista
     }
 
     @Override
-    public void delete(String id) {
-        if (Strings.isEmpty(id)) {
-            throw new ApiBadRequestException("Pas d'id spécifié pour la suppresion d'un role");
-        }
-
-        final Optional<PacifistaRole> search = super.getRepository().findByUuid(id);
-        if (search.isPresent()) {
-            final PacifistaRole role = search.get();
-
-            this.pacifistaPlayerRoleRepository.deleteAll(this.pacifistaPlayerRoleRepository.findPacifistaPlayerRolesByRole(role));
-            super.getRepository().delete(role);
-        } else {
-            throw new ApiNotFoundException(String.format("Le role id %s n'existe pas.", id));
-        }
-    }
-
-    @Override
-    public void delete(String... ids) {
-        for (String id : ids) {
-            delete(id);
-        }
+    public void beforeDeletingEntity(@NonNull PacifistaRole role) {
+        final List<PacifistaPlayerRole> playerRoles = pacifistaPlayerRoleRepository.findPacifistaPlayerRolesByRole(role);
+        pacifistaPlayerRoleRepository.deleteAll(playerRoles);
     }
 
     protected PacifistaRole findRole(final UUID roleUuid) {

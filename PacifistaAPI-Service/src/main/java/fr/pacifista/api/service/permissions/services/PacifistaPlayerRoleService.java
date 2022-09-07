@@ -7,6 +7,8 @@ import fr.pacifista.api.service.permissions.entities.PacifistaPlayerRole;
 import fr.pacifista.api.service.permissions.entities.PacifistaRole;
 import fr.pacifista.api.service.permissions.mappers.PacifistaPlayerRoleMapper;
 import fr.pacifista.api.service.permissions.repositories.PacifistaPlayerRoleRepository;
+import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,19 +28,14 @@ public class PacifistaPlayerRoleService extends ApiService<PacifistaPlayerRoleDT
     }
 
     @Override
-    @Transactional
-    public PacifistaPlayerRoleDTO create(PacifistaPlayerRoleDTO request) {
-        if (request.getRole() == null || request.getRole().getId() == null) {
-            throw new ApiBadRequestException("Le role ID est manquant.");
+    public void beforeSavingEntity(@NonNull PacifistaPlayerRoleDTO request, @NonNull PacifistaPlayerRole entity) {
+        if (request.getId() == null) {
+            final PacifistaRole role = roleService.findRole(request.getRole());
+            entity.setRole(role);
         }
-
-        final PacifistaRole role = roleService.findRole(request.getRole());
-        final PacifistaPlayerRole playerRole = getMapper().toEntity(request);
-
-        playerRole.setRole(role);
-        return getMapper().toDto(getRepository().save(playerRole));
     }
 
+    @NotNull
     @Override
     public PacifistaPlayerRoleDTO update(PacifistaPlayerRoleDTO request) {
         throw new ApiBadRequestException("Si vous voulez mettre à jour le rôle d'un joueur. Veuillez supprimer son rôle et lui en associer un autre.");
