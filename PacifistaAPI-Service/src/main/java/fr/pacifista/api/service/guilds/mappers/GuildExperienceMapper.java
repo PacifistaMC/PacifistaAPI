@@ -19,6 +19,7 @@ public interface GuildExperienceMapper extends ApiMapper<GuildExperience, GuildE
     GuildExperienceDTO toDto(GuildExperience entity);
 
     @Override
+    @Mapping(target = "guild", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void patch(GuildExperience request, @MappingTarget GuildExperience toPatch);
 }
