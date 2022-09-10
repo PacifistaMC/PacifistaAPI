@@ -18,11 +18,11 @@ public class Warp extends Location {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, name = "warp_item", length = 10000)
+    @Column(nullable = false, name = "warp_item")
     private String warpItem;
 
     @Column(nullable = false)
-    private Boolean accessible;
+    private Boolean publicAccess = true;
 
     @Column(nullable = false, name = "player_owner_uuid")
     private String playerOwnerUuid;

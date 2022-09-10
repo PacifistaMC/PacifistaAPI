@@ -23,10 +23,10 @@ public class PlayerInventoryData extends ApiEntity {
     @Column(name = "game_mode", nullable = false)
     private ServerGameMode gameMode;
 
-    @Column(nullable = false, length = 8000)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String inventory;
 
-    @Column(nullable = false, length = 8000)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String armor;
 
     public UUID getPlayerOwnerUuid() {

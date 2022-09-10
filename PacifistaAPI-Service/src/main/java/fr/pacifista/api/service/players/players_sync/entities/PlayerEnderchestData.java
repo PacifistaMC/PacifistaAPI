@@ -23,19 +23,19 @@ public class PlayerEnderchestData extends ApiEntity {
     @Column(name = "game_mode", nullable = false)
     private ServerGameMode gameMode;
 
-    @Column(name = "enderchest_serialized", nullable = false, length = 8000)
+    @Column(name = "enderchest_serialized", nullable = false, columnDefinition = "LONGTEXT")
     private String enderchestSerialized;
 
-    @Column(name = "enderchest_paladin_serialized", nullable = false, length = 8000)
+    @Column(name = "enderchest_paladin_serialized", nullable = false, columnDefinition = "LONGTEXT")
     private String enderchestPaladinSerialized;
 
-    @Column(name = "enderchest_elite_serialized", nullable = false, length = 8000)
+    @Column(name = "enderchest_elite_serialized", nullable = false, columnDefinition = "LONGTEXT")
     private String enderchestEliteSerialized;
 
-    @Column(name = "enderchest_legendaire_serialized", nullable = false, length = 8000)
+    @Column(name = "enderchest_legendaire_serialized", nullable = false, columnDefinition = "LONGTEXT")
     private String enderchestLegendaireSerialized;
 
-    @Column(name = "enderchest_mine_serialized", nullable = false, length = 8000)
+    @Column(name = "enderchest_mine_serialized", nullable = false, columnDefinition = "LONGTEXT")
     private String enderchestMineSerialized;
 
     public UUID getPlayerOwnerUuid() {

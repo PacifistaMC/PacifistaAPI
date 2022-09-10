@@ -18,7 +18,7 @@ public class BoxReward extends ApiEntity {
     @JoinColumn(name = "box_id", nullable = false)
     private Box box;
 
-    @Column(name = "item_serialized", nullable = false, length = 2500)
+    @Column(name = "item_serialized", nullable = false, columnDefinition = "LONGTEXT")
     private String itemSerialized;
 
     @Column(nullable = false)

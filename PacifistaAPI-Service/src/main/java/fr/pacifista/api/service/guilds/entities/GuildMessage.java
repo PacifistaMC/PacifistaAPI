@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "pacifista_guilds_invitations")
+@Entity(name = "pacifista_guilds_messages")
 public class GuildMessage extends ApiEntity {
 
     @ManyToOne

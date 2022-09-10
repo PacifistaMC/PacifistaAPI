@@ -8,7 +8,6 @@ services:
     volumes:
       - ./config/init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - pacifista_api_db:/var/lib/mysql
-    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: root
     networks:
@@ -19,12 +18,11 @@ services:
   mail:
     image: maildev/maildev
     container_name: pacifista_api_mail
-    restart: on-failure
     networks:
       - pacifista_api_net
     ports:
-      - "1080:1080"
-      - "1025:1025"
+      - "1081:1080"
+      - "1026:1025"
 
   pacifista-api:
     build:
@@ -35,7 +33,6 @@ services:
       - mail
     container_name: pacifista_api
     hostname: pacifista_api
-    restart: on-failure
     networks:
       - pacifista_api_net
     environment:
@@ -56,7 +53,6 @@ services:
       - mail
     container_name: funixapi
     hostname: funixapi
-    restart: on-failure
     networks:
       - pacifista_api_net
     environment:
