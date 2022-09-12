@@ -13,4 +13,14 @@ public class PlayerBoxResource extends ApiResource<PlayerBoxDTO, PlayerBoxServic
     public PlayerBoxResource(PlayerBoxService playerBoxService) {
         super(playerBoxService);
     }
+
+    @Override
+    public void give(PlayerBoxDTO request) {
+        getService().give(request);
+    }
+
+    @Override
+    public void take(PlayerBoxDTO request) {
+        getService().take(request);
+    }
 }

@@ -34,6 +34,36 @@ public class PlayerBoxService extends ApiService<PlayerBoxDTO, PlayerBox, Player
         }
     }
 
+    public void give(final PlayerBoxDTO request) {
+        final Box box = findBoxByRequest(request);
+        final Optional<PlayerBox> search = getRepository().findPlayerBoxByBoxAndPlayerUuid(box, request.getPlayerUuid().toString());
+
+        if (search.isPresent()) {
+            final PlayerBox playerBox = search.get();
+
+            playerBox.setAmount(playerBox.getAmount() + request.getAmount());
+            getRepository().save(playerBox);
+        } else {
+            super.create(request);
+        }
+    }
+
+    public void take(final PlayerBoxDTO request) {
+        final Box box = findBoxByRequest(request);
+        final Optional<PlayerBox> search = getRepository().findPlayerBoxByBoxAndPlayerUuid(box, request.getPlayerUuid().toString());
+
+        if (search.isPresent()) {
+            final PlayerBox playerBox = search.get();
+
+            if (playerBox.getAmount() <= request.getAmount()) {
+                getRepository().delete(playerBox);
+            } else {
+                playerBox.setAmount(playerBox.getAmount() - request.getAmount());
+                getRepository().save(playerBox);
+            }
+        }
+    }
+
     private Box findBoxByRequest(final PlayerBoxDTO request) {
         if (request.getBox().getId() == null) {
             throw new ApiBadRequestException("Il manque l'id de la box.");
