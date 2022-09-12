@@ -1,11 +1,13 @@
 create table pacifista_box
 (
-    id         bigint auto_increment primary key,
-    created_at datetime(6)  not null,
-    updated_at datetime(6)  null,
-    uuid       varchar(255) not null,
-    box_name   varchar(255) not null,
-    game_mode  varchar(255) not null,
+    id               bigint auto_increment primary key,
+    created_at       datetime(6)  not null,
+    updated_at       datetime(6)  null,
+    uuid             varchar(255) not null,
+    box_name         varchar(255) not null,
+    box_display_name varchar(255) not null,
+    box_description  varchar(500) not null,
+    game_mode        varchar(255) not null,
     constraint UK_box_name unique (box_name),
     constraint UK_box_public_id unique (uuid)
 );

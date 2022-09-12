@@ -20,6 +20,18 @@ public class Box extends ApiEntity {
     private String boxName;
 
     /**
+     * Display name of the box ingame
+     */
+    @Column(name = "box_display_name", nullable = false)
+    private String boxDisplayName;
+
+    /**
+     * Description of the box
+     */
+    @Column(name = "box_description", nullable = false, length = 500)
+    private String boxDescription;
+
+    /**
      * Game mode where the box is available
      */
     @Enumerated(value = EnumType.STRING)
