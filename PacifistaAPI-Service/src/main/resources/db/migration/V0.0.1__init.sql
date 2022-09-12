@@ -120,6 +120,21 @@ create table pacifista_guilds_messages
     constraint link_key_guild_id_message foreign key (guild_id) references pacifista_guilds (id)
 );
 
+create table pacifista_role
+(
+    id                bigint auto_increment primary key,
+    created_at        datetime(6)  not null,
+    updated_at        datetime(6)  null,
+    uuid              varchar(255) not null,
+    name              varchar(255) not null,
+    player_name_color varchar(255) not null,
+    power             varchar(255) not null,
+    prefix            varchar(255) not null,
+    staff_rank        bit          not null,
+    constraint UK_role_public_id unique (uuid),
+    constraint UK_name_role_unique unique (name)
+);
+
 create table pacifista_permission
 (
     id         bigint auto_increment primary key,
@@ -142,21 +157,6 @@ create table pacifista_player_role
     role_id     bigint       not null,
     constraint UK_player_role_public_id unique (uuid),
     constraint link_key_role_id_player_role foreign key (role_id) references pacifista_role (id)
-);
-
-create table pacifista_role
-(
-    id                bigint auto_increment primary key,
-    created_at        datetime(6)  not null,
-    updated_at        datetime(6)  null,
-    uuid              varchar(255) not null,
-    name              varchar(255) not null,
-    player_name_color varchar(255) not null,
-    power             varchar(255) not null,
-    prefix            varchar(255) not null,
-    staff_rank        bit          not null,
-    constraint UK_role_public_id unique (uuid),
-    constraint UK_name_role_unique unique (name)
 );
 
 create table pacifista_player_enderchest_data
