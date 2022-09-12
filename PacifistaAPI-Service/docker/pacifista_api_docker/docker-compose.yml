@@ -35,6 +35,7 @@ services:
     hostname: pacifista_api
     networks:
       - pacifista_api_net
+      - pacifista_global_net
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - API_USERNAME=${API_USERNAME}
@@ -55,6 +56,7 @@ services:
     hostname: funixapi
     networks:
       - pacifista_api_net
+      - pacifista_global_net
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
@@ -63,6 +65,10 @@ services:
 networks:
   pacifista_api_net:
     driver: bridge
+
+  pacifista_global_net:
+    external:
+      name: pacifista_net
 
 volumes:
   pacifista_api_db:
