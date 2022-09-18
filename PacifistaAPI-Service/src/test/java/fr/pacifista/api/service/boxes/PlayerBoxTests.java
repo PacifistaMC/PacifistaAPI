@@ -24,6 +24,8 @@ public class PlayerBoxTests extends PacifistaServiceTest {
     public void testCreationPlayerBox() throws Exception {
         BoxDTO box = new BoxDTO();
         box.setBoxName("testPlayerBox");
+        box.setBoxDescription("desc");
+        box.setBoxDisplayName("display");
         box.setGameMode(ServerGameMode.SURVIVAL);
         box = this.boxService.create(box);
 
@@ -42,6 +44,8 @@ public class PlayerBoxTests extends PacifistaServiceTest {
     public void testPatchPlayerBox() throws Exception {
         BoxDTO box = new BoxDTO();
         box.setBoxName("testPlayerBox2");
+        box.setBoxDescription("desc");
+        box.setBoxDisplayName("display");
         box.setGameMode(ServerGameMode.SURVIVAL);
         box = this.boxService.create(box);
 

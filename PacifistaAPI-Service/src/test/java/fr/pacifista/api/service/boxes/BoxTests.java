@@ -16,11 +16,15 @@ public class BoxTests extends PacifistaServiceTest {
     public void testBoxCreation() throws Exception {
         final BoxDTO request = new BoxDTO();
         request.setBoxName("testBox");
+        request.setBoxDescription("desc");
+        request.setBoxDisplayName("display");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
         final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
         assertEquals(request.getBoxName(), response.getBoxName());
         assertEquals(request.getGameMode(), response.getGameMode());
+        assertEquals(request.getBoxDescription(), response.getBoxDescription());
+        assertEquals(request.getBoxDisplayName(), response.getBoxDisplayName());
         assertNotNull(response.getCreatedAt());
         assertNull(request.getUpdatedAt());
         assertNotNull(response.getId());
@@ -30,6 +34,8 @@ public class BoxTests extends PacifistaServiceTest {
     public void testBoxPatch() throws Exception {
         final BoxDTO request = new BoxDTO();
         request.setBoxName("testBox");
+        request.setBoxDescription("description");
+        request.setBoxDisplayName("display");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
         final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
@@ -43,6 +49,8 @@ public class BoxTests extends PacifistaServiceTest {
     public void testBoxDelete() throws Exception {
         final BoxDTO request = new BoxDTO();
         request.setBoxName("testBoxDelete");
+        request.setBoxDescription("description");
+        request.setBoxDisplayName("display");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
         final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
