@@ -21,7 +21,7 @@ services:
       context: ../../../
       dockerfile: Dockerfile
     depends_on:
-      - mysql
+      - mysql-pacifista
     container_name: pacifista_api
     hostname: pacifista-api
     environment:
