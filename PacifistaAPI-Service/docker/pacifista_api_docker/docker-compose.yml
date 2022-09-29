@@ -3,7 +3,7 @@ version: "3.9"
 
 services:
 
-  mysql:
+  mysql-pacifista:
     image: mariadb:latest
     container_name: pacifista_api_db
     volumes:
