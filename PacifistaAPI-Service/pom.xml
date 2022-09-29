@@ -16,6 +16,22 @@
     <name>PacifistaAPI-Service</name>
     <version>1.0.0</version>
 
+    <repositories>
+        <repository>
+            <id>funixprod-mvn-repository-private</id>
+            <name>FunixProductions Maven Repository</name>
+            <url>https://maven.funixgaming.fr/private</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>funixprod-mvn-repository</id>
+            <name>FunixProductions Maven Repository</name>
+            <url>https://maven.funixgaming.fr/private</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>fr.pacifista.api.client</groupId>
@@ -27,6 +43,14 @@
             <groupId>fr.funixgaming.api.server</groupId>
             <artifactId>funix-api-server</artifactId>
             <version>${funixgaming.server.version}</version>
+        </dependency>
+
+        <!-- Used to mock some clients https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock -->
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>${wiremock.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

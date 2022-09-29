@@ -14,7 +14,7 @@
     <parent>
         <artifactId>funix-api</artifactId>
         <groupId>fr.funixgaming.api</groupId>
-        <version>1.1.3</version>
+        <version>1.1.5</version>
     </parent>
 
     <modules>
@@ -28,6 +28,9 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock -->
+        <wiremock.version>2.27.2</wiremock.version>
 
         <pacifista.api.version>1.0.0</pacifista.api.version>
     </properties>
@@ -56,16 +59,5 @@
         <developerConnection>scm:git:ssh://github.com:PacifistaMC/PacifistaAPI.git</developerConnection>
         <url>http://github.com/PacifistaMC/PacifistaAPI/tree/master</url>
     </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
 </project>

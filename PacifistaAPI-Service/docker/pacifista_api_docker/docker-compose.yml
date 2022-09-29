@@ -1,4 +1,5 @@
-version: '3'
+#Depedency for the API, need to start docker-compose of the FunixAPI
+version: "3.9"
 
 services:
 
@@ -10,32 +11,19 @@ services:
       - pacifista_api_db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - pacifista_api_net
+    hostname: mysql-pacifista
     ports:
       - "3307:3306"
 
-  mail:
-    image: maildev/maildev
-    container_name: pacifista_api_mail
-    networks:
-      - pacifista_api_net
-    ports:
-      - "1081:1080"
-      - "1026:1025"
-
+  #Needs the FunixAPI docker instance
   pacifista-api:
     build:
       context: ../../../
       dockerfile: Dockerfile
     depends_on:
       - mysql
-      - mail
     container_name: pacifista_api
     hostname: pacifista_api
-    networks:
-      - pacifista_api_net
-      - pacifista_global_net
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - API_USERNAME=${API_USERNAME}
@@ -43,32 +31,11 @@ services:
     ports:
       - "9010:9010"
 
-  funixapi:
-    build:
-      context: ./funix-api
-      dockerfile: Dockerfile
-      args:
-        FUNIX_API_VERSION: ${FUNIX_API_VERSION}
-    depends_on:
-      - mysql
-      - mail
-    container_name: funixapi
-    hostname: funixapi
-    networks:
-      - pacifista_api_net
-      - pacifista_global_net
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    ports:
-      - "8585:8080"
-
+#Don't forget to create network in docker : docker network create funixprod_net_local
 networks:
-  pacifista_api_net:
-    driver: bridge
-
-  pacifista_global_net:
-    external:
-      name: pacifista_net
+  default:
+    name: funixprod_net_local
+    external: true
 
 volumes:
   pacifista_api_db:
