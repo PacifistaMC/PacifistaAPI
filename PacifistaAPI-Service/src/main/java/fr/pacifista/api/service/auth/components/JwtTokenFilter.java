@@ -40,10 +40,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String token = header.split(" ")[1].trim();
-
         try {
-            final UserDTO userDTO = authClient.current(token);
+            final UserDTO userDTO = authClient.current(header);
             final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDTO, null, getAuthoritiesFromUser(userDTO));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
