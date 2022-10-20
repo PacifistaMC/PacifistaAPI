@@ -14,7 +14,7 @@
     <parent>
         <artifactId>funix-api</artifactId>
         <groupId>fr.funixgaming.api</groupId>
-        <version>1.1.5</version>
+        <version>1.1.6</version>
     </parent>
 
     <modules>
@@ -28,9 +28,6 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock -->
-        <wiremock.version>2.27.2</wiremock.version>
 
         <pacifista.api.version>1.0.0</pacifista.api.version>
     </properties>

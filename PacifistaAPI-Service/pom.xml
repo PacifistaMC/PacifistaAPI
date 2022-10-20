@@ -44,14 +44,6 @@
             <artifactId>funix-api-server</artifactId>
             <version>${funixgaming.server.version}</version>
         </dependency>
-
-        <!-- Used to mock some clients https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock -->
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock</artifactId>
-            <version>${wiremock.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
