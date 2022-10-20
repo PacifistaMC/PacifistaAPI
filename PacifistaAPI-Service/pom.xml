@@ -16,22 +16,6 @@
     <name>PacifistaAPI-Service</name>
     <version>1.0.0</version>
 
-    <repositories>
-        <repository>
-            <id>funixprod-mvn-repository-private</id>
-            <name>FunixProductions Maven Repository</name>
-            <url>https://maven.funixgaming.fr/private</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>funixprod-mvn-repository</id>
-            <name>FunixProductions Maven Repository</name>
-            <url>https://maven.funixgaming.fr/private</url>
-        </repository>
-    </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>fr.pacifista.api.client</groupId>
