@@ -7,6 +7,7 @@ create table pacifista_box
     box_name         varchar(255) not null,
     box_display_name varchar(255) not null,
     box_description  varchar(500) not null,
+    drop_amount      int          not null,
     game_mode        varchar(255) not null,
     constraint UK_box_name unique (box_name),
     constraint UK_box_public_id unique (uuid)

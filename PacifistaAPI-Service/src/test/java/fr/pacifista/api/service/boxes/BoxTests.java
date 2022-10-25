@@ -17,6 +17,7 @@ public class BoxTests extends PacifistaServiceTest {
         final BoxDTO request = new BoxDTO();
         request.setBoxName("testBox");
         request.setBoxDescription("desc");
+        request.setDropAmount(10);
         request.setBoxDisplayName("display");
         request.setGameMode(ServerGameMode.SURVIVAL);
 
@@ -25,6 +26,7 @@ public class BoxTests extends PacifistaServiceTest {
         assertEquals(request.getGameMode(), response.getGameMode());
         assertEquals(request.getBoxDescription(), response.getBoxDescription());
         assertEquals(request.getBoxDisplayName(), response.getBoxDisplayName());
+        assertEquals(request.getDropAmount(), response.getDropAmount());
         assertNotNull(response.getCreatedAt());
         assertNull(request.getUpdatedAt());
         assertNotNull(response.getId());

@@ -32,6 +32,12 @@ public class Box extends ApiEntity {
     private String boxDescription;
 
     /**
+     * Numbers of items this box can drop
+     */
+    @Column(name = "drop_amount", nullable = false)
+    private Integer dropAmount;
+
+    /**
      * Game mode where the box is available
      */
     @Enumerated(value = EnumType.STRING)
