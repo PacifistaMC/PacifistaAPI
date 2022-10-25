@@ -38,6 +38,7 @@ public class BoxTests extends PacifistaServiceTest {
         request.setBoxName("testBox");
         request.setBoxDescription("description");
         request.setBoxDisplayName("display");
+        request.setDropAmount(10);
         request.setGameMode(ServerGameMode.SURVIVAL);
 
         final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);
@@ -53,6 +54,7 @@ public class BoxTests extends PacifistaServiceTest {
         request.setBoxName("testBoxDelete");
         request.setBoxDescription("description");
         request.setBoxDisplayName("display");
+        request.setDropAmount(10);
         request.setGameMode(ServerGameMode.SURVIVAL);
 
         final BoxDTO response = super.sendPostRequest(ROUTE, request, status().isOk(), BoxDTO.class);

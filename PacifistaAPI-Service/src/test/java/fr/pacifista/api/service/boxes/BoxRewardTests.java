@@ -24,6 +24,7 @@ public class BoxRewardTests extends PacifistaServiceTest {
         box.setBoxName("testBoxReward");
         box.setBoxDescription("desc");
         box.setBoxDisplayName("display");
+        box.setDropAmount(10);
         box.setGameMode(ServerGameMode.SURVIVAL);
         box = this.boxService.create(box);
 
@@ -46,6 +47,7 @@ public class BoxRewardTests extends PacifistaServiceTest {
         BoxDTO box = new BoxDTO();
         box.setBoxName("testBoxReward2");
         box.setBoxDescription("desc");
+        box.setDropAmount(10);
         box.setBoxDisplayName("display");
         box.setGameMode(ServerGameMode.SURVIVAL);
         box = this.boxService.create(box);
