@@ -1,43 +1,29 @@
-version: '3'
+#Depedency for the API, need to start docker-compose of the FunixAPI
+version: "3.9"
 
 services:
 
-  mysql:
+  mysql-pacifista:
     image: mariadb:latest
     container_name: pacifista_api_db
     volumes:
       - ./config/init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - pacifista_api_db:/var/lib/mysql
-    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - pacifista_api_net
+    hostname: mysql-pacifista
     ports:
       - "3307:3306"
 
-  mail:
-    image: maildev/maildev
-    container_name: pacifista_api_mail
-    restart: on-failure
-    networks:
-      - pacifista_api_net
-    ports:
-      - "1080:1080"
-      - "1025:1025"
-
+  #Needs the FunixAPI docker instance
   pacifista-api:
     build:
       context: ../../../
       dockerfile: Dockerfile
     depends_on:
-      - mysql
-      - mail
+      - mysql-pacifista
     container_name: pacifista_api
-    hostname: pacifista_api
-    restart: on-failure
-    networks:
-      - pacifista_api_net
+    hostname: pacifista-api
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - API_USERNAME=${API_USERNAME}
@@ -45,28 +31,11 @@ services:
     ports:
       - "9010:9010"
 
-  funixapi:
-    build:
-      context: ./funix-api
-      dockerfile: Dockerfile
-      args:
-        FUNIX_API_VERSION: ${FUNIX_API_VERSION}
-    depends_on:
-      - mysql
-      - mail
-    container_name: funixapi
-    hostname: funixapi
-    restart: on-failure
-    networks:
-      - pacifista_api_net
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    ports:
-      - "8585:8080"
-
+#Don't forget to create network in docker : docker network create funixprod_net_local
 networks:
-  pacifista_api_net:
-    driver: bridge
+  default:
+    name: funixprod_net_local
+    external: true
 
 volumes:
   pacifista_api_db:
