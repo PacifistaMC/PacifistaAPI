@@ -5,10 +5,8 @@ import fr.pacifista.api.client.core.enums.ServerGameMode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,5 +43,11 @@ public class Box extends ApiEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "game_mode", nullable = false)
     private ServerGameMode gameMode;
+
+    /**
+     * List of box rewards
+     */
+    @OneToMany(mappedBy = "box", orphanRemoval = true)
+    private List<BoxReward> rewards;
 
 }
