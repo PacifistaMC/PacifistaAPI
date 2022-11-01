@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Setter
@@ -26,7 +25,4 @@ public class BoxDTO extends ApiDTO {
 
     @NotNull
     private ServerGameMode gameMode;
-
-    private List<BoxRewardDTO> rewards;
-
 }

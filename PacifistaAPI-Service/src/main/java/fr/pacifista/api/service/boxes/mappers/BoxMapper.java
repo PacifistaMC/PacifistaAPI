@@ -5,7 +5,7 @@ import fr.pacifista.api.client.boxes.dtos.BoxDTO;
 import fr.pacifista.api.service.boxes.entities.Box;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = BoxRewardMapper.class)
+@Mapper(componentModel = "spring")
 public interface BoxMapper extends ApiMapper<Box, BoxDTO> {
 
     @Override
@@ -19,6 +19,5 @@ public interface BoxMapper extends ApiMapper<Box, BoxDTO> {
 
     @Override
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "rewards", ignore = true)
     void patch(Box request, @MappingTarget Box toPatch);
 }
