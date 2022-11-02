@@ -1,5 +1,7 @@
 package fr.pacifista.api.client.core.utils.feign_impl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import feign.Feign;
 import feign.FeignException;
 import feign.gson.GsonDecoder;
@@ -30,13 +32,14 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
      */
     public FeignImpl(@NonNull final String moduleName, @NonNull final Class<FEIGN_CLIENT> clientClass) {
         final PacifistaApiConfig config = PacifistaApiConfig.getInstance();
+        final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
 
         this.client = Feign.builder()
                 .requestInterceptor(new FeignInterceptor(config))
                 .contract(new SpringMvcContract())
                 .client(new OkHttpClient())
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder())
+                .decoder(new GsonDecoder(gson))
+                .encoder(new GsonEncoder(gson))
                 .target(clientClass, String.format("%s/%s", config.getUrlDomainPacifistaApi(), moduleName));
     }
 
