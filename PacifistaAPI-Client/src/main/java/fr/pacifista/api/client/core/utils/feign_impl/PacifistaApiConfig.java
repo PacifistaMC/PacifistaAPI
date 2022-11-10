@@ -18,25 +18,11 @@ public class PacifistaApiConfig {
      */
     private final String urlDomainFunixApi = System.getenv("FUNIX_API_URL_DOMAIN");
 
-    /**
-     * username to access api
-     */
-    private final String usernameApi = System.getenv("FUNIX_API_USERNAME");
-
-    /**
-     * password to access api
-     */
-    private final String passwordApi = System.getenv("FUNIX_API_PASSWORD");
-
     private PacifistaApiConfig() throws ApiException {
         if (Strings.isEmpty(urlDomainPacifistaApi)) {
             throw new ApiException("PACIFISTA_API_URL_DOMAIN is not set");
         } else if (Strings.isEmpty(urlDomainFunixApi)) {
             throw new ApiException("FUNIX_API_URL_DOMAIN is not set");
-        } else if (Strings.isEmpty(usernameApi)) {
-            throw new ApiException("FUNIX_API_USERNAME is not set");
-        } else if (Strings.isEmpty(passwordApi)) {
-            throw new ApiException("FUNIX_API_PASSWORD is not set");
         }
     }
 

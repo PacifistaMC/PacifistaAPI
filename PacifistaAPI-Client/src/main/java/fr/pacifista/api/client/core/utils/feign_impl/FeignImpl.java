@@ -35,7 +35,6 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
         final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
 
         this.client = Feign.builder()
-                .requestInterceptor(new FeignInterceptor(config))
                 .contract(new SpringMvcContract())
                 .client(new OkHttpClient())
                 .decoder(new GsonDecoder(gson))

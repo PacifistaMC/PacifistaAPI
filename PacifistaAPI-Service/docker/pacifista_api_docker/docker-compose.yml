@@ -27,8 +27,6 @@ services:
     hostname: pacifista-api
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - API_USERNAME=${API_USERNAME}
-      - API_PASSWORD=${API_PASSWORD}
     ports:
       - "9010:9010"
 
