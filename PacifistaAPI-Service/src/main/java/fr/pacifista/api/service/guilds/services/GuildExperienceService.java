@@ -20,12 +20,13 @@ public class GuildExperienceService extends ApiService<GuildExperienceDTO, Guild
         super(repository, mapper);
         this.guildService = guildService;
     }
-    
+
     @Override
-    public void beforeSavingEntity(@NonNull GuildExperienceDTO request, @NonNull GuildExperience entity) {
-        if (request.getId() != null) {
-            final Guild guild = guildService.findGuildById(request.getGuildId());
+    public void afterMapperCall(@NonNull GuildExperienceDTO dto, @NonNull GuildExperience entity) {
+        if (dto.getId() != null) {
+            final Guild guild = guildService.findGuildById(dto.getGuildId());
             entity.setGuild(guild);
         }
     }
+
 }

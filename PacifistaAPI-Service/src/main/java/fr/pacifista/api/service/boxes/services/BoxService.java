@@ -25,9 +25,11 @@ public class BoxService extends ApiService<BoxDTO, Box, BoxMapper, BoxRepository
     }
 
     @Override
-    public void beforeDeletingEntity(@NonNull Box entity) {
-        final List<PlayerBox> playerBoxes = playerBoxRepository.findAllByBox(entity);
-        playerBoxRepository.deleteAll(playerBoxes);
+    public void beforeDeletingEntity(@NonNull Iterable<Box> entity) {
+        for (final Box box : entity) {
+            final List<PlayerBox> playerBoxes = playerBoxRepository.findAllByBox(box);
+            playerBoxRepository.deleteAll(playerBoxes);
+        }
     }
 
 }

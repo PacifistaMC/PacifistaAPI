@@ -1,6 +1,7 @@
 package fr.pacifista.api.service.auth.components;
 
 import fr.funixgaming.api.client.user.enums.UserRole;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,8 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -47,17 +46,18 @@ public class PacifistaWebSecurity {
                 )
                 .and();
 
-        http.authorizeRequests()
-                .antMatchers("/sanctions/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
-                .antMatchers("/warps/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+        http.authorizeHttpRequests(exchanges -> exchanges
+                .requestMatchers("/sanctions/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+                .requestMatchers("/warps/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+                .requestMatchers("/box/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                .requestMatchers("/permissions/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                .requestMatchers("/roles/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                .requestMatchers("/playersync/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                .requestMatchers("/guilds/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .antMatchers("/box/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
-                .antMatchers("/permissions/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
-                .antMatchers("/roles/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
-                .antMatchers("/playersync/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
-                .antMatchers("/guilds/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                .anyRequest().authenticated()
+        ).httpBasic();
 
-                .anyRequest().authenticated();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

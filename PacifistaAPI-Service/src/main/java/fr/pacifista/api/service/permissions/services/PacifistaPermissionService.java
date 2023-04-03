@@ -22,9 +22,9 @@ public class PacifistaPermissionService extends ApiService<PacifistaPermissionDT
     }
 
     @Override
-    public void beforeSavingEntity(@NonNull PacifistaPermissionDTO request, @NonNull PacifistaPermission entity) {
-        if (request.getId() == null) {
-            final PacifistaRole role = pacifistaRoleService.findRole(request.getRoleId());
+    public void afterMapperCall(@NonNull PacifistaPermissionDTO dto, @NonNull PacifistaPermission entity) {
+        if (dto.getId() == null) {
+            final PacifistaRole role = pacifistaRoleService.findRole(dto.getRoleId());
             entity.setRole(role);
         }
     }

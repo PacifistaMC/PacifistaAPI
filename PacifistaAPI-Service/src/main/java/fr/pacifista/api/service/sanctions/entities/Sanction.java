@@ -4,10 +4,10 @@ import fr.funixgaming.api.core.crud.entities.ApiEntity;
 import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
 import fr.pacifista.api.client.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.core.converters.EncryptionString;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**

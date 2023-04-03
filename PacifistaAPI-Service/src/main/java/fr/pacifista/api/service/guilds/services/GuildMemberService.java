@@ -22,10 +22,11 @@ public class GuildMemberService extends ApiService<GuildMemberDTO, GuildMember, 
     }
 
     @Override
-    public void beforeSavingEntity(@NonNull GuildMemberDTO request, @NonNull GuildMember entity) {
-        if (request.getId() != null) {
-            final Guild guild = guildService.findGuildById(request.getGuildId());
+    public void afterMapperCall(@NonNull GuildMemberDTO dto, @NonNull GuildMember entity) {
+        if (dto.getId() != null) {
+            final Guild guild = guildService.findGuildById(dto.getGuildId());
             entity.setGuild(guild);
         }
     }
+
 }

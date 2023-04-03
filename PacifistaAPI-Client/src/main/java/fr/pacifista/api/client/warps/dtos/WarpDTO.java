@@ -2,11 +2,11 @@ package fr.pacifista.api.client.warps.dtos;
 
 import fr.pacifista.api.client.core.dtos.LocationDTO;
 import fr.pacifista.api.client.warps.enums.WarpType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Getter

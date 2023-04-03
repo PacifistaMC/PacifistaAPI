@@ -5,9 +5,8 @@ import fr.funixgaming.api.core.exceptions.ApiException;
 import fr.pacifista.api.client.core.utils.feign_impl.FeignImpl;
 import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
 import fr.pacifista.api.client.sanctions.enums.SanctionType;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class SanctionImplClient extends FeignImpl<SanctionDTO, SanctionClient> implements SanctionClient {
     public SanctionImplClient() {

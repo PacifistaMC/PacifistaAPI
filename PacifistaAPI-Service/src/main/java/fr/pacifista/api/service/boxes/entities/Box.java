@@ -2,10 +2,10 @@ package fr.pacifista.api.service.boxes.entities;
 
 import fr.funixgaming.api.core.crud.entities.ApiEntity;
 import fr.pacifista.api.client.core.enums.ServerGameMode;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Getter

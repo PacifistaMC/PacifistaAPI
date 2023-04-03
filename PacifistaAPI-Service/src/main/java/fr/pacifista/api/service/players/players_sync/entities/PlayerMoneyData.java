@@ -1,11 +1,11 @@
 package fr.pacifista.api.service.players.players_sync.entities;
 
 import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import java.util.UUID;
 
 @Getter

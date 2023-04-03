@@ -2,11 +2,11 @@ package fr.pacifista.api.client.boxes.dtos;
 
 import fr.funixgaming.api.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.client.core.enums.ServerGameMode;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter

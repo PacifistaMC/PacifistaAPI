@@ -1,12 +1,12 @@
 package fr.pacifista.api.service.permissions.entities;
 
 import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import java.util.List;
 
 @Getter

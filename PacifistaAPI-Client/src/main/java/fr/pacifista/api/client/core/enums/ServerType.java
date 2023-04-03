@@ -1,9 +1,8 @@
 package fr.pacifista.api.client.core.enums;
 
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import javax.annotation.Nullable;
 
 @Getter
 @RequiredArgsConstructor

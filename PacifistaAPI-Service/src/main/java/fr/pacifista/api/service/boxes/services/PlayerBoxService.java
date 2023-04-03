@@ -27,9 +27,9 @@ public class PlayerBoxService extends ApiService<PlayerBoxDTO, PlayerBox, Player
     }
 
     @Override
-    public void beforeSavingEntity(@NonNull PlayerBoxDTO request, @NonNull PlayerBox entity) {
-        if (request.getId() == null) {
-            final Box box = findBoxByRequest(request);
+    public void afterMapperCall(@NonNull PlayerBoxDTO dto, @NonNull PlayerBox entity) {
+        if (dto.getId() == null) {
+            final Box box = findBoxByRequest(dto);
             entity.setBox(box);
         }
     }

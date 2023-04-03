@@ -2,10 +2,10 @@ package fr.pacifista.api.client.guilds.dtos;
 
 import fr.funixgaming.api.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.client.guilds.enums.GuildRole;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Getter

@@ -27,9 +27,9 @@ public class BoxRewardService extends ApiService<BoxRewardDTO, BoxReward, BoxRew
     }
 
     @Override
-    public void beforeSavingEntity(@NonNull BoxRewardDTO request, @NonNull BoxReward entity) {
-        if (request.getId() == null) {
-            final Box box = findBoxByRequest(request);
+    public void afterMapperCall(@NonNull BoxRewardDTO dto, @NonNull BoxReward entity) {
+        if (dto.getId() == null) {
+            final Box box = findBoxByRequest(dto);
             entity.setBox(box);
         }
     }

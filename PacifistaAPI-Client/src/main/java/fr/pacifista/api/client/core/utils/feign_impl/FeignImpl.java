@@ -14,11 +14,11 @@ import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiException;
 import fr.funixgaming.api.core.exceptions.ApiForbiddenException;
 import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
@@ -35,11 +35,11 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
         final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
 
         this.client = Feign.builder()
+                .requestInterceptor(new FeignTokenInterceptor())
                 .contract(new SpringMvcContract())
                 .client(new OkHttpClient())
                 .decoder(new GsonDecoder(gson))
                 .encoder(new GsonEncoder(gson))
-                .requestInterceptor(new FeignTokenInterceptor())
                 .target(clientClass, String.format("%s/%s", config.getUrlDomainPacifistaApi(), moduleName));
     }
 

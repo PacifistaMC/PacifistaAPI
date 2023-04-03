@@ -29,9 +29,11 @@ public class PacifistaRoleService extends ApiService<PacifistaRoleDTO, Pacifista
     }
 
     @Override
-    public void beforeDeletingEntity(@NonNull PacifistaRole role) {
-        final List<PacifistaPlayerRole> playerRoles = pacifistaPlayerRoleRepository.findPacifistaPlayerRolesByRole(role);
-        pacifistaPlayerRoleRepository.deleteAll(playerRoles);
+    public void beforeDeletingEntity(@NonNull Iterable<PacifistaRole> entity) {
+        for (final PacifistaRole role : entity) {
+            final List<PacifistaPlayerRole> playerRoles = pacifistaPlayerRoleRepository.findPacifistaPlayerRolesByRole(role);
+            pacifistaPlayerRoleRepository.deleteAll(playerRoles);
+        }
     }
 
     protected PacifistaRole findRole(final UUID roleUuid) {

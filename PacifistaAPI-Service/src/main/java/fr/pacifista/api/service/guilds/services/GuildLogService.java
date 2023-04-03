@@ -22,9 +22,9 @@ public class GuildLogService extends ApiService<GuildLogDTO, GuildLog, GuildLogM
     }
 
     @Override
-    public void beforeSavingEntity(@NonNull GuildLogDTO request, @NonNull GuildLog entity) {
-        if (request.getId() != null) {
-            final Guild guild = guildService.findGuildById(request.getGuildId());
+    public void afterMapperCall(@NonNull GuildLogDTO dto, @NonNull GuildLog entity) {
+        if (dto.getId() != null) {
+            final Guild guild = guildService.findGuildById(dto.getGuildId());
             entity.setGuild(guild);
         }
     }
