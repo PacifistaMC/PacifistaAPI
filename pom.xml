@@ -18,8 +18,8 @@
     </parent>
 
     <modules>
-        <module>PacifistaAPI-Client</module>
-        <module>PacifistaAPI-Service</module>
+        <module>client</module>
+        <module>service</module>
     </modules>
 
     <properties>
