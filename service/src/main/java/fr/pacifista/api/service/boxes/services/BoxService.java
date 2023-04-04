@@ -10,6 +10,7 @@ import fr.pacifista.api.service.boxes.repositories.PlayerBoxRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,10 +27,12 @@ public class BoxService extends ApiService<BoxDTO, Box, BoxMapper, BoxRepository
 
     @Override
     public void beforeDeletingEntity(@NonNull Iterable<Box> entity) {
+        final List<PlayerBox> playerBoxes = new ArrayList<>();
+
         for (final Box box : entity) {
-            final List<PlayerBox> playerBoxes = playerBoxRepository.findAllByBox(box);
-            playerBoxRepository.deleteAll(playerBoxes);
+            playerBoxes.addAll(playerBoxRepository.findAllByBox(box));
         }
+        playerBoxRepository.deleteAll(playerBoxes);
     }
 
 }
