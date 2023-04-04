@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableScheduling
 @EnableFeignClients(basePackages = {"fr.pacifista.api", "fr.funixgaming.api.client.user"})
-@SpringBootApplication(scanBasePackages = {"fr.pacifista.api", })
+@SpringBootApplication(scanBasePackages = {"fr.pacifista.api"})
 public class PacifistaApiService {
 
     public static void main(final String[] args) {
