@@ -5,6 +5,7 @@ import feign.FeignException;
 import fr.funixgaming.api.client.user.clients.UserAuthClient;
 import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.client.user.enums.UserRole;
+import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,10 +49,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         } catch (FeignException e) {
             final String code = Integer.toString(e.status());
 
-            if (code.startsWith("5")) {
-                throw new ApiException("Le serveur d'authentification est indisponible.", e);
+            if (code.startsWith("5") || code.equals("-1")) {
+                throw new ApiException("Le serveur d'authentification est indisponible ou rencontre une erreur.", e);
             } else {
-                throw new BadCredentialsException("Vous n'avez pas le bon token d'authentification. Veuillez vous reconnecter.");
+                throw new ApiBadRequestException("Vous n'avez pas le bon token d'authentification. Veuillez vous reconnecter.", e);
             }
         }
     }
@@ -62,12 +62,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         authorities.add(new SimpleGrantedAuthority(UserRole.USER.getRole()));
 
-        switch (userDTO.getRole()) {
-            case ADMIN, PACIFISTA_ADMIN -> authorities.addAll(List.of(
+        final UserRole role = userDTO.getRole();
+        if (role == UserRole.ADMIN || role == UserRole.PACIFISTA_ADMIN) {
+            authorities.addAll(List.of(
                     new SimpleGrantedAuthority(UserRole.PACIFISTA_ADMIN.getRole()),
                     new SimpleGrantedAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
             ));
-            case PACIFISTA_MODERATOR -> authorities.add(new SimpleGrantedAuthority(UserRole.PACIFISTA_MODERATOR.getRole()));
+        } else if (role == UserRole.PACIFISTA_MODERATOR) {
+            authorities.add(new SimpleGrantedAuthority(UserRole.PACIFISTA_MODERATOR.getRole()));
         }
         return authorities;
     }

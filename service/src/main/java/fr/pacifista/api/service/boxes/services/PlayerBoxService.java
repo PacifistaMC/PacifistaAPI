@@ -35,7 +35,7 @@ public class PlayerBoxService extends ApiService<PlayerBoxDTO, PlayerBox, Player
     }
 
     private Box findBoxByRequest(final PlayerBoxDTO request) {
-        if (request.getBox().getId() == null) {
+        if (request.getBox() == null || request.getBox().getId() == null) {
             throw new ApiBadRequestException("Il manque l'id de la box.");
         }
 

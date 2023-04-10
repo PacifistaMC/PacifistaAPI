@@ -29,4 +29,13 @@ public class BoxDTO extends ApiDTO {
 
     private List<BoxRewardDTO> rewards;
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
