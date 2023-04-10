@@ -2,10 +2,14 @@ package fr.pacifista.api.service.guilds.services;
 
 import fr.funixgaming.api.core.crud.services.ApiService;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
+import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.guilds.dtos.GuildDTO;
 import fr.pacifista.api.service.guilds.entities.Guild;
+import fr.pacifista.api.service.guilds.entities.GuildExperience;
 import fr.pacifista.api.service.guilds.mappers.GuildMapper;
+import fr.pacifista.api.service.guilds.repositories.GuildExperienceRepository;
 import fr.pacifista.api.service.guilds.repositories.GuildRepository;
+import lombok.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +18,28 @@ import java.util.UUID;
 @Service
 public class GuildService extends ApiService<GuildDTO, Guild, GuildMapper, GuildRepository> {
 
+    private final GuildExperienceRepository guildExperienceRepository;
+
     public GuildService(GuildRepository repository,
-                        GuildMapper mapper) {
+                        GuildMapper mapper,
+                        GuildExperienceRepository guildExperienceRepository) {
         super(repository, mapper);
+        this.guildExperienceRepository = guildExperienceRepository;
+    }
+
+    @Override
+    public void afterSavingEntity(@NonNull Iterable<Guild> entity) {
+        for (final Guild guild : entity) {
+            if (guild.getExperience() == null) {
+                GuildExperience guildExperience = new GuildExperience();
+                guildExperience.setGuild(guild);
+                guildExperience.setLevel(0);
+                guildExperience.setExperience(0);
+
+                guildExperience = this.guildExperienceRepository.save(guildExperience);
+                guild.setExperience(guildExperience);
+            }
+        }
     }
 
     protected Guild findGuildById(@Nullable UUID id) throws ApiBadRequestException {
@@ -25,7 +48,7 @@ public class GuildService extends ApiService<GuildDTO, Guild, GuildMapper, Guild
         } else {
             return getRepository().findByUuid(
                     id.toString()
-            ).orElseThrow(() -> new ApiBadRequestException("La guilde id " + id + " n'existe pas."));
+            ).orElseThrow(() -> new ApiNotFoundException("La guilde id " + id + " n'existe pas."));
         }
     }
 }

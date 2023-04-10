@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 @SpringBootTest
 class BoxServiceTest {
@@ -50,7 +50,7 @@ class BoxServiceTest {
 
         final BoxDTO response = this.service.create(request);
         this.service.delete(response.getId().toString());
-        assertThrows(ApiNotFoundException.class, () -> this.service.findById(response.getId().toString()));
+        assertThrowsExactly(ApiNotFoundException.class, () -> this.service.findById(response.getId().toString()));
     }
 
     @Test
@@ -71,7 +71,7 @@ class BoxServiceTest {
         final PlayerBoxDTO playerBoxResponse = this.playerBoxService.create(playerBox);
 
         this.service.delete(response.getId().toString());
-        assertThrows(ApiNotFoundException.class, () -> this.playerBoxService.findById(playerBoxResponse.getId().toString()));
+        assertThrowsExactly(ApiNotFoundException.class, () -> this.playerBoxService.findById(playerBoxResponse.getId().toString()));
     }
 
 }

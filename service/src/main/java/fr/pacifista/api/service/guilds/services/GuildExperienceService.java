@@ -23,7 +23,7 @@ public class GuildExperienceService extends ApiService<GuildExperienceDTO, Guild
 
     @Override
     public void afterMapperCall(@NonNull GuildExperienceDTO dto, @NonNull GuildExperience entity) {
-        if (dto.getId() != null) {
+        if (dto.getId() == null) {
             final Guild guild = guildService.findGuildById(dto.getGuildId());
             entity.setGuild(guild);
         }

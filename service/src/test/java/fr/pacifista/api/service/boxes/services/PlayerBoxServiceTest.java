@@ -46,7 +46,7 @@ class PlayerBoxServiceTest {
         playerBoxDTO.setPlayerUuid(UUID.randomUUID());
         playerBoxDTO.setAmount(10);
 
-        assertThrows(ApiBadRequestException.class, () -> service.create(playerBoxDTO));
+        assertThrowsExactly(ApiBadRequestException.class, () -> service.create(playerBoxDTO));
     }
 
     @Test
@@ -56,7 +56,7 @@ class PlayerBoxServiceTest {
         playerBoxDTO.setPlayerUuid(UUID.randomUUID());
         playerBoxDTO.setAmount(10);
 
-        assertThrows(ApiBadRequestException.class, () -> service.create(playerBoxDTO));
+        assertThrowsExactly(ApiBadRequestException.class, () -> service.create(playerBoxDTO));
     }
 
     @Test
@@ -68,7 +68,7 @@ class PlayerBoxServiceTest {
         playerBoxDTO.setPlayerUuid(UUID.randomUUID());
         playerBoxDTO.setAmount(10);
 
-        assertThrows(ApiNotFoundException.class, () -> service.create(playerBoxDTO));
+        assertThrowsExactly(ApiNotFoundException.class, () -> service.create(playerBoxDTO));
     }
 
     @Test

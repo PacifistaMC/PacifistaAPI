@@ -46,7 +46,7 @@ class BoxRewardServiceTest {
         request.setItemSerialized(UUID.randomUUID().toString());
         request.setRarity(1.2f);
 
-        assertThrows(ApiBadRequestException.class, () -> this.service.create(request));
+        assertThrowsExactly(ApiBadRequestException.class, () -> this.service.create(request));
     }
 
     @Test
@@ -56,7 +56,7 @@ class BoxRewardServiceTest {
         request.setItemSerialized(UUID.randomUUID().toString());
         request.setRarity(1.2f);
 
-        assertThrows(ApiNotFoundException.class, () -> this.service.create(request));
+        assertThrowsExactly(ApiNotFoundException.class, () -> this.service.create(request));
     }
 
     @Test

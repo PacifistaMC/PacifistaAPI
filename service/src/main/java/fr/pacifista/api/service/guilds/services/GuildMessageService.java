@@ -23,7 +23,7 @@ public class GuildMessageService extends ApiService<GuildMessageDTO, GuildMessag
 
     @Override
     public void afterMapperCall(@NonNull GuildMessageDTO dto, @NonNull GuildMessage entity) {
-        if (dto.getId() != null) {
+        if (dto.getId() == null) {
             final Guild guild = guildService.findGuildById(dto.getGuildId());
             entity.setGuild(guild);
         }

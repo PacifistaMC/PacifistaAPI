@@ -23,7 +23,7 @@ public class GuildHomeService extends ApiService<GuildHomeDTO, GuildHome, GuildH
 
     @Override
     public void afterMapperCall(@NonNull GuildHomeDTO dto, @NonNull GuildHome entity) {
-        if (dto.getId() != null) {
+        if (dto.getId() == null) {
             final Guild guild = guildService.findGuildById(dto.getGuildId());
             entity.setGuild(guild);
         }
