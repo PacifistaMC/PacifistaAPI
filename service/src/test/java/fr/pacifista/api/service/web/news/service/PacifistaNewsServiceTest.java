@@ -5,7 +5,6 @@ import fr.pacifista.api.client.web.news.dtos.PacifistaNewsDTO;
 import fr.pacifista.api.service.core.auth.entities.Session;
 import fr.pacifista.api.service.core.auth.services.ActualSession;
 import fr.pacifista.api.service.web.news.services.PacifistaNewsService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -29,12 +28,6 @@ class PacifistaNewsServiceTest {
 
     @MockBean
     ActualSession actualSession;
-
-
-    @BeforeEach
-    void setupMock() {
-
-    }
 
     @Test
     void createEntity() {
