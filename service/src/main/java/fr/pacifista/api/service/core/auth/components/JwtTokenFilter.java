@@ -1,4 +1,4 @@
-package fr.pacifista.api.service.auth.components;
+package fr.pacifista.api.service.core.auth.components;
 
 import com.google.common.net.HttpHeaders;
 import feign.FeignException;
@@ -7,12 +7,15 @@ import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.client.user.enums.UserRole;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiException;
+import fr.funixgaming.api.core.utils.network.IPUtils;
+import fr.pacifista.api.service.core.auth.entities.Session;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +31,12 @@ import java.util.List;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final UserAuthClient authClient;
+    private final IPUtils ipUtils;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request,
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (Strings.isEmpty(header) || !header.startsWith("Bearer ")) {
@@ -42,7 +46,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         try {
             final UserDTO userDTO = authClient.current(header);
-            final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDTO, null, getAuthoritiesFromUser(userDTO));
+            final Session session = new Session(userDTO, ipUtils.getClientIp(request));
+            final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(session, null, getAuthoritiesFromUser(userDTO));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
             filterChain.doFilter(request, response);
