@@ -12,7 +12,9 @@ COPY client/src ./client/src
 COPY service/pom.xml ./service/
 COPY service/src ./service/src
 
-RUN mvn clean package
+RUN mvn clean package -B
+RUN rm service/target/pacifista-api-service-*-javadoc.jar
+RUN rm service/target/pacifista-api-service-*-sources.jar
 
 FROM openjdk:17 AS FINAL
 
