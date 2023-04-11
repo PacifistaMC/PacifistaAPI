@@ -4,6 +4,7 @@ import fr.funixgaming.api.client.user.enums.UserRole;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -48,12 +49,21 @@ public class PacifistaWebSecurity {
 
         http.authorizeHttpRequests(exchanges -> exchanges
                 .requestMatchers("/sanctions/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+
                 .requestMatchers("/warps/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+
                 .requestMatchers("/box/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+
                 .requestMatchers("/permissions/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+
                 .requestMatchers("/roles/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+
                 .requestMatchers("/playersync/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+
                 .requestMatchers("/guilds/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+
+                .requestMatchers(HttpMethod.GET, "/web/**").permitAll()
+                .requestMatchers("/web/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
                 .anyRequest().authenticated()
         ).httpBasic();
