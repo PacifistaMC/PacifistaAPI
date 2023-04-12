@@ -1,4 +1,4 @@
-package fr.pacifista.api.service.auth.components;
+package fr.pacifista.api.service.core.auth.components;
 
 import fr.funixgaming.api.client.user.enums.UserRole;
 import jakarta.servlet.http.HttpServletResponse;
