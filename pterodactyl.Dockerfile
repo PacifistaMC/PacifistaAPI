@@ -24,7 +24,7 @@ USER container
 ENV USER=container HOME=/home/container
 WORKDIR /home/container
 
-COPY --from=MAVEN /container/pacifista-api/service/target/pacifista-api-server-*.jar /home/java/server.jar
+COPY --from=MAVEN /container/pacifista-api/service/target/pacifista-api-service-*.jar /home/java/server.jar
 
 COPY ./entrypointPteroq.sh /entrypoint.sh
 
