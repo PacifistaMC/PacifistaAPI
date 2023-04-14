@@ -28,3 +28,11 @@ jobs:
           docker build . --tag ghcr.io/pacifistamc/pacifista-pteroq-api:latest -f pterodactyl.Dockerfile
           docker push ghcr.io/pacifistamc/pacifista-pteroq-api:latest
 
+      - name: Send start signal to restart pacifistaapi with new version
+        run: |
+          curl "https://pterodactyl.funixgaming.fr/api/client/servers/e15e34e3/power?signal=restart" \
+            -X POST \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer ${{ secrets.PTERODACTYL_API_KEY }}'
+
