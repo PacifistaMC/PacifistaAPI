@@ -29,7 +29,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         super.setupAdmin();
 
         mockMvc.perform(get(this.route)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
         ).andExpect(status().isOk());
     }
 
@@ -38,10 +38,10 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         super.setupModerator();
 
         mockMvc.perform(get(this.route)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
         ).andExpect(status().isForbidden());
         mockMvc.perform(get(this.route + '/')
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
         ).andExpect(status().isForbidden());
     }
 
@@ -50,10 +50,10 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         super.setupNormal();
 
         mockMvc.perform(get(this.route)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
         ).andExpect(status().isForbidden());
         mockMvc.perform(get(this.route + '/')
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
         ).andExpect(status().isForbidden());
     }
 
@@ -64,7 +64,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         super.setupAdmin();
 
         mockMvc.perform(post(this.route)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(request))
         ).andExpect(status().isOk());
@@ -77,7 +77,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         super.setupAdmin();
 
         mockMvc.perform(patch(this.route)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(request))
         ).andExpect(status().isOk());
@@ -88,7 +88,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         super.setupAdmin();
 
         mockMvc.perform(delete(this.route + "?id=" + UUID.randomUUID())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
         ).andExpect(status().isOk());
     }
 
