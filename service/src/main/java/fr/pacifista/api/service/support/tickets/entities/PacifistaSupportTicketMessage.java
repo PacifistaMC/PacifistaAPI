@@ -20,7 +20,7 @@ public class PacifistaSupportTicketMessage extends ApiEntity {
     @Column(nullable = false, name = "written_by_name")
     private String writtenByName;
 
-    @Column(name = "written_by_id")
+    @Column(nullable = false, name = "written_by_id")
     private String writtenById;
 
     @Column(nullable = false, length = 10000)

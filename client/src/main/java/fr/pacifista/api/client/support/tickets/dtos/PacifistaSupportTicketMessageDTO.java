@@ -12,8 +12,9 @@ public class PacifistaSupportTicketMessageDTO extends ApiDTO {
     private PacifistaSupportTicketDTO ticket;
 
     @NotBlank
-    private String writtenBy;
+    private String writtenByName;
 
+    @NotBlank
     private String writtenById;
 
     @NotBlank

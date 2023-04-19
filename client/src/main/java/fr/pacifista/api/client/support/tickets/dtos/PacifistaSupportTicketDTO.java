@@ -5,8 +5,8 @@ import fr.pacifista.api.client.support.tickets.enums.TicketCreationSource;
 import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.client.support.tickets.enums.TicketType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -21,13 +21,13 @@ public class PacifistaSupportTicketDTO extends ApiDTO {
 
     private String createdById;
 
-    @NonNull
+    @NotNull
     private TicketCreationSource creationSource;
 
-    @NonNull
+    @NotNull
     private TicketType type;
 
-    @NonNull
+    @NotNull
     private TicketStatus status;
 
 }

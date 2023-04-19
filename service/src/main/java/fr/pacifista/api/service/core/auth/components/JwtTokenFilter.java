@@ -52,7 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         try {
             final UserDTO userDTO = fetchActualUser(header);
-            final Session session = new Session(userDTO, ipUtils.getClientIp(request));
+            final Session session = new Session(userDTO, ipUtils.getClientIp(request), request);
             final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(session, null, getAuthoritiesFromUser(userDTO));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
