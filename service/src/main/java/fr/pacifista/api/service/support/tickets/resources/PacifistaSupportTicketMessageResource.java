@@ -7,6 +7,7 @@ import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.funixgaming.api.core.crud.enums.SearchOperation;
 import fr.funixgaming.api.core.crud.resources.ApiResource;
+import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiForbiddenException;
 import fr.funixgaming.api.core.external.google.captcha.services.GoogleCaptchaService;
 import fr.pacifista.api.client.support.tickets.clients.PacifistaSupportTicketMessageClient;
@@ -67,7 +68,7 @@ public class PacifistaSupportTicketMessageResource extends ApiResource<Pacifista
             throw new ApiForbiddenException("Vous devez être connecté pour répondre à un ticket");
         }
         if (Strings.isNullOrEmpty(request.getMessage())) {
-            throw new ApiForbiddenException("Le message ne peut pas être vide");
+            throw new ApiBadRequestException("Le message ne peut pas être vide");
         }
 
         this.checkSpam(session);

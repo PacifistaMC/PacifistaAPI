@@ -1,5 +1,6 @@
 package fr.pacifista.api.service.support.tickets.resources;
 
+import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.funixgaming.api.core.external.google.captcha.services.GoogleCaptchaService;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
@@ -23,8 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -250,7 +250,12 @@ class PacifistaSupportTicketMessageResourceTest extends ResourceTestHandler {
 
     @Test
     void testGetUserTicketsMessageSuccess() throws Exception {
-        super.setupNormal();
+        final UserDTO userDTO = super.setupNormal();
+
+        final PacifistaSupportTicketDTO ticketDTO = new PacifistaSupportTicketDTO();
+        ticketDTO.setCreatedById(userDTO.getId().toString());
+
+        when(this.pacifistaSupportTicketService.findById(anyString())).thenReturn(ticketDTO);
 
         mockMvc.perform(get("/support/ticket/message/web?ticketId=uuid")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())

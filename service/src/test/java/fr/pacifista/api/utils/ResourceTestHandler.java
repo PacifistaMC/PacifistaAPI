@@ -21,7 +21,7 @@ public abstract class ResourceTestHandler {
     @MockBean
     UserAuthClient authClient;
 
-    public void setupAdmin() {
+    public UserDTO setupAdmin() {
         reset(authClient);
 
         final UserDTO userDTO = new UserDTO();
@@ -32,9 +32,10 @@ public abstract class ResourceTestHandler {
         userDTO.setCreatedAt(new Date());
 
         when(authClient.current(anyString())).thenReturn(userDTO);
+        return userDTO;
     }
 
-    public void setupModerator() {
+    public UserDTO setupModerator() {
         reset(authClient);
 
         final UserDTO userDTO = new UserDTO();
@@ -45,9 +46,10 @@ public abstract class ResourceTestHandler {
         userDTO.setCreatedAt(new Date());
 
         when(authClient.current(anyString())).thenReturn(userDTO);
+        return userDTO;
     }
 
-    public void setupNormal() {
+    public UserDTO setupNormal() {
         reset(authClient);
 
         final UserDTO userDTO = new UserDTO();
@@ -58,6 +60,7 @@ public abstract class ResourceTestHandler {
         userDTO.setCreatedAt(new Date());
 
         when(authClient.current(anyString())).thenReturn(userDTO);
+        return userDTO;
     }
 
 }
