@@ -40,7 +40,7 @@ public abstract class ResourceTestHandler {
         final UserDTO userDTO = new UserDTO();
         userDTO.setEmail("test.modo.mock@gmail.com");
         userDTO.setUsername("testuser-modo");
-        userDTO.setRole(UserRole.MODERATOR);
+        userDTO.setRole(UserRole.PACIFISTA_MODERATOR);
         userDTO.setId(UUID.randomUUID());
         userDTO.setCreatedAt(new Date());
 

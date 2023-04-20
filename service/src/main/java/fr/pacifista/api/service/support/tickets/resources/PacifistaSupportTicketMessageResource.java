@@ -1,5 +1,6 @@
 package fr.pacifista.api.service.support.tickets.resources;
 
+import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.funixgaming.api.client.user.dtos.UserDTO;
@@ -49,6 +50,7 @@ public class PacifistaSupportTicketMessageResource extends ApiResource<Pacifista
         if (session == null) {
             throw new ApiForbiddenException("Vous devez être connecté pour voir vos tickets");
         }
+
         final UserDTO userDTO = session.getUser();
         final PacifistaSupportTicketDTO ticketDTO = ticketService.findById(ticketId);
         if (!ticketDTO.getCreatedById().equals(userDTO.getId().toString())) {
@@ -63,6 +65,9 @@ public class PacifistaSupportTicketMessageResource extends ApiResource<Pacifista
         final Session session = actualSession.getActualSession();
         if (session == null) {
             throw new ApiForbiddenException("Vous devez être connecté pour répondre à un ticket");
+        }
+        if (Strings.isNullOrEmpty(request.getMessage())) {
+            throw new ApiForbiddenException("Le message ne peut pas être vide");
         }
 
         this.checkSpam(session);

@@ -22,7 +22,7 @@ public class PacifistaSupportTicket extends ApiEntity {
     @Column(nullable = false, name = "created_by_name")
     private String createdByName;
 
-    @Column(name = "created_by_id")
+    @Column(nullable = false, name = "created_by_id")
     private String createdById;
 
     @Enumerated(value = EnumType.STRING)

@@ -3,7 +3,6 @@ package fr.pacifista.api.client.support.tickets.clients;
 import fr.funixgaming.api.core.crud.clients.CrudClient;
 import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketMessageDTO;
-import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +18,6 @@ public interface PacifistaSupportTicketMessageClient extends CrudClient<Pacifist
                                                                        @RequestParam(value = "ticketId") String ticketId);
 
     @PostMapping("web")
-    PacifistaSupportTicketMessageDTO createWeb(@RequestBody @Valid PacifistaSupportTicketMessageDTO request);
+    PacifistaSupportTicketMessageDTO createWeb(@RequestBody PacifistaSupportTicketMessageDTO request);
 
 }

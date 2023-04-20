@@ -65,7 +65,8 @@ public class PacifistaWebSecurity {
                 .requestMatchers(HttpMethod.GET, "/web/**").permitAll()
                 .requestMatchers("/web/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers("/support/**/web").authenticated()
+                .requestMatchers("/support/ticket/message/web**").authenticated()
+                .requestMatchers("/support/ticket/web**").authenticated()
                 .requestMatchers("/support/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
 
                 .anyRequest().authenticated()

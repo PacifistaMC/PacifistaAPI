@@ -24,6 +24,7 @@ class PacifistaSupportTicketServiceTest {
         final PacifistaSupportTicketDTO ticketDTO = new PacifistaSupportTicketDTO();
         ticketDTO.setObject("Test" + UUID.randomUUID());
         ticketDTO.setCreatedByName("Test" + UUID.randomUUID());
+        ticketDTO.setCreatedById("Test" + UUID.randomUUID());
         ticketDTO.setCreationSource(TicketCreationSource.WEB);
         ticketDTO.setType(TicketType.OTHER);
         ticketDTO.setStatus(TicketStatus.CREATED);
@@ -44,6 +45,7 @@ class PacifistaSupportTicketServiceTest {
         final PacifistaSupportTicketDTO ticketDTO = new PacifistaSupportTicketDTO();
         ticketDTO.setObject("Test" + UUID.randomUUID());
         ticketDTO.setCreatedByName("Test" + UUID.randomUUID());
+        ticketDTO.setCreatedById("Test" + UUID.randomUUID());
         ticketDTO.setCreationSource(TicketCreationSource.WEB);
         ticketDTO.setType(TicketType.OTHER);
         ticketDTO.setStatus(TicketStatus.CREATED);

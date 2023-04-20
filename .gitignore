@@ -6,3 +6,5 @@ out
 .env
 *.key
 *.iv
+
+logs/
