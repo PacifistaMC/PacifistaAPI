@@ -11,6 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ class PacifistaNewsServiceTest {
         final String username = "jacky";
         final UserDTO userDTO = new UserDTO();
         userDTO.setUsername(username);
-        final Session session = new Session(userDTO, "10.0.0.1");
+        final Session session = new Session(userDTO, "10.0.0.1", new MockHttpServletRequest());
         reset(actualSession);
         when(actualSession.getActualSession()).thenReturn(session);
 
@@ -62,7 +63,7 @@ class PacifistaNewsServiceTest {
         final UserDTO userDTO = new UserDTO();
 
         userDTO.setUsername(username);
-        final Session session = new Session(userDTO, "10.0.0.1");
+        final Session session = new Session(userDTO, "10.0.0.1", new MockHttpServletRequest());
         reset(actualSession);
         when(actualSession.getActualSession()).thenReturn(session);
 
@@ -80,7 +81,7 @@ class PacifistaNewsServiceTest {
             final String username2 = "jacky2";
             final UserDTO userDTO2 = new UserDTO();
             userDTO2.setUsername(username2);
-            final Session session2 = new Session(userDTO2, "10.0.0.1");
+            final Session session2 = new Session(userDTO2, "10.0.0.1", new MockHttpServletRequest());
             reset(actualSession);
             when(actualSession.getActualSession()).thenReturn(session2);
 

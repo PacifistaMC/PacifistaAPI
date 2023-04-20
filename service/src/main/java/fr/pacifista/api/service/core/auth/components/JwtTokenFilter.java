@@ -1,5 +1,7 @@
 package fr.pacifista.api.service.core.auth.components;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.net.HttpHeaders;
 import feign.FeignException;
 import fr.funixgaming.api.client.user.clients.UserAuthClient;
@@ -25,6 +27,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -32,6 +35,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final UserAuthClient authClient;
     private final IPUtils ipUtils;
+
+    private final Cache<String, UserDTO> sessionsCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(1, TimeUnit.HOURS).build();
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
@@ -45,8 +51,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         try {
-            final UserDTO userDTO = authClient.current(header);
-            final Session session = new Session(userDTO, ipUtils.getClientIp(request));
+            final UserDTO userDTO = fetchActualUser(header);
+            final Session session = new Session(userDTO, ipUtils.getClientIp(request), request);
             final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(session, null, getAuthoritiesFromUser(userDTO));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -60,6 +66,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 throw new ApiBadRequestException("Vous n'avez pas le bon token d'authentification. Veuillez vous reconnecter.", e);
             }
         }
+    }
+
+    private UserDTO fetchActualUser(final String headerAuth) throws FeignException {
+        UserDTO userDTO = this.sessionsCache.getIfPresent(headerAuth);
+
+        if (userDTO == null) {
+            userDTO = this.authClient.current(headerAuth);
+            this.sessionsCache.put(headerAuth, userDTO);
+        }
+        return userDTO;
     }
 
     private List<SimpleGrantedAuthority> getAuthoritiesFromUser(final UserDTO userDTO) {
