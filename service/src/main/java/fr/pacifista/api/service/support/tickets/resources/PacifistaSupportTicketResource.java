@@ -42,17 +42,18 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
     }
 
     @Override
-    public PageDTO<PacifistaSupportTicketDTO> fetchUserTickets(String page, String elemsPerPage, String ticketType) {
+    public PageDTO<PacifistaSupportTicketDTO> fetchUserTickets(String page, String elemsPerPage, String ticketStatus) {
         final Session session = actualSession.getActualSession();
         if (session == null) {
             throw new ApiForbiddenException("Vous devez être connecté pour voir vos tickets");
         }
+        final String createdBySearch = String.format("createdById:%s:%s", SearchOperation.EQUALS.getOperation(), session.getUser().getId());
+        final String statusSearch = Strings.isNullOrEmpty(ticketStatus) || ticketStatus.equalsIgnoreCase("all") ? "" :
+                String.format(",status:%s:%s", SearchOperation.EQUALS.getOperation(), ticketStatus);
 
         return super.getService().getAll(
                 page, elemsPerPage,
-                String.format("createdById:%s:%s,ticketType:%s:%s",
-                        SearchOperation.EQUALS.getOperation(), session.getUser().getId(),
-                        SearchOperation.EQUALS.getOperation(), ticketType),
+                createdBySearch + statusSearch,
                 "createdAt:desc"
         );
     }

@@ -15,7 +15,7 @@ public interface PacifistaSupportTicketClient extends CrudClient<PacifistaSuppor
     @GetMapping("web")
     PageDTO<PacifistaSupportTicketDTO> fetchUserTickets(@RequestParam(value = "page", defaultValue = "0") String page,
                                                         @RequestParam(value = "elemsPerPage", defaultValue = "10") String elemsPerPage,
-                                                        @RequestParam(value = "ticketType", defaultValue = "all") String ticketType);
+                                                        @RequestParam(value = "ticketStatus", defaultValue = "all") String ticketStatus);
 
     @PostMapping("web")
     PacifistaSupportTicketDTO createTicketFromWeb(@RequestBody PacifistaSupportTicketDTO request);
