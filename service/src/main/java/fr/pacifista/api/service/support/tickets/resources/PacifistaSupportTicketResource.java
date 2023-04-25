@@ -5,6 +5,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.core.crud.dtos.PageDTO;
+import fr.funixgaming.api.core.crud.enums.SearchOperation;
 import fr.funixgaming.api.core.crud.resources.ApiResource;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiForbiddenException;
@@ -41,15 +42,19 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
     }
 
     @Override
-    public PageDTO<PacifistaSupportTicketDTO> fetchUserTickets(String page, String elemsPerPage) {
+    public PageDTO<PacifistaSupportTicketDTO> fetchUserTickets(String page, String elemsPerPage, String ticketType) {
         final Session session = actualSession.getActualSession();
         if (session == null) {
             throw new ApiForbiddenException("Vous devez être connecté pour voir vos tickets");
         }
 
-        return super.getService().getAll(page, elemsPerPage, String.format(
-                "createdById:%s:%s", session.getUser().getId(), "createdAt:desc"
-        ), "createdAt:desc");
+        return super.getService().getAll(
+                page, elemsPerPage,
+                String.format("createdById:%s:%s,ticketType:%s:%s",
+                        SearchOperation.EQUALS.getOperation(), session.getUser().getId(),
+                        SearchOperation.EQUALS.getOperation(), ticketType),
+                "createdAt:desc"
+        );
     }
 
     @Override
