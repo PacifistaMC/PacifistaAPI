@@ -4,7 +4,9 @@ import com.google.gson.reflect.TypeToken;
 import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
+import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.client.support.tickets.enums.TicketType;
+import fr.pacifista.api.service.support.tickets.services.PacifistaSupportTicketService;
 import fr.pacifista.api.utils.JsonHelper;
 import fr.pacifista.api.utils.ResourceTestHandler;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,9 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
 
     @Autowired
     JsonHelper jsonHelper;
+
+    @Autowired
+    PacifistaSupportTicketService ticketService;
 
     @Test
     void fetchUserTickets() throws Exception {
@@ -85,6 +90,59 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
         assertEquals(1, page.getContent().size());
         assertTrue(isTicketPresentInList(page.getContent(), ticket1));
         assertEquals(userDTO.getId().toString(), page.getContent().get(0).getCreatedById());
+    }
+
+    @Test
+    void testFetchUserDoneTickets() throws Exception {
+        final Type type = new TypeToken<PageDTO<PacifistaSupportTicketDTO>>(){}.getType();
+
+        UserDTO userDTO = super.setupNormal();
+
+        PacifistaSupportTicketDTO ticket1 = new PacifistaSupportTicketDTO();
+        ticket1.setObject("Test");
+        ticket1.setType(TicketType.BUG);
+
+        MvcResult result = this.mockMvc.perform(post("/support/ticket/web")
+                .header("Authorization", "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(ticket1))
+        ).andExpect(status().isOk()).andReturn();
+        ticket1 = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaSupportTicketDTO.class);
+
+        result = this.mockMvc.perform(get("/support/ticket/web")
+                .header("Authorization", "Bearer token")
+        ).andExpect(status().isOk()).andReturn();
+
+        PageDTO<PacifistaSupportTicketDTO> page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
+        assertEquals(1, page.getContent().size());
+        assertTrue(isTicketPresentInList(page.getContent(), ticket1));
+        assertEquals(userDTO.getId().toString(), page.getContent().get(0).getCreatedById());
+
+        ticket1.setStatus(TicketStatus.SOLVED);
+        ticket1 = this.ticketService.update(ticket1);
+
+        result = this.mockMvc.perform(get("/support/ticket/web")
+                .header("Authorization", "Bearer token")
+        ).andExpect(status().isOk()).andReturn();
+
+        page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
+        assertEquals(1, page.getContent().size());
+        assertTrue(isTicketPresentInList(page.getContent(), ticket1));
+        assertEquals(userDTO.getId().toString(), page.getContent().get(0).getCreatedById());
+
+        result = this.mockMvc.perform(get("/support/ticket/web?ticketStatus=" + TicketStatus.IN_PROGRESS)
+                .header("Authorization", "Bearer token")
+        ).andExpect(status().isOk()).andReturn();
+
+        page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
+        assertEquals(0, page.getContent().size());
+
+        result = this.mockMvc.perform(get("/support/ticket/web?ticketStatus=[" + TicketStatus.IN_PROGRESS + "|" + TicketStatus.CREATED + "]")
+                .header("Authorization", "Bearer token")
+        ).andExpect(status().isOk()).andReturn();
+
+        page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
+        assertEquals(0, page.getContent().size());
     }
 
     private boolean isTicketPresentInList(final List<PacifistaSupportTicketDTO> list, final PacifistaSupportTicketDTO ticket) {

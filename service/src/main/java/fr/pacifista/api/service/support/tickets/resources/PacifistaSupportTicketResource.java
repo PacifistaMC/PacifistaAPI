@@ -49,11 +49,11 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
         }
         final String createdBySearch = String.format("createdById:%s:%s", SearchOperation.EQUALS.getOperation(), session.getUser().getId());
         final String statusSearch = Strings.isNullOrEmpty(ticketStatus) || ticketStatus.equalsIgnoreCase("all") ? "" :
-                String.format(",status:%s:%s", SearchOperation.EQUALS.getOperation(), ticketStatus);
+                String.format("status:%s:%s", SearchOperation.EQUALS.getOperation(), ticketStatus);
 
         return super.getService().getAll(
                 page, elemsPerPage,
-                createdBySearch + statusSearch,
+                statusSearch + (Strings.isNullOrEmpty(statusSearch) ? "" : ",") + createdBySearch,
                 "createdAt:desc"
         );
     }
