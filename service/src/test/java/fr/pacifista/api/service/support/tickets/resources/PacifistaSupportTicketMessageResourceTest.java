@@ -196,9 +196,10 @@ class PacifistaSupportTicketMessageResourceTest extends ResourceTestHandler {
         final PacifistaSupportTicketMessageDTO ticketMessageDTO = new PacifistaSupportTicketMessageDTO();
         ticketMessageDTO.setTicket(new PacifistaSupportTicketDTO());
         ticketMessageDTO.setMessage("message" + UUID.randomUUID());
+        final UUID token = UUID.randomUUID();
 
         mockMvc.perform(post("/support/ticket/message/web")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticketMessageDTO))
                 .with(request -> {
@@ -208,7 +209,7 @@ class PacifistaSupportTicketMessageResourceTest extends ResourceTestHandler {
         ).andExpect(status().isOk());
 
         mockMvc.perform(post("/support/ticket/message/web")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticketMessageDTO))
                 .with(request -> {

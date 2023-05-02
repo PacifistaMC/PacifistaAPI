@@ -187,9 +187,10 @@ class PacifistaSupportTicketResourceTest extends ResourceTestHandler {
         final PacifistaSupportTicketDTO ticket = new PacifistaSupportTicketDTO();
         ticket.setObject("oui test");
         ticket.setType(TicketType.BUG);
+        final UUID token = UUID.randomUUID();
 
         mockMvc.perform(post("/support/ticket/web")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticket))
                 .with(request -> {
@@ -199,7 +200,7 @@ class PacifistaSupportTicketResourceTest extends ResourceTestHandler {
         ).andExpect(status().isOk());
 
         mockMvc.perform(post("/support/ticket/web")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticket))
                 .with(request -> {
