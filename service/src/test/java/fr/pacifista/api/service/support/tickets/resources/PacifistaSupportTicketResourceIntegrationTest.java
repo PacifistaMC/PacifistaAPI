@@ -107,7 +107,7 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticket1))
                 .with(request -> {
-                    request.setRemoteAddr("1.0.3.4");
+                    request.setRemoteAddr("1.0.3.7");
                     return request;
                 })
         ).andExpect(status().isOk()).andReturn();
