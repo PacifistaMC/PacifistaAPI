@@ -9,7 +9,6 @@ import fr.funixgaming.api.client.user.dtos.UserDTO;
 import fr.funixgaming.api.client.user.enums.UserRole;
 import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
 import fr.funixgaming.api.core.exceptions.ApiException;
-import fr.funixgaming.api.core.utils.network.IPUtils;
 import fr.pacifista.api.service.core.auth.entities.Session;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,10 +33,9 @@ import java.util.concurrent.TimeUnit;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final UserAuthClient authClient;
-    private final IPUtils ipUtils;
 
     private final Cache<String, UserDTO> sessionsCache = CacheBuilder.newBuilder()
-            .expireAfterAccess(1, TimeUnit.HOURS).build();
+            .expireAfterAccess(10, TimeUnit.MINUTES).build();
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
@@ -52,7 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         try {
             final UserDTO userDTO = fetchActualUser(header);
-            final Session session = new Session(userDTO, ipUtils.getClientIp(request), request);
+            final Session session = new Session(userDTO, header, request);
             final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(session, null, getAuthoritiesFromUser(userDTO));
 
             SecurityContextHolder.getContext().setAuthentication(auth);
