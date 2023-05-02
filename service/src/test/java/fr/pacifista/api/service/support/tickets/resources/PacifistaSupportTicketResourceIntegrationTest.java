@@ -106,6 +106,10 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
                 .header("Authorization", "Bearer token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticket1))
+                .with(request -> {
+                    request.setRemoteAddr("1.0.3.4");
+                    return request;
+                })
         ).andExpect(status().isOk()).andReturn();
         ticket1 = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaSupportTicketDTO.class);
 
