@@ -103,7 +103,7 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
         ticket1.setType(TicketType.BUG);
 
         MvcResult result = this.mockMvc.perform(post("/support/ticket/web")
-                .header("Authorization", "Bearer token")
+                .header("Authorization", "Bearer token2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(ticket1))
                 .with(request -> {
@@ -114,7 +114,7 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
         ticket1 = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaSupportTicketDTO.class);
 
         result = this.mockMvc.perform(get("/support/ticket/web")
-                .header("Authorization", "Bearer token")
+                .header("Authorization", "Bearer token2")
         ).andExpect(status().isOk()).andReturn();
 
         PageDTO<PacifistaSupportTicketDTO> page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
@@ -126,7 +126,7 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
         ticket1 = this.ticketService.update(ticket1);
 
         result = this.mockMvc.perform(get("/support/ticket/web")
-                .header("Authorization", "Bearer token")
+                .header("Authorization", "Bearer token2")
         ).andExpect(status().isOk()).andReturn();
 
         page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
@@ -135,14 +135,14 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
         assertEquals(userDTO.getId().toString(), page.getContent().get(0).getCreatedById());
 
         result = this.mockMvc.perform(get("/support/ticket/web?ticketStatus=" + TicketStatus.IN_PROGRESS)
-                .header("Authorization", "Bearer token")
+                .header("Authorization", "Bearer token2")
         ).andExpect(status().isOk()).andReturn();
 
         page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
         assertEquals(0, page.getContent().size());
 
         result = this.mockMvc.perform(get("/support/ticket/web?ticketStatus=[" + TicketStatus.IN_PROGRESS + "|" + TicketStatus.CREATED + "]")
-                .header("Authorization", "Bearer token")
+                .header("Authorization", "Bearer token2")
         ).andExpect(status().isOk()).andReturn();
 
         page = this.jsonHelper.fromJson(result.getResponse().getContentAsString(), type);
