@@ -58,7 +58,13 @@ public class PacifistaSupportTicketMessageResource extends ApiResource<Pacifista
             throw new ApiForbiddenException("Vous ne pouvez pas voir les messages d'un ticket qui ne vous appartient pas");
         }
 
-        return super.getAll(page, elemsPerPage, String.format("ticket.createdById:%s:%s", SearchOperation.EQUALS.getOperation(), userDTO.getId()), "createdAt:desc");
+        return super.getAll(
+                page,
+                elemsPerPage,
+                String.format("ticket.createdById:%s:%s", SearchOperation.EQUALS.getOperation(), userDTO.getId()) + ',' +
+                String.format("ticket.uuid:%s:%s", SearchOperation.EQUALS.getOperation(), ticketId),
+                "createdAt:desc"
+        );
     }
 
     @Override
