@@ -63,7 +63,7 @@ public class PacifistaSupportTicketMessageResource extends ApiResource<Pacifista
                 elemsPerPage,
                 String.format("ticket.createdById:%s:%s", SearchOperation.EQUALS.getOperation(), userDTO.getId()) + ',' +
                 String.format("ticket.uuid:%s:%s", SearchOperation.EQUALS.getOperation(), ticketId),
-                "createdAt:desc"
+                "createdAt:asc"
         );
     }
 
