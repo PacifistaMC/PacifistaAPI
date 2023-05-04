@@ -18,12 +18,15 @@ import java.util.Optional;
 public class PacifistaSupportTicketMessageService extends ApiService<PacifistaSupportTicketMessageDTO, PacifistaSupportTicketMessage, PacifistaSupportTicketMessageMapper, PacifistaSupportTicketMessageRepository> {
 
     private final PacifistaSupportTicketRepository ticketRepository;
+    private final PacifistaSupportWebSocketTicketMessageService webSocketTicketMessageService;
 
     public PacifistaSupportTicketMessageService(PacifistaSupportTicketMessageRepository repository,
                                                 PacifistaSupportTicketMessageMapper mapper,
-                                                PacifistaSupportTicketRepository ticketRepository) {
+                                                PacifistaSupportTicketRepository ticketRepository,
+                                                PacifistaSupportWebSocketTicketMessageService webSocketTicketMessageService) {
         super(repository, mapper);
         this.ticketRepository = ticketRepository;
+        this.webSocketTicketMessageService = webSocketTicketMessageService;
     }
 
     @Override
@@ -45,4 +48,12 @@ public class PacifistaSupportTicketMessageService extends ApiService<PacifistaSu
             }
         }
     }
+
+    @Override
+    public void afterSavingEntity(@NonNull Iterable<PacifistaSupportTicketMessage> entity) {
+        for (final PacifistaSupportTicketMessage message : entity) {
+            this.webSocketTicketMessageService.newTicketMessage(this.getMapper().toDto(message));
+        }
+    }
+
 }
