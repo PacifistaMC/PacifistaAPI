@@ -8,7 +8,7 @@
     <artifactId>pacifista-api</artifactId>
     <name>PacifistaAPI</name>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <!-- Version: https://github.com/FunixProductions/FunixAPI -->
     <parent>
@@ -29,7 +29,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <pacifista.api.version>1.0.0</pacifista.api.version>
+        <pacifista.api.version>1.0.1</pacifista.api.version>
     </properties>
 
     <description>PacifistaAPI, Api used in the gameserver Pacifista Minecraft and used on website https://pacifista.fr</description>

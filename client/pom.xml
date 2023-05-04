@@ -6,13 +6,13 @@
 
     <groupId>fr.pacifista.api.client</groupId>
     <artifactId>pacifista-api-client</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>PacifistaAPI-Client</name>
 
     <parent>
         <groupId>fr.pacifista.api</groupId>
         <artifactId>pacifista-api</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <dependencies>
