@@ -17,7 +17,10 @@ import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.service.core.auth.entities.Session;
 import fr.pacifista.api.service.core.auth.services.ActualSession;
 import fr.pacifista.api.service.support.tickets.services.PacifistaSupportTicketService;
+import fr.pacifista.api.service.support.tickets.services.PacifistaSupportWebSocketTicketMessageService;
 import lombok.NonNull;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,12 +36,16 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
     private final Cache<String, Instant> ticketCreationCache = CacheBuilder.newBuilder()
             .expireAfterAccess(3, TimeUnit.MINUTES).build();
 
+    private final PacifistaSupportWebSocketTicketMessageService webSocket;
+
     public PacifistaSupportTicketResource(PacifistaSupportTicketService pacifistaSupportTicketService,
                                           ActualSession actualSession,
-                                          GoogleCaptchaService googleCaptchaService) {
+                                          GoogleCaptchaService googleCaptchaService,
+                                          PacifistaSupportWebSocketTicketMessageService webSocket) {
         super(pacifistaSupportTicketService);
         this.actualSession = actualSession;
         this.googleCaptchaService = googleCaptchaService;
+        this.webSocket = webSocket;
     }
 
     @Override
@@ -83,6 +90,11 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
         final PacifistaSupportTicketDTO ticket = super.create(request);
         this.ticketCreationCache.put(session.getClientIp(), Instant.now());
         return ticket;
+    }
+
+    @PostMapping("web/fcm")
+    public void addFcm(@RequestBody String fcm) {
+        this.webSocket.addFcm(fcm);
     }
 
     private void checkSpam(final @NonNull Session session) {
