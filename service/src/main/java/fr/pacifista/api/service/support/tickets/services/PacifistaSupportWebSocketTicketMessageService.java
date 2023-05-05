@@ -116,7 +116,6 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
     protected void onClientDisconnect(String sessionId) {
         this.ticketsMessagingSubscriptions.remove(sessionId);
         this.authSessions.remove(sessionId);
-        this.fcmMap.remove(sessionId);
     }
 
     private boolean canListenToThatTicket(final String ticketId, final String sessionId) {
