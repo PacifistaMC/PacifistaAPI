@@ -29,20 +29,25 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
 
     private final Map<String, String> ticketsMessagingSubscriptions = new HashMap<>();
     private final Map<String, UserDTO> authSessions = new HashMap<>();
+    private final Map<String, String> fcmMap = new HashMap<>();
     private final Gson gson = new Gson();
 
     private final UserAuthClient authClient;
     private final PacifistaSupportTicketService ticketService;
+    private final REMOVETHIS fcmService;
 
     public PacifistaSupportWebSocketTicketMessageService(final UserAuthClient authClient,
-                                                         final PacifistaSupportTicketService ticketService) {
+                                                         final PacifistaSupportTicketService ticketService,
+                                                         final REMOVETHIS fcmService) {
         this.authClient = authClient;
         this.ticketService = ticketService;
+        this.fcmService = fcmService;
     }
 
     public void newTicketMessage(final PacifistaSupportTicketMessageDTO message) {
         final String ticketId = message.getTicket().getId().toString();
 
+        this.remove(message.getTicket());
         for (final Map.Entry<String, String> entry : this.ticketsMessagingSubscriptions.entrySet()) {
             final String sessionId = entry.getKey();
             final String ticketIdEntry = entry.getValue();
@@ -57,6 +62,25 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
         }
     }
 
+    void remove(final PacifistaSupportTicketDTO ticket) {
+        for (final Map.Entry<String, String> entry : this.fcmMap.entrySet()) {
+            final String tokenFcm = this.fcmMap.get(entry.getValue());
+            if (!Strings.isNullOrEmpty(tokenFcm)) {
+                final String title = "Nouveau message sur le ticket #" + ticket.getId();
+                final String body = "Un nouveau message a été posté sur le ticket #" + ticket.getId() + " clickez pour en savoir +.";
+                final String url = "https://dashboard.funixproductions.com/dashboard/pacifista/tickets/messages/" + ticket.getId();
+                final REMOVEDTO.Notification notification = new REMOVEDTO.Notification();
+                notification.setTitle(title);
+                notification.setBody(body);
+                notification.setUrl(url);
+                final REMOVEDTO dto = new REMOVEDTO();
+                dto.setTo(tokenFcm);
+                dto.setNotification(notification);
+                this.fcmService.sendNotification("key=" + System.getenv("FCM_SERVER_KEY"), dto);
+            }
+        }
+    }
+
     @Override
     protected void newWebsocketMessage(@NonNull WebSocketSession session, @NonNull String message) throws Exception {
         final String[] data = message.split(":");
@@ -64,7 +88,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
         if (message.startsWith(SUBSCRIBE_CALL_CLIENT) && data.length == 2) {
             final String ticketId = data[1];
 
-            if (canListenToThatTicket(ticketId, session.getId())) {
+            if (!Strings.isNullOrEmpty(ticketId) && canListenToThatTicket(ticketId, session.getId())) {
                 this.ticketsMessagingSubscriptions.put(session.getId(), ticketId);
             }
         } else if (message.startsWith(AUTH_REQUEST) && data.length == 2) {
@@ -78,6 +102,12 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
                     log.error("Impossible de récupérer l'utilisateur à partir du token.", e);
                 }
             }
+        } else if (message.startsWith("fcm-token") && data.length == 2) {
+            final String fcmToken = data[1];
+
+            if (!Strings.isNullOrEmpty(fcmToken)) {
+                this.fcmMap.put(session.getId(), fcmToken);
+            }
         }
     }
 
@@ -85,6 +115,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
     protected void onClientDisconnect(String sessionId) {
         this.ticketsMessagingSubscriptions.remove(sessionId);
         this.authSessions.remove(sessionId);
+        this.fcmMap.remove(sessionId);
     }
 
     private boolean canListenToThatTicket(final String ticketId, final String sessionId) {
