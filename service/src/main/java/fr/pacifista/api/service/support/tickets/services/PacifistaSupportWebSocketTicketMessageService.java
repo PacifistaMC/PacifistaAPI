@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -29,7 +31,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
 
     private final Map<String, String> ticketsMessagingSubscriptions = new HashMap<>();
     private final Map<String, UserDTO> authSessions = new HashMap<>();
-    private final Map<String, String> fcmMap = new HashMap<>();
+    private final Set<String> fcmMap = new HashSet<>();
     private final Gson gson = new Gson();
 
     private final UserAuthClient authClient;
@@ -63,8 +65,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
     }
 
     void remove(final PacifistaSupportTicketDTO ticket) {
-        for (final Map.Entry<String, String> entry : this.fcmMap.entrySet()) {
-            final String tokenFcm = this.fcmMap.get(entry.getValue());
+        for (final String tokenFcm : this.fcmMap) {
             if (!Strings.isNullOrEmpty(tokenFcm)) {
                 final String title = "Nouveau message sur le ticket #" + ticket.getId();
                 final String body = "Un nouveau message a été posté sur le ticket #" + ticket.getId() + " clickez pour en savoir +.";
@@ -106,7 +107,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
             final String fcmToken = data[1];
 
             if (!Strings.isNullOrEmpty(fcmToken)) {
-                this.fcmMap.put(session.getId(), fcmToken);
+                this.fcmMap.add(fcmToken);
             }
         }
     }
