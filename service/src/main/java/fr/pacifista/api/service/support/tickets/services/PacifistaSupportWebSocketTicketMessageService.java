@@ -114,6 +114,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
             final String fcmToken = data[1];
 
             if (!Strings.isNullOrEmpty(fcmToken)) {
+                log.info("Ajout du token FCM {} à la liste des tokens FCM. OUI OUI", fcmToken);
                 this.fcmMap.add(fcmToken);
             }
         }
