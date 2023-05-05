@@ -78,7 +78,7 @@ public class PacifistaSupportTicketMessageResource extends ApiResource<Pacifista
         }
 
         this.checkSpam(session);
-        this.googleCaptchaService.checkCode(session.getRequest(), "pacifista-support-ticket-message");
+        this.googleCaptchaService.checkCode(session.getRequest(), "pacifistasupportticketmessage");
 
         final UserDTO userDTO = session.getUser();
         request.setWrittenByName(userDTO.getUsername());
