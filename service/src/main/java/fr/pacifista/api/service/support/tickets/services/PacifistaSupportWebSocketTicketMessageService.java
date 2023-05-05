@@ -91,6 +91,7 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
 
     @Override
     protected void newWebsocketMessage(@NonNull WebSocketSession session, @NonNull String message) throws Exception {
+        log.info("NEW MESSAGE SOCKET: {}", message);
         final String[] data = message.split(":");
 
         if (message.startsWith(SUBSCRIBE_CALL_CLIENT) && data.length == 2) {
@@ -114,7 +115,6 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
             final String fcmToken = data[1];
 
             if (!Strings.isNullOrEmpty(fcmToken)) {
-                log.info("Ajout du token FCM {} à la liste des tokens FCM. OUI OUI", fcmToken);
                 this.fcmMap.add(fcmToken);
             }
         }
