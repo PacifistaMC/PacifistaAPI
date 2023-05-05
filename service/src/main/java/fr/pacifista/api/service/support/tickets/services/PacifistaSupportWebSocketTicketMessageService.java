@@ -65,6 +65,8 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
     }
 
     void remove(final PacifistaSupportTicketDTO ticket) {
+        log.info("Suppression du ticket {} de la liste des tickets écoutés.", ticket.getId());
+
         for (final String tokenFcm : this.fcmMap) {
             if (!Strings.isNullOrEmpty(tokenFcm)) {
                 final String title = "Nouveau message sur le ticket #" + ticket.getId();
@@ -77,7 +79,12 @@ public class PacifistaSupportWebSocketTicketMessageService extends ApiWebsocketS
                 final REMOVEDTO dto = new REMOVEDTO();
                 dto.setTo(tokenFcm);
                 dto.setNotification(notification);
-                this.fcmService.sendNotification("key=" + System.getenv("FCM_SERVER_KEY"), dto);
+
+                try {
+                    this.fcmService.sendNotification("key=" + System.getenv("FCM_SERVER_KEY"), dto);
+                } catch (FeignException e) {
+                    log.error("Impossible d'envoyer une notification FCM.", e);
+                }
             }
         }
     }
