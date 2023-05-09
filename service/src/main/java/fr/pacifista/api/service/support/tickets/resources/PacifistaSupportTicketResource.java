@@ -92,11 +92,6 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
         return ticket;
     }
 
-    @PostMapping("web/fcm")
-    public void addFcm(@RequestBody String fcm) {
-        this.webSocket.addFcm(fcm);
-    }
-
     private void checkSpam(final @NonNull Session session) {
         if (this.ticketCreationCache.getIfPresent(session.getClientIp()) != null) {
             throw new ApiForbiddenException("Vous avez déjà créé un ticket il y a moins de 3 minutes");
