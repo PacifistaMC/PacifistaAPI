@@ -8,13 +8,13 @@
     <artifactId>pacifista-api</artifactId>
     <name>PacifistaAPI</name>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 
     <!-- Version: https://github.com/FunixProductions/FunixAPI -->
     <parent>
-        <artifactId>funix-api</artifactId>
-        <groupId>fr.funixgaming.api</groupId>
-        <version>1.2.8.5</version>
+        <artifactId>funixproductions-api</artifactId>
+        <groupId>com.funixproductions.api</groupId>
+        <version>1.0.1</version>
     </parent>
 
     <modules>
@@ -23,13 +23,11 @@
     </modules>
 
     <properties>
-        <java.version>17</java.version>
-
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <pacifista.api.version>1.0.1</pacifista.api.version>
+        <pacifista.api.version>1.1.0</pacifista.api.version>
     </properties>
 
     <description>PacifistaAPI, Api used in the gameserver Pacifista Minecraft and used on website https://pacifista.fr</description>
@@ -56,5 +54,20 @@
         <developerConnection>scm:git:ssh://github.com:PacifistaMC/PacifistaAPI.git</developerConnection>
         <url>http://github.com/PacifistaMC/PacifistaAPI/tree/master</url>
     </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.funixproductions.core.crud</groupId>
+            <artifactId>crud</artifactId>
+            <version>${com.funixproductions.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.funixproductions.core.test</groupId>
+            <artifactId>test-utils</artifactId>
+            <version>${com.funixproductions.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

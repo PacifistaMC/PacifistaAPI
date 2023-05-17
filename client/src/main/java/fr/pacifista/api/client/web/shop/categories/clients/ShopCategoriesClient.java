@@ -1,6 +1,6 @@
 package fr.pacifista.api.client.web.shop.categories.clients;
 
-import fr.funixgaming.api.core.crud.clients.CrudClient;
+import com.funixproductions.core.crud.clients.CrudClient;
 import fr.pacifista.api.client.web.shop.categories.dtos.ShopCategoryDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 

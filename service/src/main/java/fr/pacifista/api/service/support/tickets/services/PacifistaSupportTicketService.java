@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.support.tickets.services;
 
-import fr.funixgaming.api.core.crud.services.ApiService;
+import com.funixproductions.core.crud.services.ApiService;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.service.support.tickets.entities.PacifistaSupportTicket;
 import fr.pacifista.api.service.support.tickets.mappers.PacifistaSupportTicketMapper;

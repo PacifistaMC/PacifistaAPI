@@ -1,7 +1,7 @@
-package fr.pacifista.api.client.warps.clients;
+package fr.pacifista.api.client.server.warps.clients;
 
-import fr.funixgaming.api.core.crud.clients.CrudClient;
-import fr.pacifista.api.client.warps.dtos.WarpDTO;
+import com.funixproductions.core.crud.clients.CrudClient;
+import fr.pacifista.api.client.server.warps.dtos.WarpDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(name = "Warps", url = "${pacifista.api.app-domain-url}", path = "/warps")

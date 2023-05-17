@@ -1,16 +1,15 @@
 package fr.pacifista.api.utils;
 
-import fr.funixgaming.api.client.user.clients.UserAuthClient;
-import fr.funixgaming.api.client.user.dtos.UserDTO;
-import fr.funixgaming.api.client.user.enums.UserRole;
+import com.funixproductions.api.client.user.clients.UserAuthClient;
+import com.funixproductions.api.client.user.dtos.UserDTO;
+import com.funixproductions.api.client.user.enums.UserRole;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Date;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * SpringBootTest

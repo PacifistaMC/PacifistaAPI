@@ -1,7 +1,7 @@
-package fr.pacifista.api.client.warps.clients;
+package fr.pacifista.api.client.server.warps.clients;
 
 import fr.pacifista.api.client.core.utils.feign_impl.FeignImpl;
-import fr.pacifista.api.client.warps.dtos.WarpDTO;
+import fr.pacifista.api.client.server.warps.dtos.WarpDTO;
 
 public class WarpImplClient extends FeignImpl<WarpDTO, WarpClient> implements WarpClient {
     public WarpImplClient() {

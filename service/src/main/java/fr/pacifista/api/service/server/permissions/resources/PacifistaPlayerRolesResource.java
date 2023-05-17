@@ -1,8 +1,8 @@
 package fr.pacifista.api.service.server.permissions.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
-import fr.pacifista.api.client.permissions.clients.PacifistaPlayerRolesClient;
-import fr.pacifista.api.client.permissions.dtos.PacifistaPlayerRoleDTO;
+import com.funixproductions.core.crud.resources.ApiResource;
+import fr.pacifista.api.client.server.permissions.clients.PacifistaPlayerRolesClient;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaPlayerRoleDTO;
 import fr.pacifista.api.service.server.permissions.services.PacifistaPlayerRoleService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

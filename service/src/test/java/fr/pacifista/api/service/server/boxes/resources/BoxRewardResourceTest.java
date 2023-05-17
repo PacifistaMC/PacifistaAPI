@@ -1,7 +1,7 @@
-package fr.pacifista.api.service.boxes.resources;
+package fr.pacifista.api.service.server.boxes.resources;
 
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
-import fr.pacifista.api.client.boxes.dtos.BoxRewardDTO;
+import com.funixproductions.core.crud.dtos.PageDTO;
+import fr.pacifista.api.client.server.boxes.dtos.BoxRewardDTO;
 import fr.pacifista.api.service.server.boxes.services.BoxRewardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;

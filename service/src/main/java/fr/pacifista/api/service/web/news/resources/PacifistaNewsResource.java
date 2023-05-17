@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.news.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
+import com.funixproductions.core.crud.resources.ApiResource;
 import fr.pacifista.api.client.web.news.clients.PacifistaNewsClient;
 import fr.pacifista.api.client.web.news.dtos.PacifistaNewsDTO;
 import fr.pacifista.api.service.web.news.services.PacifistaNewsService;

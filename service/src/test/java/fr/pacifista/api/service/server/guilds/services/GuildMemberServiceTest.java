@@ -1,9 +1,8 @@
-package fr.pacifista.api.service.guilds.services;
+package fr.pacifista.api.service.server.guilds.services;
 
-import fr.pacifista.api.client.guilds.dtos.GuildDTO;
-import fr.pacifista.api.client.guilds.dtos.GuildMemberDTO;
-import fr.pacifista.api.client.guilds.enums.GuildRole;
-import fr.pacifista.api.service.server.guilds.services.GuildMemberService;
+import fr.pacifista.api.client.server.guilds.dtos.GuildDTO;
+import fr.pacifista.api.client.server.guilds.dtos.GuildMemberDTO;
+import fr.pacifista.api.client.server.guilds.enums.GuildRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

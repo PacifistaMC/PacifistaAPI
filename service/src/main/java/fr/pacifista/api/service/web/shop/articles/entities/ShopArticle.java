@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.shop.articles.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.service.web.shop.categories.entities.ShopCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

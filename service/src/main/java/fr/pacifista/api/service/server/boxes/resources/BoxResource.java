@@ -1,8 +1,8 @@
 package fr.pacifista.api.service.server.boxes.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
-import fr.pacifista.api.client.boxes.clients.BoxClient;
-import fr.pacifista.api.client.boxes.dtos.BoxDTO;
+import com.funixproductions.core.crud.resources.ApiResource;
+import fr.pacifista.api.client.server.boxes.clients.BoxClient;
+import fr.pacifista.api.client.server.boxes.dtos.BoxDTO;
 import fr.pacifista.api.service.server.boxes.services.BoxService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,8 +1,7 @@
-package fr.pacifista.api.service.permissions.services;
+package fr.pacifista.api.service.server.permissions.services;
 
-import fr.pacifista.api.client.permissions.dtos.PacifistaPermissionDTO;
-import fr.pacifista.api.client.permissions.dtos.PacifistaRoleDTO;
-import fr.pacifista.api.service.server.permissions.services.PacifistaPermissionService;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaPermissionDTO;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaRoleDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

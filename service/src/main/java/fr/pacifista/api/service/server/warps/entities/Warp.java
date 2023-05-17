@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.server.warps.entities;
 
-import fr.pacifista.api.client.warps.enums.WarpType;
+import fr.pacifista.api.client.server.warps.enums.WarpType;
 import fr.pacifista.api.service.core.entities.Location;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
 package fr.pacifista.api.client.support.tickets.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.client.support.tickets.enums.TicketCreationSource;
 import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.client.support.tickets.enums.TicketType;

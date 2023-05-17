@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.players.players_sync.services;
 
-import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.pacifista.api.client.players.players_sync.dtos.PlayerInventoryDataDTO;
+import com.funixproductions.core.crud.services.ApiService;
+import fr.pacifista.api.client.server.players.players_sync.dtos.PlayerInventoryDataDTO;
 import fr.pacifista.api.service.server.players.players_sync.entities.PlayerInventoryData;
 import fr.pacifista.api.service.server.players.players_sync.mappers.PlayerInventoryDataMapper;
 import fr.pacifista.api.service.server.players.players_sync.repositories.PlayerInventoryDataRepository;

@@ -1,13 +1,10 @@
-package fr.pacifista.api.service.permissions.services;
+package fr.pacifista.api.service.server.permissions.services;
 
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.permissions.dtos.PacifistaPermissionDTO;
-import fr.pacifista.api.client.permissions.dtos.PacifistaPlayerRoleDTO;
-import fr.pacifista.api.client.permissions.dtos.PacifistaRoleDTO;
-import fr.pacifista.api.service.server.permissions.services.PacifistaPermissionService;
-import fr.pacifista.api.service.server.permissions.services.PacifistaPlayerRoleService;
-import fr.pacifista.api.service.server.permissions.services.PacifistaRoleService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaPermissionDTO;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaPlayerRoleDTO;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaRoleDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

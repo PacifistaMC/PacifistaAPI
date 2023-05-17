@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.shop.articles.services;
 
-import fr.funixgaming.api.core.crud.services.ApiService;
+import com.funixproductions.core.crud.services.ApiService;
 import fr.pacifista.api.client.web.shop.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.service.web.shop.articles.entities.ShopArticle;
 import fr.pacifista.api.service.web.shop.articles.mappers.ShopArticleMapper;

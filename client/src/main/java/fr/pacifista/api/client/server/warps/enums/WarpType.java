@@ -1,4 +1,4 @@
-package fr.pacifista.api.client.warps.enums;
+package fr.pacifista.api.client.server.warps.enums;
 
 public enum WarpType {
     STAFF_WARP,

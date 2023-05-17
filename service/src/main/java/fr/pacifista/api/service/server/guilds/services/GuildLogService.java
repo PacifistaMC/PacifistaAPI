@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.guilds.services;
 
-import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.pacifista.api.client.guilds.dtos.GuildLogDTO;
+import com.funixproductions.core.crud.services.ApiService;
+import fr.pacifista.api.client.server.guilds.dtos.GuildLogDTO;
 import fr.pacifista.api.service.server.guilds.entities.Guild;
 import fr.pacifista.api.service.server.guilds.entities.GuildLog;
 import fr.pacifista.api.service.server.guilds.mappers.GuildLogMapper;

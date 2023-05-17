@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.support.tickets.services;
 
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketMessageDTO;
 import fr.pacifista.api.client.support.tickets.enums.TicketCreationSource;

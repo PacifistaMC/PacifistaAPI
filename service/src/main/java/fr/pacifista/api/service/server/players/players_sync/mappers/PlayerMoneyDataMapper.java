@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.players.players_sync.mappers;
 
-import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.players.players_sync.dtos.PlayerMoneyDataDTO;
+import com.funixproductions.core.crud.mappers.ApiMapper;
+import fr.pacifista.api.client.server.players.players_sync.dtos.PlayerMoneyDataDTO;
 import fr.pacifista.api.service.server.players.players_sync.entities.PlayerMoneyData;
 import org.mapstruct.*;
 

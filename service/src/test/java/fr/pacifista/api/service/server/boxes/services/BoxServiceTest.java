@@ -1,11 +1,9 @@
-package fr.pacifista.api.service.boxes.services;
+package fr.pacifista.api.service.server.boxes.services;
 
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.boxes.dtos.BoxDTO;
-import fr.pacifista.api.client.boxes.dtos.PlayerBoxDTO;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.core.enums.ServerGameMode;
-import fr.pacifista.api.service.server.boxes.services.BoxService;
-import fr.pacifista.api.service.server.boxes.services.PlayerBoxService;
+import fr.pacifista.api.client.server.boxes.dtos.BoxDTO;
+import fr.pacifista.api.client.server.boxes.dtos.PlayerBoxDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,11 +32,11 @@ class BoxServiceTest {
         request.setGameMode(ServerGameMode.SKYBLOCK);
 
         final BoxDTO response = this.service.create(request);
-        assertEquals(response.getBoxName(), response.getBoxName());
-        assertEquals(response.getBoxDescription(), response.getBoxDescription());
-        assertEquals(response.getBoxDisplayName(), response.getBoxDisplayName());
-        assertEquals(response.getDropAmount(), response.getDropAmount());
-        assertEquals(response.getGameMode(), response.getGameMode());
+        assertEquals(request.getBoxName(), response.getBoxName());
+        assertEquals(request.getBoxDescription(), response.getBoxDescription());
+        assertEquals(request.getBoxDisplayName(), response.getBoxDisplayName());
+        assertEquals(request.getDropAmount(), response.getDropAmount());
+        assertEquals(request.getGameMode(), response.getGameMode());
     }
 
     @Test

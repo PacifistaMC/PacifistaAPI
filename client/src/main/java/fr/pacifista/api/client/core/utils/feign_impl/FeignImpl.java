@@ -1,5 +1,12 @@
 package fr.pacifista.api.client.core.utils.feign_impl;
 
+import com.funixproductions.core.crud.clients.CrudClient;
+import com.funixproductions.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiException;
+import com.funixproductions.core.exceptions.ApiForbiddenException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import feign.Feign;
@@ -7,13 +14,6 @@ import feign.FeignException;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.okhttp.OkHttpClient;
-import fr.funixgaming.api.core.crud.clients.CrudClient;
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiException;
-import fr.funixgaming.api.core.exceptions.ApiForbiddenException;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NonNull;

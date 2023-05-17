@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.core.converters;
 
-import fr.funixgaming.api.core.utils.encryption.Encryption;
+import com.funixproductions.core.tools.encryption.Encryption;
 import org.springframework.stereotype.Component;
 
 @Component

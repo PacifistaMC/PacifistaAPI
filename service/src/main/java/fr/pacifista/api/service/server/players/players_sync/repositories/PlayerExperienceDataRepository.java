@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.server.players.players_sync.repositories;
 
-import fr.funixgaming.api.core.crud.repositories.ApiRepository;
+import com.funixproductions.core.crud.repositories.ApiRepository;
 import fr.pacifista.api.service.server.players.players_sync.entities.PlayerExperienceData;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,8 @@
 package fr.pacifista.api.service.server.sanctions.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
-import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
-import fr.pacifista.api.client.sanctions.enums.SanctionType;
+import com.funixproductions.core.crud.entities.ApiEntity;
+import fr.pacifista.api.client.server.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.server.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.core.converters.EncryptionString;
 import jakarta.persistence.*;
 import lombok.Getter;

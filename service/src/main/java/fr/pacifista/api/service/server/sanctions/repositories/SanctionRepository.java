@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.sanctions.repositories;
 
-import fr.funixgaming.api.core.crud.repositories.ApiRepository;
-import fr.pacifista.api.client.sanctions.enums.SanctionType;
+import com.funixproductions.core.crud.repositories.ApiRepository;
+import fr.pacifista.api.client.server.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.server.sanctions.entities.Sanction;
 import org.springframework.stereotype.Repository;
 

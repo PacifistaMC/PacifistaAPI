@@ -1,7 +1,6 @@
-package fr.pacifista.api.service.players.players_sync.services;
+package fr.pacifista.api.service.server.players.players_sync.services;
 
-import fr.pacifista.api.client.players.players_sync.dtos.PlayerMoneyDataDTO;
-import fr.pacifista.api.service.server.players.players_sync.services.PlayerMoneyDataService;
+import fr.pacifista.api.client.server.players.players_sync.dtos.PlayerMoneyDataDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

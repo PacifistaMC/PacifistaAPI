@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.server.permissions.repositories;
 
-import fr.funixgaming.api.core.crud.repositories.ApiRepository;
+import com.funixproductions.core.crud.repositories.ApiRepository;
 import fr.pacifista.api.service.server.permissions.entities.PacifistaPlayerRole;
 import fr.pacifista.api.service.server.permissions.entities.PacifistaRole;
 import org.springframework.stereotype.Repository;

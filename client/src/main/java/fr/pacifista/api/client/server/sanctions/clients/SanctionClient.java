@@ -1,8 +1,8 @@
-package fr.pacifista.api.client.sanctions.clients;
+package fr.pacifista.api.client.server.sanctions.clients;
 
-import fr.funixgaming.api.core.crud.clients.CrudClient;
-import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
-import fr.pacifista.api.client.sanctions.enums.SanctionType;
+import com.funixproductions.core.crud.clients.CrudClient;
+import fr.pacifista.api.client.server.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.server.sanctions.enums.SanctionType;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

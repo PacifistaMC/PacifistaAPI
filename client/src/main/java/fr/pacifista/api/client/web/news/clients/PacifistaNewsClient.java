@@ -1,6 +1,6 @@
 package fr.pacifista.api.client.web.news.clients;
 
-import fr.funixgaming.api.core.crud.clients.CrudClient;
+import com.funixproductions.core.crud.clients.CrudClient;
 import fr.pacifista.api.client.web.news.dtos.PacifistaNewsDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 

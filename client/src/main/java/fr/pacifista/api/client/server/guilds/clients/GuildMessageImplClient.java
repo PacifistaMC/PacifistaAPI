@@ -1,7 +1,7 @@
-package fr.pacifista.api.client.guilds.clients;
+package fr.pacifista.api.client.server.guilds.clients;
 
 import fr.pacifista.api.client.core.utils.feign_impl.FeignImpl;
-import fr.pacifista.api.client.guilds.dtos.GuildMessageDTO;
+import fr.pacifista.api.client.server.guilds.dtos.GuildMessageDTO;
 
 public class GuildMessageImplClient extends FeignImpl<GuildMessageDTO, GuildMessageClient> implements GuildMessageClient {
     public GuildMessageImplClient() {

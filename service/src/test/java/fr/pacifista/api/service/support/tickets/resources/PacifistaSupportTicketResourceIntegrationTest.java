@@ -1,20 +1,23 @@
 package fr.pacifista.api.service.support.tickets.resources;
 
+import com.funixproductions.api.client.google.recaptcha.clients.GoogleCaptchaClient;
+import com.funixproductions.api.client.user.dtos.UserDTO;
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.test.beans.JsonHelper;
 import com.google.gson.reflect.TypeToken;
-import fr.funixgaming.api.client.user.dtos.UserDTO;
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.client.support.tickets.enums.TicketType;
 import fr.pacifista.api.service.support.tickets.services.PacifistaSupportTicketService;
-import fr.pacifista.api.utils.JsonHelper;
 import fr.pacifista.api.utils.ResourceTestHandler;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -27,6 +30,8 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,6 +46,15 @@ class PacifistaSupportTicketResourceIntegrationTest extends ResourceTestHandler 
 
     @Autowired
     PacifistaSupportTicketService ticketService;
+
+    @MockBean
+    GoogleCaptchaClient captchaClient;
+
+    @BeforeEach
+    void setupCaptcha() {
+        reset(this.captchaClient);
+        doNothing().when(this.captchaClient).verify(any(), any(), any());
+    }
 
     @Test
     void fetchUserTickets() throws Exception {

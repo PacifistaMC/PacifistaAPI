@@ -1,6 +1,6 @@
-package fr.pacifista.api.client.guilds.dtos;
+package fr.pacifista.api.client.server.guilds.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.crud.dtos.ApiDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

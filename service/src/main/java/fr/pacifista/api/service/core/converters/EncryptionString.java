@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.core.converters;
 
-import fr.funixgaming.api.core.utils.encryption.ApiConverter;
+import com.funixproductions.core.tools.encryption.ApiConverter;
 import jakarta.persistence.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

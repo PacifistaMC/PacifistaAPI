@@ -1,12 +1,10 @@
-package fr.pacifista.api.service.boxes.services;
+package fr.pacifista.api.service.server.boxes.services;
 
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.boxes.dtos.BoxDTO;
-import fr.pacifista.api.client.boxes.dtos.BoxRewardDTO;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.core.enums.ServerGameMode;
-import fr.pacifista.api.service.server.boxes.services.BoxRewardService;
-import fr.pacifista.api.service.server.boxes.services.BoxService;
+import fr.pacifista.api.client.server.boxes.dtos.BoxDTO;
+import fr.pacifista.api.client.server.boxes.dtos.BoxRewardDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

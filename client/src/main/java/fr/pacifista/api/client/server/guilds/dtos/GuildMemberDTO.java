@@ -1,7 +1,7 @@
-package fr.pacifista.api.client.guilds.dtos;
+package fr.pacifista.api.client.server.guilds.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
-import fr.pacifista.api.client.guilds.enums.GuildRole;
+import com.funixproductions.core.crud.dtos.ApiDTO;
+import fr.pacifista.api.client.server.guilds.enums.GuildRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

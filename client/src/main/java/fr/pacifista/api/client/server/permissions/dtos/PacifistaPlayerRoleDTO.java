@@ -1,6 +1,6 @@
-package fr.pacifista.api.client.permissions.dtos;
+package fr.pacifista.api.client.server.permissions.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.crud.dtos.ApiDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

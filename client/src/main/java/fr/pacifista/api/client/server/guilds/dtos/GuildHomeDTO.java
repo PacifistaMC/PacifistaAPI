@@ -1,4 +1,4 @@
-package fr.pacifista.api.client.guilds.dtos;
+package fr.pacifista.api.client.server.guilds.dtos;
 
 import fr.pacifista.api.client.core.dtos.LocationDTO;
 import jakarta.validation.constraints.NotNull;

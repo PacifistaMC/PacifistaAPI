@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.core.configs;
 
-import fr.funixgaming.api.core.utils.network.IPUtils;
+import com.funixproductions.core.tools.network.IPUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

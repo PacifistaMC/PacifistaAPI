@@ -1,9 +1,9 @@
 package fr.pacifista.api.service.server.guilds.services;
 
-import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.guilds.dtos.GuildDTO;
+import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
+import fr.pacifista.api.client.server.guilds.dtos.GuildDTO;
 import fr.pacifista.api.service.server.guilds.entities.Guild;
 import fr.pacifista.api.service.server.guilds.entities.GuildExperience;
 import fr.pacifista.api.service.server.guilds.mappers.GuildMapper;

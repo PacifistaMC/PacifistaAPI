@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.shop.articles.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
+import com.funixproductions.core.crud.resources.ApiResource;
 import fr.pacifista.api.client.web.shop.articles.clients.ShopArticlesClient;
 import fr.pacifista.api.client.web.shop.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.service.web.shop.articles.services.ShopArticleService;

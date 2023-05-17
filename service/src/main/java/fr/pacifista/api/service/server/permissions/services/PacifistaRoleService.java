@@ -1,10 +1,10 @@
 package fr.pacifista.api.service.server.permissions.services;
 
+import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.google.common.base.Strings;
-import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.client.permissions.dtos.PacifistaRoleDTO;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaRoleDTO;
 import fr.pacifista.api.service.server.permissions.entities.PacifistaPlayerRole;
 import fr.pacifista.api.service.server.permissions.entities.PacifistaRole;
 import fr.pacifista.api.service.server.permissions.mappers.PacifistaRoleMapper;

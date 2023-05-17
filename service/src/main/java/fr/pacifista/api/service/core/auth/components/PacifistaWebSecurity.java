@@ -1,12 +1,13 @@
 package fr.pacifista.api.service.core.auth.components;
 
-import fr.funixgaming.api.client.user.enums.UserRole;
-import jakarta.servlet.http.HttpServletResponse;
+import com.funixproductions.api.client.user.enums.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,52 +30,46 @@ public class PacifistaWebSecurity {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http = http.cors().and().csrf().disable();
+        http = http.cors(httpSecurityCorsConfigurer ->httpSecurityCorsConfigurer.configurationSource(httpServletRequest -> {
+                    final CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowCredentials(true);
+                    corsConfiguration.addAllowedOriginPattern("*");
+                    corsConfiguration.addAllowedHeader("*");
+                    corsConfiguration.addAllowedMethod("*");
+                    return corsConfiguration;
+                })).csrf(AbstractHttpConfigurer::disable)
 
-        //Set unauthorized requests exception handler
-        http = http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
+                .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(Customizer.withDefaults())
 
-        http = http
-                .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> response.sendError(
-                                HttpServletResponse.SC_UNAUTHORIZED,
-                                ex.getMessage()
-                        )
-                )
-                .and();
+                .authorizeHttpRequests(exchanges -> exchanges
+                        .requestMatchers("/sanctions/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
 
-        http.authorizeHttpRequests(exchanges -> exchanges
-                .requestMatchers("/sanctions/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+                        .requestMatchers("/warps/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
 
-                .requestMatchers("/warps/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+                        .requestMatchers("/box/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers("/box/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                        .requestMatchers("/permissions/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers("/permissions/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                        .requestMatchers("/roles/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers("/roles/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                        .requestMatchers("/playersync/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers("/playersync/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                        .requestMatchers("/guilds/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers("/guilds/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                        .requestMatchers(HttpMethod.GET, "/web/**").permitAll()
+                        .requestMatchers("/web/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
 
-                .requestMatchers(HttpMethod.GET, "/web/**").permitAll()
-                .requestMatchers("/web/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
+                        .requestMatchers("/support/ticket/message/web**").authenticated()
+                        .requestMatchers("/support/ticket/message/web/ws").permitAll()
+                        .requestMatchers("/support/ticket/web**").authenticated()
+                        .requestMatchers("/support/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
 
-                .requestMatchers("/support/ticket/message/web**").authenticated()
-                .requestMatchers("/support/ticket/message/web/ws").permitAll()
-                .requestMatchers("/support/ticket/web**").authenticated()
-                .requestMatchers("/support/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+                        .anyRequest().authenticated()
+                ).httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-                .anyRequest().authenticated()
-        ).httpBasic();
-
-
-        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

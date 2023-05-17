@@ -1,8 +1,7 @@
-package fr.pacifista.api.service.players.players_sync.services;
+package fr.pacifista.api.service.server.players.players_sync.services;
 
 import fr.pacifista.api.client.core.enums.ServerGameMode;
-import fr.pacifista.api.client.players.players_sync.dtos.PlayerExperienceDataDTO;
-import fr.pacifista.api.service.server.players.players_sync.services.PlayerExperienceDataService;
+import fr.pacifista.api.client.server.players.players_sync.dtos.PlayerExperienceDataDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

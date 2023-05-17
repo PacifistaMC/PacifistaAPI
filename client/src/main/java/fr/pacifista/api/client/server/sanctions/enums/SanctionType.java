@@ -1,4 +1,4 @@
-package fr.pacifista.api.client.sanctions.enums;
+package fr.pacifista.api.client.server.sanctions.enums;
 
 public enum SanctionType {
     BAN,

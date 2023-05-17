@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.core.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.client.core.enums.ServerType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;

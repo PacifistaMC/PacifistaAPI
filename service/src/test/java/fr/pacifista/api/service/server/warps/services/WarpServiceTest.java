@@ -1,9 +1,8 @@
-package fr.pacifista.api.service.warps.services;
+package fr.pacifista.api.service.server.warps.services;
 
 import fr.pacifista.api.client.core.enums.ServerType;
-import fr.pacifista.api.client.warps.dtos.WarpDTO;
-import fr.pacifista.api.client.warps.enums.WarpType;
-import fr.pacifista.api.service.server.warps.services.WarpService;
+import fr.pacifista.api.client.server.warps.dtos.WarpDTO;
+import fr.pacifista.api.client.server.warps.enums.WarpType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

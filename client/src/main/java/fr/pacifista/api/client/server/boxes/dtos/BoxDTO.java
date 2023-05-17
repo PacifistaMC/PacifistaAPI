@@ -1,6 +1,6 @@
-package fr.pacifista.api.client.boxes.dtos;
+package fr.pacifista.api.client.server.boxes.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.client.core.enums.ServerGameMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

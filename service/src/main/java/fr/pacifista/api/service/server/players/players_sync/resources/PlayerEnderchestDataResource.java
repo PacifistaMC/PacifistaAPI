@@ -1,8 +1,8 @@
 package fr.pacifista.api.service.server.players.players_sync.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
-import fr.pacifista.api.client.players.players_sync.clients.PlayerEnderchestDataClient;
-import fr.pacifista.api.client.players.players_sync.dtos.PlayerEnderchestDataDTO;
+import com.funixproductions.core.crud.resources.ApiResource;
+import fr.pacifista.api.client.server.players.players_sync.clients.PlayerEnderchestDataClient;
+import fr.pacifista.api.client.server.players.players_sync.dtos.PlayerEnderchestDataDTO;
 import fr.pacifista.api.service.server.players.players_sync.services.PlayerEnderchestDataService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

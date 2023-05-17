@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.server.players.players_sync.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.client.core.enums.ServerGameMode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

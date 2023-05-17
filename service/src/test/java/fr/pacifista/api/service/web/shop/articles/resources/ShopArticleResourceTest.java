@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.shop.articles.resources;
 
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
+import com.funixproductions.core.crud.dtos.PageDTO;
 import fr.pacifista.api.client.web.shop.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.client.web.shop.categories.dtos.ShopCategoryDTO;
 import fr.pacifista.api.service.web.shop.ShopResourceModuleTest;

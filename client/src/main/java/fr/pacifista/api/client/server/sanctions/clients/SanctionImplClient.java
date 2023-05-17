@@ -1,10 +1,10 @@
-package fr.pacifista.api.client.sanctions.clients;
+package fr.pacifista.api.client.server.sanctions.clients;
 
+import com.funixproductions.core.exceptions.ApiException;
 import feign.FeignException;
-import fr.funixgaming.api.core.exceptions.ApiException;
 import fr.pacifista.api.client.core.utils.feign_impl.FeignImpl;
-import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
-import fr.pacifista.api.client.sanctions.enums.SanctionType;
+import fr.pacifista.api.client.server.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.server.sanctions.enums.SanctionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

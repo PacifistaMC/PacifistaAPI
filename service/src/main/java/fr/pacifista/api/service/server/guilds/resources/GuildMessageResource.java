@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.guilds.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
-import fr.pacifista.api.client.guilds.dtos.GuildMessageDTO;
+import com.funixproductions.core.crud.resources.ApiResource;
+import fr.pacifista.api.client.server.guilds.dtos.GuildMessageDTO;
 import fr.pacifista.api.service.server.guilds.services.GuildMessageService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,9 +1,9 @@
 package fr.pacifista.api.service.server.sanctions.resources;
 
-import fr.funixgaming.api.core.crud.resources.ApiResource;
-import fr.pacifista.api.client.sanctions.clients.SanctionClient;
-import fr.pacifista.api.client.sanctions.dtos.SanctionDTO;
-import fr.pacifista.api.client.sanctions.enums.SanctionType;
+import com.funixproductions.core.crud.resources.ApiResource;
+import fr.pacifista.api.client.server.sanctions.clients.SanctionClient;
+import fr.pacifista.api.client.server.sanctions.dtos.SanctionDTO;
+import fr.pacifista.api.client.server.sanctions.enums.SanctionType;
 import fr.pacifista.api.service.server.sanctions.services.SanctionService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

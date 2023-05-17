@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.news.service;
 
-import fr.funixgaming.api.client.user.dtos.UserDTO;
+import com.funixproductions.api.client.user.dtos.UserDTO;
 import fr.pacifista.api.client.web.news.dtos.PacifistaNewsDTO;
 import fr.pacifista.api.service.core.auth.entities.Session;
 import fr.pacifista.api.service.core.auth.services.ActualSession;

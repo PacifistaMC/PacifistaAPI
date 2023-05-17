@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.support.tickets.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.client.support.tickets.enums.TicketCreationSource;
 import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.client.support.tickets.enums.TicketType;

@@ -1,14 +1,14 @@
 package fr.pacifista.api.service.core.auth.components;
 
+import com.funixproductions.api.client.user.clients.UserAuthClient;
+import com.funixproductions.api.client.user.dtos.UserDTO;
+import com.funixproductions.api.client.user.enums.UserRole;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiException;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.net.HttpHeaders;
 import feign.FeignException;
-import fr.funixgaming.api.client.user.clients.UserAuthClient;
-import fr.funixgaming.api.client.user.dtos.UserDTO;
-import fr.funixgaming.api.client.user.enums.UserRole;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiException;
 import fr.pacifista.api.service.core.auth.entities.Session;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

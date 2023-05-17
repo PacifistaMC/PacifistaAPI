@@ -1,4 +1,4 @@
-package fr.pacifista.api.client.guilds.enums;
+package fr.pacifista.api.client.server.guilds.enums;
 
 public enum GuildRole {
     OWNER,

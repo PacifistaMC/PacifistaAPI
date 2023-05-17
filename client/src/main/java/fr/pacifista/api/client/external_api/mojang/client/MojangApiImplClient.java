@@ -1,12 +1,12 @@
 package fr.pacifista.api.client.external_api.mojang.client;
 
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiException;
 import feign.Feign;
 import feign.FeignException;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.okhttp.OkHttpClient;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiException;
 import fr.pacifista.api.client.external_api.mojang.dto.MojangUserNameAndIdDTO;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.lang.Nullable;

@@ -1,13 +1,13 @@
 package fr.pacifista.api.service.support.tickets.services;
 
+import com.funixproductions.api.client.user.clients.UserAuthClient;
+import com.funixproductions.api.client.user.dtos.UserDTO;
+import com.funixproductions.api.client.user.enums.UserRole;
+import com.funixproductions.core.exceptions.ApiException;
+import com.funixproductions.core.tools.websocket.services.ApiWebsocketServerHandler;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import feign.FeignException;
-import fr.funixgaming.api.client.user.clients.UserAuthClient;
-import fr.funixgaming.api.client.user.dtos.UserDTO;
-import fr.funixgaming.api.client.user.enums.UserRole;
-import fr.funixgaming.api.core.exceptions.ApiException;
-import fr.funixgaming.api.core.utils.websocket.services.ApiWebsocketServerHandler;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketMessageDTO;
 import lombok.NonNull;

@@ -1,7 +1,7 @@
-package fr.pacifista.api.client.sanctions.dtos;
+package fr.pacifista.api.client.server.sanctions.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
-import fr.pacifista.api.client.sanctions.enums.SanctionType;
+import com.funixproductions.core.crud.dtos.ApiDTO;
+import fr.pacifista.api.client.server.sanctions.enums.SanctionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

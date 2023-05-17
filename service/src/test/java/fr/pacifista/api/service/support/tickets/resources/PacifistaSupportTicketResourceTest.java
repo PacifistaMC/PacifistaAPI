@@ -1,13 +1,13 @@
 package fr.pacifista.api.service.support.tickets.resources;
 
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
-import fr.funixgaming.api.core.external.google.captcha.services.GoogleCaptchaService;
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.test.beans.JsonHelper;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.client.support.tickets.enums.TicketCreationSource;
 import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.client.support.tickets.enums.TicketType;
+import fr.pacifista.api.service.google.recaptcha.GoogleCaptchaService;
 import fr.pacifista.api.service.support.tickets.services.PacifistaSupportTicketService;
-import fr.pacifista.api.utils.JsonHelper;
 import fr.pacifista.api.utils.ResourceTestHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,8 @@
-package fr.pacifista.api.service.guilds.services;
+package fr.pacifista.api.service.server.guilds.services;
 
 import fr.pacifista.api.client.core.enums.ServerType;
-import fr.pacifista.api.client.guilds.dtos.GuildDTO;
-import fr.pacifista.api.client.guilds.dtos.GuildHomeDTO;
-import fr.pacifista.api.service.server.guilds.services.GuildHomeService;
+import fr.pacifista.api.client.server.guilds.dtos.GuildDTO;
+import fr.pacifista.api.client.server.guilds.dtos.GuildHomeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

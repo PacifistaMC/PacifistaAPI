@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.boxes.mappers;
 
-import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.boxes.dtos.BoxDTO;
+import com.funixproductions.core.crud.mappers.ApiMapper;
+import fr.pacifista.api.client.server.boxes.dtos.BoxDTO;
 import fr.pacifista.api.service.server.boxes.entities.Box;
 import org.mapstruct.*;
 

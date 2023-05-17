@@ -1,6 +1,6 @@
 package fr.pacifista.api.client.web.shop.articles.dtos;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.client.web.shop.categories.dtos.ShopCategoryDTO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

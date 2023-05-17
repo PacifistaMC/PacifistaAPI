@@ -1,8 +1,8 @@
 package fr.pacifista.api.service.support.tickets.services;
 
-import fr.funixgaming.api.core.crud.services.ApiService;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiNotFoundException;
+import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketMessageDTO;
 import fr.pacifista.api.service.support.tickets.entities.PacifistaSupportTicket;
 import fr.pacifista.api.service.support.tickets.entities.PacifistaSupportTicketMessage;

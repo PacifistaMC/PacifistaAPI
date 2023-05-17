@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.server.boxes.repositories;
 
-import fr.funixgaming.api.core.crud.repositories.ApiRepository;
+import com.funixproductions.core.crud.repositories.ApiRepository;
 import fr.pacifista.api.service.server.boxes.entities.Box;
 import org.springframework.stereotype.Repository;
 

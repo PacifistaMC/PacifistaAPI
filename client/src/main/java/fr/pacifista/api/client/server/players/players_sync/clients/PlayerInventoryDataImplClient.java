@@ -1,7 +1,7 @@
-package fr.pacifista.api.client.players.players_sync.clients;
+package fr.pacifista.api.client.server.players.players_sync.clients;
 
 import fr.pacifista.api.client.core.utils.feign_impl.FeignImpl;
-import fr.pacifista.api.client.players.players_sync.dtos.PlayerInventoryDataDTO;
+import fr.pacifista.api.client.server.players.players_sync.dtos.PlayerInventoryDataDTO;
 
 public class PlayerInventoryDataImplClient extends FeignImpl<PlayerInventoryDataDTO, PlayerInventoryDataClient> implements PlayerInventoryDataClient {
     public PlayerInventoryDataImplClient() {

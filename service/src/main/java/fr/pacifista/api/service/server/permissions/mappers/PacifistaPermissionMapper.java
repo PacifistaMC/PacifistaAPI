@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.permissions.mappers;
 
-import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.permissions.dtos.PacifistaPermissionDTO;
+import com.funixproductions.core.crud.mappers.ApiMapper;
+import fr.pacifista.api.client.server.permissions.dtos.PacifistaPermissionDTO;
 import fr.pacifista.api.service.server.permissions.entities.PacifistaPermission;
 import org.mapstruct.*;
 

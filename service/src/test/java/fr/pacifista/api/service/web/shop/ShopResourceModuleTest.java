@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.web.shop;
 
-import fr.funixgaming.api.core.crud.dtos.ApiDTO;
-import fr.pacifista.api.utils.JsonHelper;
+import com.funixproductions.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.test.beans.JsonHelper;
 import fr.pacifista.api.utils.ResourceTestHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.guilds.mappers;
 
-import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.guilds.dtos.GuildDTO;
+import com.funixproductions.core.crud.mappers.ApiMapper;
+import fr.pacifista.api.client.server.guilds.dtos.GuildDTO;
 import fr.pacifista.api.service.server.guilds.entities.Guild;
 import org.mapstruct.*;
 

@@ -1,26 +1,24 @@
 package fr.pacifista.api.service.support.tickets.resources;
 
+import com.funixproductions.api.client.user.dtos.UserDTO;
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.crud.enums.SearchOperation;
+import com.funixproductions.core.crud.resources.ApiResource;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiForbiddenException;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import fr.funixgaming.api.client.user.dtos.UserDTO;
-import fr.funixgaming.api.core.crud.dtos.PageDTO;
-import fr.funixgaming.api.core.crud.enums.SearchOperation;
-import fr.funixgaming.api.core.crud.resources.ApiResource;
-import fr.funixgaming.api.core.exceptions.ApiBadRequestException;
-import fr.funixgaming.api.core.exceptions.ApiForbiddenException;
-import fr.funixgaming.api.core.external.google.captcha.services.GoogleCaptchaService;
 import fr.pacifista.api.client.support.tickets.clients.PacifistaSupportTicketClient;
 import fr.pacifista.api.client.support.tickets.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.client.support.tickets.enums.TicketCreationSource;
 import fr.pacifista.api.client.support.tickets.enums.TicketStatus;
 import fr.pacifista.api.service.core.auth.entities.Session;
 import fr.pacifista.api.service.core.auth.services.ActualSession;
+import fr.pacifista.api.service.google.recaptcha.GoogleCaptchaService;
 import fr.pacifista.api.service.support.tickets.services.PacifistaSupportTicketService;
 import fr.pacifista.api.service.support.tickets.services.PacifistaSupportWebSocketTicketMessageService;
 import lombok.NonNull;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

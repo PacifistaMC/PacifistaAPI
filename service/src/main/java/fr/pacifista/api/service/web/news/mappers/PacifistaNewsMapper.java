@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.news.mappers;
 
-import fr.funixgaming.api.core.crud.mappers.ApiMapper;
+import com.funixproductions.core.crud.mappers.ApiMapper;
 import fr.pacifista.api.client.web.news.dtos.PacifistaNewsDTO;
 import fr.pacifista.api.service.web.news.entities.PacifistaNews;
 import org.mapstruct.Mapper;

@@ -1,6 +1,6 @@
 package fr.pacifista.api.service.web.news.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
+import com.funixproductions.core.crud.entities.ApiEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;

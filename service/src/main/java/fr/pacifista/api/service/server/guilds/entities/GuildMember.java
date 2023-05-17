@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.guilds.entities;
 
-import fr.funixgaming.api.core.crud.entities.ApiEntity;
-import fr.pacifista.api.client.guilds.enums.GuildRole;
+import com.funixproductions.core.crud.entities.ApiEntity;
+import fr.pacifista.api.client.server.guilds.enums.GuildRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

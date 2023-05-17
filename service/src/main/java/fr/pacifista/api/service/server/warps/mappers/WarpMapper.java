@@ -1,7 +1,7 @@
 package fr.pacifista.api.service.server.warps.mappers;
 
-import fr.funixgaming.api.core.crud.mappers.ApiMapper;
-import fr.pacifista.api.client.warps.dtos.WarpDTO;
+import com.funixproductions.core.crud.mappers.ApiMapper;
+import fr.pacifista.api.client.server.warps.dtos.WarpDTO;
 import fr.pacifista.api.service.server.warps.entities.Warp;
 import org.mapstruct.*;
 
