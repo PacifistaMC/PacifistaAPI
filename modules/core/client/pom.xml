@@ -23,13 +23,6 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-gson</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>fr.pacifista.api.core.tests</groupId>
-            <artifactId>pacifista-core-test-utils</artifactId>
-            <version>${fr.pacifista.api.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

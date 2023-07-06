@@ -43,6 +43,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>fr.pacifista.api.core.service</groupId>
+            <artifactId>pacifista-core-service</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.pacifista.api.core.tests</groupId>
+            <artifactId>pacifista-core-test-utils</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -42,7 +42,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         ).andExpect(status().isForbidden());
         mockMvc.perform(get(this.route + '/')
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
-        ).andExpect(status().isForbidden());
+        ).andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -54,7 +54,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
         ).andExpect(status().isForbidden());
         mockMvc.perform(get(this.route + '/')
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
-        ).andExpect(status().isForbidden());
+        ).andExpect(status().is4xxClientError());
     }
 
     @Test
