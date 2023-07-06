@@ -11,18 +11,26 @@ public class PacifistaApiConfig {
     /**
      * https://api.pacifista.fr
      */
-    private final String urlDomainPacifistaApi = System.getenv("PACIFISTA_API_URL_DOMAIN");
+    private final String urlDomainPacifistaApi;
 
     /**
      * https://api.funixproductions.com
      */
-    private final String urlDomainFunixApi = System.getenv("FUNIXPROD_API_URL_DOMAIN");
+    private final String urlDomainFunixProductionsApi;
 
     private PacifistaApiConfig() throws ApiException {
-        if (Strings.isEmpty(urlDomainPacifistaApi)) {
-            throw new ApiException("PACIFISTA_API_URL_DOMAIN is not set");
-        } else if (Strings.isEmpty(urlDomainFunixApi)) {
-            throw new ApiException("FUNIXPROD_API_URL_DOMAIN is not set");
+        final String pacifistaApiDomain = System.getenv("PACIFISTA_API_URL_DOMAIN");
+        final String funixProdApiDomain = System.getenv("FUNIXPROD_API_URL_DOMAIN");
+
+        if (Strings.isEmpty(funixProdApiDomain)) {
+            this.urlDomainFunixProductionsApi = "https://api.funixproductions.com";
+        } else {
+            this.urlDomainFunixProductionsApi = funixProdApiDomain;
+        }
+        if (Strings.isEmpty(pacifistaApiDomain)) {
+            this.urlDomainPacifistaApi = "https://api.pacifista.fr";
+        } else {
+            this.urlDomainPacifistaApi = pacifistaApiDomain;
         }
     }
 

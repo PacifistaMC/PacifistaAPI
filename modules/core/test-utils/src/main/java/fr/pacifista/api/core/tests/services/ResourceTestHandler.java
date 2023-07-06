@@ -1,4 +1,4 @@
-package fr.pacifista.api.utils;
+package fr.pacifista.api.core.tests.services;
 
 import com.funixproductions.api.user.client.clients.UserAuthClient;
 import com.funixproductions.api.user.client.dtos.UserDTO;

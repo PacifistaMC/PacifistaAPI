@@ -12,14 +12,18 @@
 
     <!-- Version: https://github.com/FunixProductions/FunixAPI -->
     <parent>
-        <artifactId>funixproductions-api</artifactId>
         <groupId>com.funixproductions.api</groupId>
-        <version>1.0.1</version>
+        <artifactId>funixproductions-api</artifactId>
+        <version>1.2.1</version>
     </parent>
 
     <modules>
         <module>client</module>
         <module>service</module>
+        <module>modules/core</module>
+        <module>modules/server</module>
+        <module>modules/web</module>
+        <module>modules/support</module>
     </modules>
 
     <properties>
@@ -27,7 +31,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <pacifista.api.version>1.1.0.1</pacifista.api.version>
+        <fr.pacifista.api.version>1.1.0.1</fr.pacifista.api.version>
     </properties>
 
     <description>PacifistaAPI, Api used in the gameserver Pacifista Minecraft and used on website https://pacifista.fr</description>
@@ -67,6 +71,12 @@
             <artifactId>test-utils</artifactId>
             <version>${com.funixproductions.core.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.funixproductions.api.user.client</groupId>
+            <artifactId>funixproductions-user-client</artifactId>
+            <version>${com.funixproductions.api.version}</version>
         </dependency>
     </dependencies>
 
