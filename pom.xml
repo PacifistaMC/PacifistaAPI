@@ -14,7 +14,7 @@
     <parent>
         <artifactId>funixproductions-api</artifactId>
         <groupId>com.funixproductions.api</groupId>
-        <version>1.0.1</version>
+        <version>1.2.1</version>
     </parent>
 
     <modules>
