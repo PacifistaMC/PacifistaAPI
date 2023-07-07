@@ -4,18 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.pacifista.api</groupId>
-        <artifactId>pacifista-api</artifactId>
+        <groupId>fr.pacifista.api.server</groupId>
+        <artifactId>pacifista-server</artifactId>
         <version>1.1.0.1</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>fr.pacifista.api.server</groupId>
-    <artifactId>pacifista-server</artifactId>
+    <groupId>fr.pacifista.api.server.guilds</groupId>
+    <artifactId>pacifista-server-guilds</artifactId>
     <packaging>pom</packaging>
+
     <modules>
-        <module>box</module>
-        <module>guilds</module>
+        <module>client</module>
+        <module>service</module>
     </modules>
 
     <properties>
