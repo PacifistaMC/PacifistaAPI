@@ -18,7 +18,6 @@ public class WebSecurity extends ApiWebSecurity {
     public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> getUrlsMatchers() {
         return ex -> ex
                 .requestMatchers("/actuator**").permitAll()
-                .requestMatchers("/box/**").hasAuthority(UserRole.PACIFISTA_ADMIN.getRole())
-                .anyRequest().authenticated();
+                .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
 }

@@ -1,4 +1,4 @@
-package fr.pacifista.api.server.guilds.service.security;
+package fr.pacifista.api.server.permissions.service.security;
 
 import com.funixproductions.api.user.client.enums.UserRole;
 import com.funixproductions.api.user.client.security.ApiWebSecurity;
@@ -17,7 +17,7 @@ public class WebSecurity extends ApiWebSecurity {
     @Override
     public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> getUrlsMatchers() {
         return ex -> ex
-                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/actuator**").permitAll()
                 .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
 }
