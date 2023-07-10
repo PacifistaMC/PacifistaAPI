@@ -4,7 +4,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.http.HttpHeaders;
 
-class FeignTokenInterceptor implements RequestInterceptor {
+public class FeignTokenInterceptor implements RequestInterceptor {
 
     private final String barerToken = System.getenv("FUNIXPRODUCTIONS_API_TOKEN");
 
