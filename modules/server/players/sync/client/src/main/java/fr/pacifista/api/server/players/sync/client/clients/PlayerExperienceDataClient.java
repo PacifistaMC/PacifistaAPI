@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(
         name = "PlayerExperienceData",
-        url = "${pacifista.api.app-domain-url}",
+        url = "${pacifista.api.server.playersync.app-domain-url}",
         path = "/playersync/experience",
         configuration = FeignTokenInterceptor.class
 )
