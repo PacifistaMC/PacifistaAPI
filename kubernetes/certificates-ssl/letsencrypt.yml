@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt
+  name: letsencrypt-pacifista
   namespace: "pacifista"
 spec:
   acme:
     email: contact@pacifista.fr
     privateKeySecretRef:
-      name: letsencrypt
+      name: letsencrypt-pacifista
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:
