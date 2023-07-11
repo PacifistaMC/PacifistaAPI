@@ -26,7 +26,7 @@ import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("support/ticket")
+@RequestMapping("/support/ticket")
 public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupportTicketDTO, PacifistaSupportTicketService> implements PacifistaSupportTicketClient {
 
     private final CurrentSession actualSession;
@@ -77,7 +77,7 @@ public class PacifistaSupportTicketResource extends ApiResource<PacifistaSupport
         }
 
         this.checkSpam(session);
-        this.googleCaptchaService.verify(session.getRequest(), "pacifistasupportticketcreate");
+        this.googleCaptchaService.verify(session.getServletRequest(), "pacifistasupportticketcreate");
 
         final UserDTO userDTO = session.getUserDTO();
         request.setCreatedByName(userDTO.getUsername());
