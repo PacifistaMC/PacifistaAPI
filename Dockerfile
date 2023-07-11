@@ -11,4 +11,4 @@ WORKDIR /container/java
 ADD ./modules/${SERVICE_BASE_DIR}/service/target/pacifista-${SERVICE_NAME}-service-${APP_VERSION}.jar /container/java/service.jar
 
 WORKDIR /container/app
-ENTRYPOINT ["/bin/sh", "-c", "java -jar -Xms300M -XX:MaxRAMPercentage=95.0 /container/java/service.jar"]
+ENTRYPOINT ["/bin/sh", "-c", "java -jar -Xms150M -XX:MaxRAMPercentage=95.0 /container/java/service.jar"]
