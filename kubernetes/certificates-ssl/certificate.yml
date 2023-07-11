@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pacifista-api-certificate
+  namespace: "pacifista"
+spec:
+  secretName: pacifista-api-certificate-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: "api.pacifista.fr"
+  dnsNames:
+    - "api.pacifista.fr"

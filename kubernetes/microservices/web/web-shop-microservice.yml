@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: web-shop-microservice-deployment
+  namespace: 'pacifista'
+  labels:
+    app: springboot
+    service: web-shop
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: springboot
+      service: web-shop
+  template:
+    metadata:
+      namespace: 'pacifista'
+      annotations:
+        build-time: "TIME-UPDATE-BUILD-FNG"
+      labels:
+        app: springboot
+        service: web-shop
+    spec:
+      containers:
+        - name: springboot-web-shop
+          image: ghcr.io/pacifistamc/pacifista-api-web-shop:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+                memory: "1300Mi"
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          env:
+            - name: APP_PORT
+              value: '80'
+            - name: DB_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres-url
+                  name: postgres-config
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres-port
+            - name: DB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres-db
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  namespace: 'pacifista'
+  name: web-shop-service
+
+spec:
+  type: ClusterIP
+  selector:
+    app: springboot
+    service: web-shop
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: 'pacifista'
+  name: web-shop-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-shop-microservice-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80

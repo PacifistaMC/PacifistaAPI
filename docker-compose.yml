@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  #Server - box service
+  build-production-server-box-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-box:latest
+    build:
+      context: .
+      args:
+        service_name: server-box
+        service_base_dir: server/box
+
+  #Server - Guilds service
+  build-production-server-guilds-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-guilds:latest
+    build:
+      context: .
+      args:
+        service_name: server-guilds
+        service_base_dir: server/guilds
+
+  #Server - Permissions service
+  build-production-server-permissions-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-permissions:latest
+    build:
+      context: .
+      args:
+        service_name: server-permissions
+        service_base_dir: server/permissions
+
+  #Server - Players Sync service
+  build-production-server-players-sync-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-players-sync:latest
+    build:
+      context: .
+      args:
+        service_name: server-players-sync
+        service_base_dir: server/players/sync
+
+  #Server - Sanctions service
+  build-production-server-sanctions-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-sanctions:latest
+    build:
+      context: .
+      args:
+        service_name: server-sanctions
+        service_base_dir: server/sanctions
+
+  #Server - Warps service
+  build-production-server-warps-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-warps:latest
+    build:
+      context: .
+      args:
+        service_name: server-warps
+        service_base_dir: server/warps
+
+  #Support - Tickets service
+  build-production-support-tickets-service:
+    image: ghcr.io/pacifistamc/pacifista-api-support-tickets:latest
+    build:
+      context: .
+      args:
+        service_name: support-tickets
+        service_base_dir: support/tickets
+
+  #Web - News service
+  build-production-web-news-service:
+    image: ghcr.io/pacifistamc/pacifista-api-web-news:latest
+    build:
+      context: .
+      args:
+        service_name: web-news
+        service_base_dir: web/news
+
+  #Web - News service
+  build-production-web-shop-service:
+    image: ghcr.io/pacifistamc/pacifista-api-web-shop:latest
+    build:
+      context: .
+      args:
+        service_name: web-shop
+        service_base_dir: web/shop

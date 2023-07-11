@@ -1,25 +1,14 @@
-FROM maven:3-openjdk-17 AS MAVEN
+FROM openjdk:17-alpine
 
-MAINTAINER Antoine PRONNIER, <antoine.pronnier@gmail.com>
-
-WORKDIR /container/pacifista-api/
-
-COPY pom.xml .
-
-COPY client/pom.xml ./client/
-COPY client/src ./client/src
-
-COPY service/pom.xml ./service/
-COPY service/src ./service/src
-
-RUN mvn clean package -B
-RUN rm service/target/pacifista-api-service-*-javadoc.jar
-RUN rm service/target/pacifista-api-service-*-sources.jar
-
-FROM openjdk:17 AS FINAL
+ARG service_name
+ARG service_base_dir
+ENV SERVICE_NAME=${service_name}
+ENV SERVICE_BASE_DIR=${service_base_dir}
+ENV APP_VERSION=1.1.0.1
 
 WORKDIR /container/java
 
-COPY --from=MAVEN /container/pacifista-api/service/target/pacifista-api-service-*.jar /container/java/server.jar
+ADD ./modules/${SERVICE_BASE_DIR}/service/target/pacifista-${SERVICE_NAME}-service-${APP_VERSION}.jar /container/java/service.jar
 
-ENTRYPOINT ["java", "-jar", "/container/java/server.jar", "-Dspring.profiles.active=docker"]
+WORKDIR /container/app
+ENTRYPOINT ["/bin/sh", "-c", "java -jar -Xms150M -XX:MaxRAMPercentage=95.0 /container/java/service.jar"]
