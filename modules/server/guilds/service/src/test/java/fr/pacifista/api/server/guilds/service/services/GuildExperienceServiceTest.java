@@ -16,31 +16,11 @@ class GuildExperienceServiceTest extends GuildServiceTestHandler {
     GuildExperienceService guildExperienceService;
 
     @Test
-    void createEntity() {
-        final GuildDTO guildDTO = super.generateGuild();
-        final GuildExperienceDTO experienceDTO = new GuildExperienceDTO();
-        experienceDTO.setGuildId(guildDTO.getId());
-        experienceDTO.setExperience(100);
-        experienceDTO.setLevel(100);
-
-        assertDoesNotThrow(() -> {
-            final GuildExperienceDTO created = guildExperienceService.create(experienceDTO);
-            assertEquals(experienceDTO.getExperience(), created.getExperience());
-            assertEquals(experienceDTO.getLevel(), created.getLevel());
-            assertEquals(experienceDTO.getGuildId(), created.getGuildId());
-        });
-    }
-
-    @Test
     void patchEntity() {
         final GuildDTO guildDTO = super.generateGuild();
-        final GuildExperienceDTO experienceDTO = new GuildExperienceDTO();
-        experienceDTO.setGuildId(guildDTO.getId());
-        experienceDTO.setExperience(100);
-        experienceDTO.setLevel(100);
 
         assertDoesNotThrow(() -> {
-            final GuildExperienceDTO created = guildExperienceService.create(experienceDTO);
+            final GuildExperienceDTO created = guildDTO.getExperience();
             created.setExperience(200);
             created.setLevel(200);
             final GuildExperienceDTO patched = guildExperienceService.update(created);
