@@ -4,7 +4,7 @@ metadata:
   namespace: 'pacifista'
   name: pacifista-api-ingress
   annotations:
-    kubernetes.io/ingress.class: traefik
+    spec.ingressClassName: traefik
 spec:
   tls:
     - secretName: pacifista-api-certificate-tls
