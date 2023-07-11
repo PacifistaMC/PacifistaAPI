@@ -18,8 +18,6 @@
     </parent>
 
     <modules>
-        <module>client</module>
-        <module>service</module>
         <module>modules/core</module>
         <module>modules/server</module>
         <module>modules/web</module>
