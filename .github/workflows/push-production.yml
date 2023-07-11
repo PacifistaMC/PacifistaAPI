@@ -70,7 +70,7 @@ jobs:
           name: maven-packages
           path: modules/**/target/*.jar
 
-  build-production-server-box-service:
+  build-production-images-service:
     needs: build-production-maven
     runs-on: ubuntu-latest
 
@@ -100,7 +100,7 @@ jobs:
 
   update-kubernetes-cluster:
     needs:
-      - build-production-server-box-service
+      - build-production-images-service
 
     runs-on: ubuntu-latest
 
