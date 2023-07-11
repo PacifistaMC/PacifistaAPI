@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 @FeignClient(
         name = "PacifistaPermission",
         url = "${pacifista.api.server.permissions.app-domain-url}",
-        path = "/permissions//gamepermissions",
+        path = "/permissions/gamepermissions",
         configuration = FeignTokenInterceptor.class
 )
 public interface PacifistaPermissionClient extends CrudClient<PacifistaPermissionDTO> {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("permissions/gamepermissions")
+@RequestMapping("/permissions/gamepermissions")
 public class PacifistaPermissionResource extends ApiResource<PacifistaPermissionDTO, PacifistaPermissionService> implements PacifistaPermissionClient {
     public PacifistaPermissionResource(PacifistaPermissionService pacifistaPermissionService) {
         super(pacifistaPermissionService);

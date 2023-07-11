@@ -1,0 +1,77 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: 'pacifista'
+  name: pacifista-api-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+    - secretName: pacifista-api-certificate-tls
+  rules:
+    - host: api.pacifista.fr
+      http:
+        paths:
+          - path: /box
+            pathType: Prefix
+            backend:
+              service:
+                name: server-box-service
+                port:
+                  number: 80
+          - path: /guilds
+            pathType: Prefix
+            backend:
+              service:
+                name: server-guilds-service
+                port:
+                  number: 80
+          - path: /permissions
+            pathType: Prefix
+            backend:
+              service:
+                name: server-permissions-service
+                port:
+                  number: 80
+          - path: /playersync
+            pathType: Prefix
+            backend:
+              service:
+                name: server-players-sync-service
+                port:
+                  number: 80
+          - path: /sanctions
+            pathType: Prefix
+            backend:
+              service:
+                name: server-sanctions-service
+                port:
+                  number: 80
+          - path: /warps
+            pathType: Prefix
+            backend:
+              service:
+                name: server-warps-service
+                port:
+                  number: 80
+          - path: /support/ticket
+            pathType: Prefix
+            backend:
+              service:
+                name: support-tickets-service
+                port:
+                  number: 80
+          - path: /web/shop
+            pathType: Prefix
+            backend:
+              service:
+                name: web-shop-service
+                port:
+                  number: 80
+          - path: /web/news
+            pathType: Prefix
+            backend:
+              service:
+                name: web-news-service
+                port:
+                  number: 80
