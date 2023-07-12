@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: server-sanctions-microservice-deployment
-  namespace: 'pacifista'
+  namespace: 'funixproductions'
   labels:
     app: springboot
     service: server-sanctions
@@ -16,7 +16,7 @@ spec:
       service: server-sanctions
   template:
     metadata:
-      namespace: 'pacifista'
+      namespace: 'funixproductions'
       annotations:
         build-time: "TIME-UPDATE-BUILD-FNG"
       labels:
@@ -45,26 +45,26 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: postgres-url
-                  name: postgres-config
+                  name: postgres-config-pacifista
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: postgres-config
+                  name: postgres-config-pacifista
                   key: postgres-port
             - name: DB_DATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: postgres-config
+                  name: postgres-config-pacifista
                   key: postgres-db
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-secret-pacifista
                   key: postgres-user
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-secret-pacifista
                   key: postgres-password
 
 ---
@@ -73,7 +73,7 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  namespace: 'pacifista'
+  namespace: 'funixproductions'
   name: server-sanctions-service
 
 spec:
