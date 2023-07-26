@@ -133,4 +133,4 @@ jobs:
           DISCORD_USERNAME: Pacifista-API-Deploy
         uses: Ilshidur/action-discord@master
         with:
-          args: '✅ Pacifista-API 🌍**PROD** (api.pacifista.fr) a bien été déployé sur le cluster Kubernetes !'
+          args: '✅ Pacifista-API 🌍**PROD** (api.pacifista.fr) à bien été déployé sur le cluster Kubernetes !'

@@ -8,3 +8,4 @@ Api principale du serveur Minecraft Pacifista et du site web pacifista.fr
 [![Duplicated Lines (%)](https://sonarqube.funixgaming.fr/api/project_badges/measure?project=PacifistaMC_PacifistaAPI_AYQzovLnBQ5gx4sidxt8&metric=duplicated_lines_density&token=sqb_3c6a62421529a6d0ac63e6686b7e84376c86f25d)](https://sonarqube.funixgaming.fr/dashboard?id=PacifistaMC_PacifistaAPI_AYQzovLnBQ5gx4sidxt8)
 [![Lines of Code](https://sonarqube.funixgaming.fr/api/project_badges/measure?project=PacifistaMC_PacifistaAPI_AYQzovLnBQ5gx4sidxt8&metric=ncloc&token=sqb_3c6a62421529a6d0ac63e6686b7e84376c86f25d)](https://sonarqube.funixgaming.fr/dashboard?id=PacifistaMC_PacifistaAPI_AYQzovLnBQ5gx4sidxt8)
 
+Migration scripts are located in modules/server/box/src/main/resources/db/migration
