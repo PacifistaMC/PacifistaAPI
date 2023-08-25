@@ -14,6 +14,7 @@ import feign.FeignException;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.okhttp.OkHttpClient;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NonNull;
@@ -107,6 +108,24 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
     public void delete(String id) throws ApiException {
         try {
             client.delete(id);
+        } catch (FeignException e) {
+            throw handleFeignException(e);
+        }
+    }
+
+    @Override
+    public DTO updatePut(@Valid DTO request) {
+        try {
+            return client.updatePut(request);
+        } catch (FeignException e) {
+            throw handleFeignException(e);
+        }
+    }
+
+    @Override
+    public List<DTO> updatePut(@Valid List<@Valid DTO> request) {
+        try {
+            return client.updatePut(request);
         } catch (FeignException e) {
             throw handleFeignException(e);
         }
