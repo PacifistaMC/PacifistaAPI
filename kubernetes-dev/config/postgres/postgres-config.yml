@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: 'funixproductions-dev'
+  name: postgres-config-pacifista
+data:
+  postgres-url: '168.119.145.236'
+  postgres-port: '5434'
+  postgres-db: 'pacifista_db_dev'

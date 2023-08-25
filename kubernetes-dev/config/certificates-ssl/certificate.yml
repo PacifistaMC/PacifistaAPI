@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pacifista-api-certificate
+  namespace: 'funixproductions-dev'
+spec:
+  secretName: pacifista-api-certificate-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: "dev.api.pacifista.fr"
+  dnsNames:
+    - "dev.api.pacifista.fr"
