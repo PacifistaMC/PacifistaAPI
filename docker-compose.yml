@@ -37,6 +37,15 @@ services:
         service_name: server-players-sync
         service_base_dir: server/players/sync
 
+  #Server - Players Data service
+  build-production-server-players-data-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-players-data:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: server-players-data
+        service_base_dir: server/players/data
+
   #Server - Sanctions service
   build-production-server-sanctions-service:
     image: ghcr.io/pacifistamc/pacifista-api-server-sanctions:${IMAGE_TAG}

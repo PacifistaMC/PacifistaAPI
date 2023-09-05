@@ -40,6 +40,13 @@ spec:
                 name: server-players-sync-service
                 port:
                   number: 80
+          - path: /playerdata
+            pathType: Prefix
+            backend:
+              service:
+                name: server-players-data-service
+                port:
+                  number: 80
           - path: /sanctions
             pathType: Prefix
             backend:
