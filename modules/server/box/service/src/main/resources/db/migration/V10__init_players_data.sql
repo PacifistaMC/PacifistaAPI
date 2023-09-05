@@ -43,8 +43,8 @@ CREATE TABLE pacifista_player_session
     uuid               VARCHAR(255)                            NOT NULL,
     created_at         TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     updated_at         TIMESTAMP WITHOUT TIME ZONE,
-    connected_at       BIGINT                                  NOT NULL,
-    disconnected_at    BIGINT                                  NOT NULL,
+    connected_at       TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
+    disconnected_at    TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     CONSTRAINT pk_pacifista_player_session PRIMARY KEY (id)
 );
 
