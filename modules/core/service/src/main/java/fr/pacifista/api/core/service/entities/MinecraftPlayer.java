@@ -1,4 +1,4 @@
-package fr.pacifista.api.serverplayers.data.service.entities;
+package fr.pacifista.api.core.service.entities;
 
 import com.funixproductions.core.crud.entities.ApiEntity;
 import jakarta.persistence.Column;

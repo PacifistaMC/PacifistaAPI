@@ -1,5 +1,6 @@
 package fr.pacifista.api.serverplayers.data.service.entities;
 
+import fr.pacifista.api.core.service.entities.MinecraftPlayer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;

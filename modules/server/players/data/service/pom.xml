@@ -43,6 +43,12 @@
             <version>${fr.pacifista.api.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>fr.pacifista.api.core.service</groupId>
+            <artifactId>pacifista-core-service</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
