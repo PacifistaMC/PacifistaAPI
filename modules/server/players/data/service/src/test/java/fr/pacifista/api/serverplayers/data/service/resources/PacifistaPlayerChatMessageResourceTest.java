@@ -76,7 +76,7 @@ class PacifistaPlayerChatMessageResourceTest extends ResourceTestHandler {
         pacifistaPlayerChatMessageDTO.setServerType(ServerType.CREATIVE);
         pacifistaPlayerChatMessageDTO.setMinecraftUsername("Oui");
         mockMvc.perform(post("/playerdata/chatmessages")
-                        .header("Authorization", "Bearer dd")
+                        .header("Authorization", "Bearer ddc")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(pacifistaPlayerChatMessageDTO)))
                 .andExpect(status().isForbidden());

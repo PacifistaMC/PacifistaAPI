@@ -70,7 +70,7 @@ class PacifistaPlayerSessionResourceTest extends ResourceTestHandler {
         sessionDTO.setMinecraftUsername("Oui");
         sessionDTO.setMinecraftUuid(UUID.randomUUID());
         mockMvc.perform(post("/playerdata/session")
-                        .header("Authorization", "Bearer dd")
+                        .header("Authorization", "Bearer ddz")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(sessionDTO)))
                 .andExpect(status().isForbidden());

@@ -77,7 +77,7 @@ class PacifistaPlayerDataResourceTest extends ResourceTestHandler {
         playerDataDTO.setAcceptTeleportation(true);
         playerDataDTO.setAcceptPingSoundTagMessage(true);
         mockMvc.perform(post("/playerdata/data")
-                        .header("Authorization", "Bearer dd")
+                        .header("Authorization", "Bearer dds")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(playerDataDTO)))
                 .andExpect(status().isForbidden());
