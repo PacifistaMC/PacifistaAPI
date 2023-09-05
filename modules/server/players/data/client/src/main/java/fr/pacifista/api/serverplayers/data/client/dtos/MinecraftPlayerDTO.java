@@ -26,10 +26,18 @@ public abstract class MinecraftPlayerDTO extends ApiDTO {
     private String minecraftUsername;
 
     public void setMinecraftUsername(String minecraftUsername) {
-        this.minecraftUsername = minecraftUsername.toLowerCase();
+        if (minecraftUsername == null) {
+            this.minecraftUsername = null;
+        } else {
+            this.minecraftUsername = minecraftUsername.toLowerCase();
+        }
     }
 
     public String getMinecraftUsername() {
-        return minecraftUsername.toLowerCase();
+        if (minecraftUsername == null) {
+            return null;
+        } else {
+            return minecraftUsername.toLowerCase();
+        }
     }
 }
