@@ -4,23 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.pacifista.api.server</groupId>
-        <artifactId>pacifista-server</artifactId>
+        <groupId>fr.pacifista.api.serverplayers.data</groupId>
+        <artifactId>pacifista-server-players-data</artifactId>
         <version>1.5.1.0</version>
     </parent>
 
-    <groupId>fr.pacifista.api.server.players</groupId>
-    <artifactId>pacifista-server-players</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>sync</module>
-        <module>data</module>
-    </modules>
+    <groupId>fr.pacifista.api.serverplayers.data.client</groupId>
+    <artifactId>pacifista-server-players-data-client</artifactId>
 
     <properties>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.pacifista.api.core.client</groupId>
+            <artifactId>pacifista-core-client</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
