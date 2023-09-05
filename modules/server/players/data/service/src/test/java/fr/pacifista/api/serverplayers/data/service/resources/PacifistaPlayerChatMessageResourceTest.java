@@ -69,10 +69,16 @@ class PacifistaPlayerChatMessageResourceTest extends ResourceTestHandler {
                 .andExpect(status().isUnauthorized());
 
         super.setupNormal();
+        final PacifistaPlayerChatMessageDTO pacifistaPlayerChatMessageDTO = new PacifistaPlayerChatMessageDTO();
+        pacifistaPlayerChatMessageDTO.setMessage("test");
+        pacifistaPlayerChatMessageDTO.setIsCommand(false);
+        pacifistaPlayerChatMessageDTO.setMinecraftUuid(UUID.randomUUID());
+        pacifistaPlayerChatMessageDTO.setServerType(ServerType.CREATIVE);
+        pacifistaPlayerChatMessageDTO.setMinecraftUsername("Oui");
         mockMvc.perform(post("/playerdata/chatmessages")
                         .header("Authorization", "Bearer dd")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonHelper.toJson(new PacifistaPlayerChatMessageDTO())))
+                        .content(jsonHelper.toJson(pacifistaPlayerChatMessageDTO)))
                 .andExpect(status().isForbidden());
     }
 

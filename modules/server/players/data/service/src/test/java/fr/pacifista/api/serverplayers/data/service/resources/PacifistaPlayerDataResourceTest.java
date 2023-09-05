@@ -67,10 +67,19 @@ class PacifistaPlayerDataResourceTest extends ResourceTestHandler {
                 .andExpect(status().isUnauthorized());
 
         super.setupNormal();
+        final PacifistaPlayerDataDTO playerDataDTO = new PacifistaPlayerDataDTO();
+        playerDataDTO.setMinecraftUsername("Oui");
+        playerDataDTO.setMinecraftUuid(UUID.randomUUID());
+        playerDataDTO.setPlayTime(0L);
+        playerDataDTO.setLastConnection(new Date());
+        playerDataDTO.setFirstConnection(new Date());
+        playerDataDTO.setAcceptPayments(true);
+        playerDataDTO.setAcceptTeleportation(true);
+        playerDataDTO.setAcceptPingSoundTagMessage(true);
         mockMvc.perform(post("/playerdata/data")
                         .header("Authorization", "Bearer dd")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonHelper.toJson(new PacifistaPlayerDataDTO())))
+                        .content(jsonHelper.toJson(playerDataDTO)))
                 .andExpect(status().isForbidden());
     }
 
