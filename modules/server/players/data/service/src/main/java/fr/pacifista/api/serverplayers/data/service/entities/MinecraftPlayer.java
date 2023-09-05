@@ -13,10 +13,10 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class MinecraftPlayer extends ApiEntity {
 
-    @Column(unique = true, name = "minecraft_uuid", length = 50, nullable = false)
+    @Column(name = "minecraft_uuid", length = 50, nullable = false)
     private String minecraftUuid;
 
-    @Column(unique = true, name = "minecraft_username", length = 200, nullable = false)
+    @Column(name = "minecraft_username", length = 200, nullable = false)
     private String minecraftUsername;
 
     public UUID getMinecraftUuid() {
