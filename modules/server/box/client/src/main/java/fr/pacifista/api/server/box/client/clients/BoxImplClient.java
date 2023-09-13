@@ -6,7 +6,7 @@ import fr.pacifista.api.server.box.client.dtos.BoxDTO;
 
 public class BoxImplClient extends FeignImpl<BoxDTO, BoxClient> implements BoxClient {
 
-    public static final String PATH = "/box";
+    public static final String PATH = "box";
 
     public BoxImplClient() {
         super(PATH, BoxClient.class);
