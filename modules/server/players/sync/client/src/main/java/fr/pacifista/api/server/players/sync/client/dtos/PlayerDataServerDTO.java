@@ -1,15 +1,13 @@
 package fr.pacifista.api.server.players.sync.client.dtos;
 
+import fr.pacifista.api.core.client.enums.enums.ServerGameMode;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PlayerMoneyDataDTO extends PlayerDataDTO {
+public abstract class PlayerDataServerDTO extends PlayerDataDTO {
     @NotNull
-    private Double money;
-
-    @NotNull
-    private Double offlineMoney;
+    private ServerGameMode gameMode;
 }

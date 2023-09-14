@@ -20,6 +20,7 @@ class PlayerMoneyDataServiceTest {
     void createEntity() {
         final PlayerMoneyDataDTO moneyDataDTO = new PlayerMoneyDataDTO();
         moneyDataDTO.setMoney(100.0);
+        moneyDataDTO.setOfflineMoney(100.0);
         moneyDataDTO.setPlayerOwnerUuid(UUID.randomUUID());
 
         assertDoesNotThrow(() -> {
@@ -33,6 +34,7 @@ class PlayerMoneyDataServiceTest {
     void patchEntity() {
         final PlayerMoneyDataDTO moneyDataDTO = new PlayerMoneyDataDTO();
         moneyDataDTO.setMoney(100.0);
+        moneyDataDTO.setOfflineMoney(100.0);
         moneyDataDTO.setPlayerOwnerUuid(UUID.randomUUID());
 
         assertDoesNotThrow(() -> {
