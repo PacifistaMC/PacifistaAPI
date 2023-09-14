@@ -1,15 +1,15 @@
 package fr.pacifista.api.server.players.sync.client.dtos;
 
+import com.funixproductions.core.crud.dtos.ApiDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
-public class PlayerMoneyDataDTO extends PlayerDataDTO {
+public abstract class PlayerDataDTO extends ApiDTO {
     @NotNull
-    private Double money;
-
-    @NotNull
-    private Double offlineMoney;
+    private UUID playerOwnerUuid;
 }
