@@ -139,20 +139,35 @@ class SanctionServiceTest {
 
     @Test
     void testCheckIfIpBan() {
-        final UUID playerUUID = UUID.randomUUID();
-        final SanctionDTO playerSanction = generateSanctionForPlayer(playerUUID, SanctionType.BAN);
+        final String ip = "10.4.3.2";
+        when(encryptionClient.encrypt(ip)).thenReturn(ip);
+        when(encryptionClient.decrypt(ip)).thenReturn(ip);
 
-        assertDoesNotThrow(() -> {
-            final SanctionDTO isSanctioned = sanctionService.isIpSanctioned(playerSanction.getPlayerSanctionIp(), SanctionType.BAN);
-            assertEquals(playerSanction, isSanctioned);
+        final SanctionDTO playerSanction = generateSanctionForPlayer(UUID.randomUUID(), SanctionType.BAN);
+        playerSanction.setPlayerSanctionIp(ip);
+        sanctionService.update(playerSanction);
 
-            isSanctioned.setActive(false);
-            sanctionService.update(isSanctioned);
+        final SanctionDTO isSanctioned = sanctionService.isIpSanctioned(playerSanction.getPlayerSanctionIp(), SanctionType.BAN);
+        assertEquals(playerSanction, isSanctioned);
 
-            assertThrowsExactly(ApiNotFoundException.class, () -> {
-                sanctionService.isIpSanctioned(playerSanction.getPlayerSanctionIp(), SanctionType.BAN);
-            });
+        isSanctioned.setActive(false);
+        sanctionService.update(isSanctioned);
+
+        assertThrowsExactly(ApiNotFoundException.class, () -> {
+            sanctionService.isIpSanctioned(playerSanction.getPlayerSanctionIp(), SanctionType.BAN);
         });
+
+        isSanctioned.setActive(true);
+        sanctionService.update(isSanctioned);
+
+        final SanctionDTO playerSanction2 = generateSanctionForPlayer(UUID.randomUUID(), SanctionType.BAN);
+        playerSanction2.setPlayerSanctionIp(ip);
+        sanctionService.update(playerSanction2);
+
+        final SanctionDTO sanctionGot = sanctionService.isIpSanctioned(playerSanction2.getPlayerSanctionIp(), SanctionType.BAN);
+        assertEquals(playerSanction2, sanctionGot);
+        assertEquals(playerSanction2.getPlayerSanctionIp(), sanctionGot.getPlayerSanctionIp());
+        assertEquals(playerSanction2.getPlayerSanctionUuid(), sanctionGot.getPlayerSanctionUuid());
     }
 
     private SanctionDTO generateSanctionForPlayer(final UUID playerUUID, final SanctionType sanctionType) {
