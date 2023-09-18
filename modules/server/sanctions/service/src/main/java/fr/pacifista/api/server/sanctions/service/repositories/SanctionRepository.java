@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface SanctionRepository extends ApiRepository<Sanction> {
 
     Optional<Sanction> findFirstByPlayerSanctionUuidAndActiveIsTrueAndSanctionTypeAndExpirationDateIsNullOrExpirationDateIsAfterOrderByCreatedAtDesc(String playerUuid, SanctionType sanctionType, Date dateNow);
-    Optional<Sanction> findFirstByPlayerSanctionIpAndActiveIsTrueAndSanctionTypeAndExpirationDateIsNullOrExpirationDateIsAfterOrderByCreatedAtDesc(String playerIp, SanctionType sanctionType, Date dateNow);
+    Optional<Sanction> findFirstByPlayerSanctionIpAndActiveIsTrueAndIpSanctionIsTrueAndSanctionTypeAndExpirationDateIsNullOrExpirationDateIsAfterOrderByCreatedAtDesc(String playerIp, SanctionType sanctionType, Date dateNow);
 
 }

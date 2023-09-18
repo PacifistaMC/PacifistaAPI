@@ -42,7 +42,7 @@ public class SanctionService extends ApiService<SanctionDTO, Sanction, SanctionM
      */
     public SanctionDTO isIpSanctioned(final String playerIp, final SanctionType sanctionType) throws ApiNotFoundException {
         final Optional<Sanction> search = getRepository()
-                .findFirstByPlayerSanctionIpAndActiveIsTrueAndSanctionTypeAndExpirationDateIsNullOrExpirationDateIsAfterOrderByCreatedAtDesc(playerIp, sanctionType, Date.from(Instant.now()));
+                .findFirstByPlayerSanctionIpAndActiveIsTrueAndIpSanctionIsTrueAndSanctionTypeAndExpirationDateIsNullOrExpirationDateIsAfterOrderByCreatedAtDesc(playerIp, sanctionType, Date.from(Instant.now()));
 
         return getDTOWithSearch(search);
     }
