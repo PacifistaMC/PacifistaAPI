@@ -32,7 +32,7 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: Publish to the Maven Central Repository
-        run: mvn --batch-mode clean deploy
+        run: mvn --batch-mode clean deploy -T 6
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
@@ -62,7 +62,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn --batch-mode clean package
+        run: mvn --batch-mode clean package -T 6
 
       - name: Publish Package Artifacts
         uses: actions/upload-artifact@v3
