@@ -1,10 +1,10 @@
-FROM openjdk:17-alpine
+FROM amazoncorretto:21-alpine
 
 ARG service_name
 ARG service_base_dir
 ENV SERVICE_NAME=${service_name}
 ENV SERVICE_BASE_DIR=${service_base_dir}
-ENV APP_VERSION=1.5.1.2
+ENV APP_VERSION=1.5.1.3
 
 WORKDIR /container/java
 
