@@ -12,7 +12,6 @@ public class FeignTokenInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         requestTemplate.header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        requestTemplate.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         requestTemplate.header(HttpHeaders.AUTHORIZATION, "Bearer " + barerToken);
     }
 }

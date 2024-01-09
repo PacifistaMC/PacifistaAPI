@@ -144,10 +144,10 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
         final int httpCode = e.status();
 
         switch (httpCode) {
-            case 400 -> throw new ApiBadRequestException("400 Bad request: " + e.contentUTF8(), e);
+            case 400 -> throw new ApiBadRequestException("400 Bad request: " + e.getMessage(), e);
             case 401 -> throw new ApiForbiddenException("401 Vous n'êtes pas connecté à l'api.", e);
             case 403 -> throw new ApiForbiddenException("403 Vous n'avez pas la permission.", e);
-            case 404 -> throw new ApiNotFoundException("404 Not found: " + e.contentUTF8(), e);
+            case 404 -> throw new ApiNotFoundException("404 Not found: " + e.getMessage(), e);
             default -> throw new ApiException(httpCode + ' ' + e.getMessage(), e);
         }
     }
