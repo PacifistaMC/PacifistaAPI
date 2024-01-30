@@ -18,6 +18,8 @@ public class PacifistaShopPaymentRequestDTO {
     /**
      * Liste des id des articles à payer
      */
+    @NotNull(message = "La liste des id des articles à payer ne peut pas être nulle")
+    @NotEmpty(message = "La liste des id des articles à payer ne peut pas être vide")
     private List<String> articlesIds;
 
     /**
