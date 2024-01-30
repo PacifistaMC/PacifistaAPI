@@ -41,6 +41,7 @@ class ShopCategoryResourceTest extends ShopResourceModuleTest<ShopCategoryDTO> {
     public ShopCategoryDTO generateDTO() {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
+        shopCategoryDTO.setDescription(UUID.randomUUID().toString());
 
         return shopCategoryDTO;
     }

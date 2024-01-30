@@ -9,7 +9,10 @@ import lombok.Setter;
 @Setter
 public class ShopCategoryDTO extends ApiDTO {
 
-    @NotBlank
+    @NotBlank(message = "Le nom de la catégorie ne peut pas être vide")
     private String name;
+
+    @NotBlank(message = "La description de la catégorie ne peut pas être vide")
+    private String description;
 
 }

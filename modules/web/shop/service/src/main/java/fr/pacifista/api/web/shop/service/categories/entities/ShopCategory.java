@@ -14,4 +14,7 @@ public class ShopCategory extends ApiEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String description;
+
 }
