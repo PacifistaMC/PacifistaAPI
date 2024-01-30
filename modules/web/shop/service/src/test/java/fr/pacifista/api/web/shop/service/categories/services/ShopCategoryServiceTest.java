@@ -20,6 +20,7 @@ class ShopCategoryServiceTest {
     void createEntity() {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
+        shopCategoryDTO.setDescription(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
             final ShopCategoryDTO created = this.shopCategoryService.create(shopCategoryDTO);
@@ -31,6 +32,7 @@ class ShopCategoryServiceTest {
     void patchEntity() {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
+        shopCategoryDTO.setDescription(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
             final ShopCategoryDTO created = this.shopCategoryService.create(shopCategoryDTO);
