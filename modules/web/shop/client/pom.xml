@@ -24,6 +24,12 @@
             <artifactId>pacifista-core-client</artifactId>
             <version>${fr.pacifista.api.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.funixproductions.api.payment.paypal.client</groupId>
+            <artifactId>funixproductions-payment-paypal-client</artifactId>
+            <version>${com.funixproductions.api.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

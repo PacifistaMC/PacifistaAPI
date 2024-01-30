@@ -1,6 +1,6 @@
 package fr.pacifista.api.server.sanctions.service.services;
 
-import com.funixproductions.api.encryption.client.clients.FunixProductionsEncryptionClient;
+import com.funixproductions.api.encryption.client.clients.EncryptionClient;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.server.sanctions.client.dtos.SanctionDTO;
 import fr.pacifista.api.server.sanctions.client.enums.SanctionType;
@@ -25,7 +25,7 @@ class SanctionServiceTest {
     SanctionService sanctionService;
 
     @MockBean
-    FunixProductionsEncryptionClient encryptionClient;
+    EncryptionClient encryptionClient;
 
     @BeforeEach
     void setupMocks() {
