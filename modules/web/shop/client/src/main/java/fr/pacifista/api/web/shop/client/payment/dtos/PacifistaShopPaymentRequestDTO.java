@@ -18,15 +18,31 @@ public class PacifistaShopPaymentRequestDTO {
     /**
      * Liste des id des articles à payer
      */
+    @Valid
     @NotNull(message = "La liste des id des articles à payer ne peut pas être nulle")
     @NotEmpty(message = "La liste des id des articles à payer ne peut pas être vide")
-    private List<String> articlesIds;
+    private List<@Valid ShopArticleRequest> articles;
 
     /**
      * Nullable, si null alors le paiement se fera avec paypal checkout
      */
     @Valid
     private CreditCard creditCard;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ShopArticleRequest {
+
+        @NotBlank(message = "L'id de l'article est obligatoire")
+        private String articleId;
+
+        @NotNull(message = "La quantité de l'article est obligatoire")
+        @Min(value = 1, message = "La quantité de l'article est invalide")
+        private Integer quantity;
+
+    }
 
     @Getter
     @Setter
