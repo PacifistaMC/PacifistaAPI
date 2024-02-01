@@ -15,10 +15,7 @@ import fr.pacifista.api.web.shop.service.payment.mappers.ShopPaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -91,7 +88,7 @@ public class PaypalPaymentService {
         purchaseUnitDTO.setSoftDescriptor("shop pacifista.fr");
         purchaseUnitDTO.setDescription("Achat sur la boutique de Pacifista.fr le serveur Minecraft.");
 
-        final List<PaymentDTO.PurchaseUnitDTO.Item> items = purchaseUnitDTO.getItems();
+        final List<PaymentDTO.PurchaseUnitDTO.Item> items = new ArrayList<>();
         for (Map.Entry<ShopArticle, Integer> entry : articles.entrySet()) {
             final PaymentDTO.PurchaseUnitDTO.Item item = this.shopPaymentMapper.toPaypalItem(entry.getKey());
 

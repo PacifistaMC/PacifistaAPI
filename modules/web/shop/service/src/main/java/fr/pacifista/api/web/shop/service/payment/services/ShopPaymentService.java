@@ -7,6 +7,7 @@ import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiException;
+import com.funixproductions.core.exceptions.ApiForbiddenException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
 import fr.pacifista.api.web.shop.client.payment.clients.ShopPaymentClient;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentRequestDTO;
@@ -30,8 +31,9 @@ public class ShopPaymentService implements ShopPaymentClient {
 
     private final ShopPaymentRepository shopPaymentRepository;
     private final ShopPaymentMapper shopPaymentMapper;
-    private final ShopArticleService shopArticleService;
     private final ShopArticlePurchaseRepository shopArticlePurchaseRepository;
+
+    private final ShopArticleService shopArticleService;
 
     private final CurrentSession currentSession;
     private final PaypalPaymentService paypalPaymentService;
@@ -114,7 +116,7 @@ public class ShopPaymentService implements ShopPaymentClient {
     }
 
     private ShopPayment getShopPaymentByUser(final String paymentExternalOrderId, final UserDTO currentUser) {
-        return this.shopPaymentRepository.findByPaymentExternalOrderIdAndUserId(paymentExternalOrderId, currentUser.getId().toString()).orElseThrow(() -> new ApiUnauthorizedException("Vous n'êtes pas autorisé à accéder à ce paiement."));
+        return this.shopPaymentRepository.findByPaymentExternalOrderIdAndUserId(paymentExternalOrderId, currentUser.getId().toString()).orElseThrow(() -> new ApiForbiddenException("Vous n'êtes pas autorisé à accéder à ce paiement."));
     }
 
     private ShopPayment createDTO(@NonNull final PacifistaShopPaymentRequestDTO request,
