@@ -20,6 +20,12 @@ public interface ShopPaymentMapper extends ApiMapper<ShopPayment, PacifistaShopP
     @Mapping(target = "orderPaid", ignore = true)
     PacifistaShopPaymentResponseDTO toDto(ShopPayment entity);
 
+    @Override
+    @Mapping(target = "uuid", source = "id")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "purchases", ignore = true)
+    ShopPayment toEntity(PacifistaShopPaymentResponseDTO dto);
+
     @Mapping(target = "cancelUrl", ignore = true)
     @Mapping(target = "returnUrl", ignore = true)
     @Mapping(target = "user", ignore = true)
