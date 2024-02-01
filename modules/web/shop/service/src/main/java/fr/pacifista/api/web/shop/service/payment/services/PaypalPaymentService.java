@@ -94,6 +94,7 @@ public class PaypalPaymentService {
         final List<PaymentDTO.PurchaseUnitDTO.Item> items = purchaseUnitDTO.getItems();
         for (Map.Entry<ShopArticle, Integer> entry : articles.entrySet()) {
             final PaymentDTO.PurchaseUnitDTO.Item item = this.shopPaymentMapper.toPaypalItem(entry.getKey());
+
             item.setQuantity(entry.getValue());
             if (vatAmount > 0) {
                 item.setTax(item.getPrice() * vatAmount);
@@ -104,7 +105,6 @@ public class PaypalPaymentService {
 
         return Collections.singletonList(purchaseUnitDTO);
     }
-
     private VATInformation getVatFromUser(final UserDTO userDTO) {
         for (final VATInformation vat : VATInformation.values()) {
             if (vat.getCountryCode().equalsIgnoreCase(userDTO.getCountry().getCountryCode2Chars())) {

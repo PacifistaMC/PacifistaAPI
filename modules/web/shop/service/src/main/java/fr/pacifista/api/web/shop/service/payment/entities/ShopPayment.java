@@ -2,12 +2,11 @@ package fr.pacifista.api.web.shop.service.payment.entities;
 
 import com.funixproductions.api.payment.billing.client.enums.PaymentType;
 import com.funixproductions.core.crud.entities.ApiEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,4 +23,6 @@ public class ShopPayment extends ApiEntity {
     @Column(nullable = false, name = "user_id")
     private String userId;
 
+    @OneToMany(mappedBy = "payment")
+    private Set<ShopArticlePurchase> purchases;
 }

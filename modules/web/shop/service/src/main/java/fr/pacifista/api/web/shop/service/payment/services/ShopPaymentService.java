@@ -5,58 +5,56 @@ import com.funixproductions.api.payment.paypal.client.dtos.responses.PaypalOrder
 import com.funixproductions.api.payment.paypal.client.enums.OrderStatus;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.security.CurrentSession;
-import com.funixproductions.core.crud.services.ApiService;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
 import fr.pacifista.api.web.shop.client.payment.clients.ShopPaymentClient;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentRequestDTO;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentResponseDTO;
 import fr.pacifista.api.web.shop.service.articles.entities.ShopArticle;
 import fr.pacifista.api.web.shop.service.articles.services.ShopArticleService;
+import fr.pacifista.api.web.shop.service.payment.entities.ShopArticlePurchase;
 import fr.pacifista.api.web.shop.service.payment.entities.ShopPayment;
 import fr.pacifista.api.web.shop.service.payment.mappers.ShopPaymentMapper;
+import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopPaymentRepository;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-public class ShopPaymentCrudService extends ApiService<PacifistaShopPaymentResponseDTO, ShopPayment, ShopPaymentMapper, ShopPaymentRepository> implements ShopPaymentClient {
+@RequiredArgsConstructor
+public class ShopPaymentService implements ShopPaymentClient {
 
+    private final ShopPaymentRepository shopPaymentRepository;
+    private final ShopPaymentMapper shopPaymentMapper;
     private final ShopArticleService shopArticleService;
+    private final ShopArticlePurchaseRepository shopArticlePurchaseRepository;
 
     private final CurrentSession currentSession;
     private final PaypalPaymentService paypalPaymentService;
 
-    public ShopPaymentCrudService(ShopPaymentRepository repository,
-                                  ShopPaymentMapper mapper,
-                                  PaypalPaymentService paypalPaymentService,
-                                  ShopArticleService shopArticleService,
-                                  CurrentSession currentSession) {
-        super(repository, mapper);
-        this.paypalPaymentService = paypalPaymentService;
-        this.currentSession = currentSession;
-        this.shopArticleService = shopArticleService;
-    }
-
     @Override
     public PacifistaShopPaymentResponseDTO createOrder(PacifistaShopPaymentRequestDTO request) {
         final UserDTO currentUser = getCurrentUser();
-        final PacifistaShopPaymentResponseDTO dto = createDTO(request, currentUser.getId());
         final Map<ShopArticle, Integer> articles = getArticles(request.getArticles());
+        final ShopPayment shopPayment = createDTO(request, currentUser.getId(), articles);
         final PaypalOrderDTO paypalOrderDTO;
 
         if (request.getCreditCard() == null) {
-            paypalOrderDTO = paypalPaymentService.createOrder(articles, currentUser, dto.getId());
+            paypalOrderDTO = paypalPaymentService.createOrder(articles, currentUser, shopPayment.getUuid());
         } else {
-            paypalOrderDTO = paypalPaymentService.createOrder(articles, currentUser, dto.getId(), request.getCreditCard());
+            paypalOrderDTO = paypalPaymentService.createOrder(articles, currentUser, shopPayment.getUuid(), request.getCreditCard());
         }
 
-        dto.setPaymentExternalOrderId(paypalOrderDTO.getOrderId());
+        shopPayment.setPaymentExternalOrderId(paypalOrderDTO.getOrderId());
+
+        final PacifistaShopPaymentResponseDTO dto = this.shopPaymentMapper.toDto(this.shopPaymentRepository.save(shopPayment));
         dto.setUrlClientRedirection(paypalOrderDTO.getUrlClientRedirection());
         dto.setOrderPaid(paypalOrderDTO.getStatus() == OrderStatus.COMPLETED);
-        return super.update(dto);
+        return dto;
     }
 
     @Override
@@ -116,15 +114,45 @@ public class ShopPaymentCrudService extends ApiService<PacifistaShopPaymentRespo
     }
 
     private ShopPayment getShopPaymentByUser(final String paymentExternalOrderId, final UserDTO currentUser) {
-        return getRepository().findByPaymentExternalOrderIdAndUserId(paymentExternalOrderId, currentUser.getId().toString()).orElseThrow(() -> new ApiUnauthorizedException("Vous n'êtes pas autorisé à accéder à ce paiement."));
+        return this.shopPaymentRepository.findByPaymentExternalOrderIdAndUserId(paymentExternalOrderId, currentUser.getId().toString()).orElseThrow(() -> new ApiUnauthorizedException("Vous n'êtes pas autorisé à accéder à ce paiement."));
     }
 
-    private PacifistaShopPaymentResponseDTO createDTO(@NonNull final PacifistaShopPaymentRequestDTO request, @NonNull final UUID userId) {
-        final PacifistaShopPaymentResponseDTO dto = new PacifistaShopPaymentResponseDTO();
+    private ShopPayment createDTO(@NonNull final PacifistaShopPaymentRequestDTO request,
+                                                      @NonNull final UUID userId,
+                                                      @NonNull final Map<ShopArticle, Integer> articles) {
+        try {
+            ShopPayment shopPayment = new ShopPayment();
 
-        dto.setPaymentType(determinePaymentTypeFromRequest(request));
-        dto.setUserId(userId.toString());
-        return super.create(dto);
+            shopPayment.setPaymentType(determinePaymentTypeFromRequest(request));
+            shopPayment.setUserId(userId.toString());
+            shopPayment = this.shopPaymentRepository.save(shopPayment);
+
+            final Set<ShopArticlePurchase> shopArticlePurchases = new HashSet<>();
+            for (final PacifistaShopPaymentRequestDTO.ShopArticleRequest articleRequest : request.getArticles()) {
+                final ShopArticlePurchase shopArticlePurchase = new ShopArticlePurchase();
+
+                shopArticlePurchase.setPayment(shopPayment);
+                shopArticlePurchase.setQuantity(articleRequest.getQuantity());
+                shopArticlePurchase.setArticle(getArticleFromMap(articles, articleRequest.getArticleId()));
+
+                shopArticlePurchases.add(shopArticlePurchase);
+            }
+            this.shopArticlePurchaseRepository.saveAll(shopArticlePurchases);
+            return shopPayment;
+        } catch (Exception e) {
+            throw new ApiException("Impossible de créer le paiement. Erreur lors de la création du paiement.", e);
+        }
+    }
+
+    private ShopArticle getArticleFromMap(final Map<ShopArticle, Integer> articles, final String articleId) {
+        for (final Map.Entry<ShopArticle, Integer> entry : articles.entrySet()) {
+            final ShopArticle article = entry.getKey();
+
+            if (article.getUuid().toString().equals(articleId)) {
+                return article;
+            }
+        }
+        throw new ApiBadRequestException(String.format("L'article %s n'existe pas.", articleId));
     }
 
     private PaymentType determinePaymentTypeFromRequest(@NonNull final PacifistaShopPaymentRequestDTO request) {
