@@ -78,6 +78,9 @@ jobs:
       - build-production-docker-images
 
     runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://dev.api.pacifista.fr
 
     steps:
       - name: Set up kubectl
