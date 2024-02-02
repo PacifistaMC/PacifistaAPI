@@ -34,4 +34,8 @@ public class ShopArticleDTO extends ApiDTO {
     @Min(value = 0, message = "Le prix ne peut pas être négatif")
     private Double price;
 
+    @NotBlank(message = "La commande exécutée ne peut pas être vide")
+    @Size(min = 3, max = 255, message = "La commande exécutée doit contenir entre 3 et 255 caractères")
+    private String commandExecuted;
+
 }

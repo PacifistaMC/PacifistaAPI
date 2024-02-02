@@ -30,6 +30,7 @@ class ShopArticleServiceTest {
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
         shopArticleDTO.setLogoUrl(UUID.randomUUID().toString());
+        shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
             final ShopArticleDTO created = this.shopArticleService.create(shopArticleDTO);
@@ -53,6 +54,7 @@ class ShopArticleServiceTest {
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
         shopArticleDTO.setLogoUrl(UUID.randomUUID().toString());
+        shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
             final ShopArticleDTO created = this.shopArticleService.create(shopArticleDTO);

@@ -33,4 +33,7 @@ public class ShopArticle extends ApiEntity {
     @Column(nullable = false)
     private Double price;
 
+    @Column(nullable = false, name = "command_executed")
+    private String commandExecuted;
+
 }

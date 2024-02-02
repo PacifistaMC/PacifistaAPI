@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients(basePackages = {
-        "com.funixproductions",
+        "com.funixproductions.api.user",
+        "com.funixproductions.api.payment.paypal",
 })
 @SpringBootApplication(scanBasePackages = {
         "com.funixproductions",

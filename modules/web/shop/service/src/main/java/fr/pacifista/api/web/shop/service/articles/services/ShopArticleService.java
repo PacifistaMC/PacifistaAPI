@@ -8,6 +8,7 @@ import fr.pacifista.api.web.shop.service.articles.mappers.ShopArticleMapper;
 import fr.pacifista.api.web.shop.service.articles.repositories.ShopArticleRepository;
 import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService;
+import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,15 @@ import java.util.List;
 public class ShopArticleService extends ApiService<ShopArticleDTO, ShopArticle, ShopArticleMapper, ShopArticleRepository> {
 
     private final ShopCategoryService shopCategoryService;
+    private final ShopArticlePurchaseRepository shopArticlePurchaseRepository;
 
     public ShopArticleService(ShopArticleRepository repository,
                               ShopArticleMapper mapper,
-                              ShopCategoryService shopCategoryService) {
+                              ShopCategoryService shopCategoryService,
+                              ShopArticlePurchaseRepository shopArticlePurchaseRepository) {
         super(repository, mapper);
         this.shopCategoryService = shopCategoryService;
+        this.shopArticlePurchaseRepository = shopArticlePurchaseRepository;
     }
 
     @Override
@@ -41,6 +45,13 @@ public class ShopArticleService extends ApiService<ShopArticleDTO, ShopArticle, 
                     throw new ApiNotFoundException(String.format("Catégorie avec id %s non trouvé.", article.getCategory().getUuid()));
                 }
             }
+        }
+    }
+
+    @Override
+    public void beforeDeletingEntity(@NonNull Iterable<ShopArticle> entity) {
+        for (ShopArticle article : entity) {
+            this.shopArticlePurchaseRepository.deleteAllByArticle(article);
         }
     }
 
