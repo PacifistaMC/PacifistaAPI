@@ -1,6 +1,7 @@
 package fr.pacifista.api.web.shop.service.articles.services;
 
 import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.service.articles.entities.ShopArticle;
@@ -11,7 +12,9 @@ import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,9 @@ public class ShopArticleService extends ApiService<ShopArticleDTO, ShopArticle, 
     private final ShopCategoryService shopCategoryService;
     private final ShopArticlePurchaseRepository shopArticlePurchaseRepository;
 
+    private final File pacifistaFolder = new File("pacifista");
+    private final File shopFolder = new File(pacifistaFolder, "shop_web_articles");
+
     public ShopArticleService(ShopArticleRepository repository,
                               ShopArticleMapper mapper,
                               ShopCategoryService shopCategoryService,
@@ -28,6 +34,16 @@ public class ShopArticleService extends ApiService<ShopArticleDTO, ShopArticle, 
         super(repository, mapper);
         this.shopCategoryService = shopCategoryService;
         this.shopArticlePurchaseRepository = shopArticlePurchaseRepository;
+
+        if (!pacifistaFolder.exists() && !pacifistaFolder.mkdir()) {
+            throw new ApiException("Impossible de créer le dossier pacifista");
+        }
+        if (!shopFolder.exists() && !shopFolder.mkdir()) {
+            throw new ApiException("Impossible de créer le dossier shop_web_articles");
+        }
+    }
+
+    public ShopArticleDTO createArticleWithImage(final ShopArticleDTO request, final MultipartFile image) {
     }
 
     @Override

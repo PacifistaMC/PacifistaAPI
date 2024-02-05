@@ -15,4 +15,6 @@ public class ShopArticleResource extends ApiResource<ShopArticleDTO, ShopArticle
         super(service);
     }
 
+
+
 }
