@@ -20,12 +20,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.funixproductions.core.files</groupId>
-            <artifactId>funixproductions-storage</artifactId>
-            <version>${com.funixproductions.core.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>fr.pacifista.api.web.shop.client</groupId>
             <artifactId>pacifista-web-shop-client</artifactId>
             <version>${fr.pacifista.api.version}</version>
