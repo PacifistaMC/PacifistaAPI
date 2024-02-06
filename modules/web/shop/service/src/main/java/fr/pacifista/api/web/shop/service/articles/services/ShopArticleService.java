@@ -11,7 +11,6 @@ import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +28,6 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
         super("pacifista_shop_web_articles", repository, mapper);
         this.shopCategoryService = shopCategoryService;
         this.shopArticlePurchaseRepository = shopArticlePurchaseRepository;
-    }
-
-    public ShopArticleDTO createArticleWithImage(final ShopArticleDTO request, final MultipartFile image) {
     }
 
     @Override
@@ -54,6 +50,7 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
 
     @Override
     public void beforeDeletingEntity(@NonNull Iterable<ShopArticle> entity) {
+        super.beforeDeletingEntity(entity);
         for (ShopArticle article : entity) {
             this.shopArticlePurchaseRepository.deleteAllByArticle(article);
         }
