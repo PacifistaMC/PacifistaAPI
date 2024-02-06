@@ -1,5 +1,6 @@
 package fr.pacifista.api.web.shop.service.articles.services;
 
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService;
@@ -43,7 +44,10 @@ class ShopArticleServiceTest {
             assertEquals(shopArticleDTO.getLogoUrl(), created.getLogoUrl());
             assertEquals(shopArticleDTO.getPrice(), created.getPrice());
 
+            this.shopArticleService.loadAsResource(created.getId().toString());
             this.shopArticleService.delete(created.getId().toString());
+
+            assertThrowsExactly(ApiNotFoundException.class, () -> this.shopArticleService.loadAsResource(created.getId().toString()));
         });
     }
 
