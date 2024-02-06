@@ -26,7 +26,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
 
     @Test
     void testAccessAdmin() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(get(this.route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
@@ -61,7 +61,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
     void testCreateAdmin() throws Exception {
         final DTO request = generateDTO();
 
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(post(this.route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
@@ -74,7 +74,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
     void testPatchAdmin() throws Exception {
         final DTO request = generateDTO();
 
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(patch(this.route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
@@ -85,7 +85,7 @@ abstract class BoxModuleResourceTest<DTO extends ApiDTO> extends ResourceTestHan
 
     @Test
     void testDeleteAdmin() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(delete(this.route + "?id=" + UUID.randomUUID())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())

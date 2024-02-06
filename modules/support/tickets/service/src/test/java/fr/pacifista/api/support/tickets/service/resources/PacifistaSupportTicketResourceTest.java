@@ -134,7 +134,7 @@ class PacifistaSupportTicketResourceTest extends ResourceTestHandler {
 
     @Test
     void testGetAllAdminSuccess() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(get("/support/ticket")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
@@ -143,7 +143,7 @@ class PacifistaSupportTicketResourceTest extends ResourceTestHandler {
 
     @Test
     void testCreateAdminSuccess() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         final PacifistaSupportTicketDTO ticket = new PacifistaSupportTicketDTO();
         ticket.setType(TicketType.OTHER);
@@ -162,7 +162,7 @@ class PacifistaSupportTicketResourceTest extends ResourceTestHandler {
 
     @Test
     void testPatchAdminSuccess() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(patch("/support/ticket")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())

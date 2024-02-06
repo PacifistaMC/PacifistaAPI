@@ -31,7 +31,7 @@ class PacifistaPlayerChatMessageResourceTest extends ResourceTestHandler {
 
     @Test
     void createAndEditChatMessageSuccess() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
         final PacifistaPlayerChatMessageDTO pacifistaPlayerChatMessageDTO = new PacifistaPlayerChatMessageDTO();
         pacifistaPlayerChatMessageDTO.setMessage("test");
         pacifistaPlayerChatMessageDTO.setIsCommand(false);

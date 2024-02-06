@@ -22,7 +22,6 @@ public class WebSecurity extends ApiWebSecurity {
                 .requestMatchers("/web/shop/capture").authenticated()
                 .requestMatchers(HttpMethod.GET, "/web/shop/articles/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/web/shop/categories/**").permitAll()
-                .requestMatchers("/web/shop/articles/**").hasAuthority(UserRole.ADMIN.getRole())
-                .requestMatchers("/web/shop/categories/**").hasAuthority(UserRole.ADMIN.getRole());
+                .anyRequest().hasAuthority(UserRole.ADMIN.getRole());
     }
 }

@@ -79,6 +79,17 @@ class ShopCategoryResourceTest extends ResourceTestHandler {
     }
 
     @Test
+    void testCreatePacifistaAdminFail() throws Exception {
+        super.setupPacifistaAdmin();
+
+        mockMvc.perform(post(this.route)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(generateDTO()))
+        ).andExpect(status().isForbidden());
+    }
+
+    @Test
     void testPatchAdmin() throws Exception {
         super.setupAdmin();
 

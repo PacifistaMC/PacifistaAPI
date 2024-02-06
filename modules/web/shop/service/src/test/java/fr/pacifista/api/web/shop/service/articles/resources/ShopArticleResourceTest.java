@@ -40,12 +40,10 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     @Autowired
     JsonHelper jsonHelper;
 
-    String route = "/web";
+    private final String route = "/web/shop/articles";
 
     @BeforeEach
     void setupMock() {
-        this.route = "/web/shop/articles";
-
         reset(articleService);
         when(articleService.getAll(
                 anyString(), anyString(), anyString(), anyString()
@@ -64,6 +62,13 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     }
 
     @Test
+    void testGetTokenSuccess() throws Exception {
+        super.setupNormal();
+
+        mockMvc.perform(get(this.route).header("Authorization", "Bearer sdsdfsd")).andExpect(status().isOk());
+    }
+
+    @Test
     void testGetModoSuccess() throws Exception {
         super.setupModerator();
 
@@ -73,11 +78,23 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     }
 
     @Test
+    void testCreatePacifistaAdminFail() throws Exception {
+        super.setupPacifistaAdmin();
+
+        mockMvc.perform(multipart(this.route + "/file")
+                .file("fileTest", new byte[0])
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(generateDTO()))
+        ).andExpect(status().isForbidden());
+    }
+
+    @Test
     void testCreateAdmin() throws Exception {
         super.setupAdmin();
 
         mockMvc.perform(multipart(this.route + "/file")
-                .file("fileTest", new byte[0])
+                .file("file", new byte[0])
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonHelper.toJson(generateDTO()))

@@ -31,7 +31,7 @@ class PacifistaPlayerDataResourceTest extends ResourceTestHandler {
 
     @Test
     void createAndEditDataSuccess() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
         final PacifistaPlayerDataDTO playerDataDTO = new PacifistaPlayerDataDTO();
         playerDataDTO.setMinecraftUsername("Oui");
         playerDataDTO.setMinecraftUuid(UUID.randomUUID());
