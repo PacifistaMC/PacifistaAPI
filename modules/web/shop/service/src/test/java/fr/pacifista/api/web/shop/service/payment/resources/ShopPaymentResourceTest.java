@@ -350,6 +350,10 @@ class ShopPaymentResourceTest {
             article.setLogoUrl("testLogoUrl" + i);
             article.setPrice(random.nextDouble(300) * 100);
             article.setCommandExecuted("testCommandExecuted" + i);
+            article.setFileExtension("jpg");
+            article.setFileName("testFileName" + i);
+            article.setFilePath("testFileUrl" + i);
+            article.setFileSize(1000L + i);
 
             articles.add(article);
         }
