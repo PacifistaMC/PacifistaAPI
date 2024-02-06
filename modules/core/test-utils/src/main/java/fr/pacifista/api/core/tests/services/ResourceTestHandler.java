@@ -9,7 +9,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 /**
  * SpringBootTest
@@ -20,13 +21,27 @@ public abstract class ResourceTestHandler {
     @MockBean
     UserAuthClient authClient;
 
-    public UserDTO setupAdmin() {
+    public UserDTO setupPacifistaAdmin() {
         reset(authClient);
 
         final UserDTO userDTO = new UserDTO();
         userDTO.setEmail("test.admin.mock@gmail.com");
         userDTO.setUsername("testuser-admin");
         userDTO.setRole(UserRole.PACIFISTA_ADMIN);
+        userDTO.setId(UUID.randomUUID());
+        userDTO.setCreatedAt(new Date());
+
+        when(authClient.current(anyString())).thenReturn(userDTO);
+        return userDTO;
+    }
+
+    public UserDTO setupAdmin() {
+        reset(authClient);
+
+        final UserDTO userDTO = new UserDTO();
+        userDTO.setEmail("test.admin.mock@gmail.com");
+        userDTO.setUsername("testuser-admin");
+        userDTO.setRole(UserRole.ADMIN);
         userDTO.setId(UUID.randomUUID());
         userDTO.setCreatedAt(new Date());
 

@@ -1,6 +1,6 @@
 package fr.pacifista.api.web.shop.service.articles.entities;
 
-import com.funixproductions.core.crud.entities.ApiEntity;
+import com.funixproductions.core.files.entities.ApiStorageFile;
 import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity(name = "shop_articles")
-public class ShopArticle extends ApiEntity {
+public class ShopArticle extends ApiStorageFile {
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "category_id")

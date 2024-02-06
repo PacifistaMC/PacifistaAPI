@@ -1,11 +1,13 @@
 package fr.pacifista.api.web.shop.service.articles.services;
 
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.UUID;
 
@@ -33,7 +35,7 @@ class ShopArticleServiceTest {
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
-            final ShopArticleDTO created = this.shopArticleService.create(shopArticleDTO);
+            final ShopArticleDTO created = this.shopArticleService.store(shopArticleDTO, new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[0]));
             assertEquals(shopArticleDTO.getName(), created.getName());
             assertNotNull(created.getCategory());
             assertEquals(shopArticleDTO.getCategory(), created.getCategory());
@@ -41,6 +43,11 @@ class ShopArticleServiceTest {
             assertEquals(shopArticleDTO.getHtmlDescription(), created.getHtmlDescription());
             assertEquals(shopArticleDTO.getLogoUrl(), created.getLogoUrl());
             assertEquals(shopArticleDTO.getPrice(), created.getPrice());
+
+            this.shopArticleService.loadAsResource(created.getId().toString());
+            this.shopArticleService.delete(created.getId().toString());
+
+            assertThrowsExactly(ApiNotFoundException.class, () -> this.shopArticleService.loadAsResource(created.getId().toString()));
         });
     }
 
@@ -57,7 +64,7 @@ class ShopArticleServiceTest {
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
-            final ShopArticleDTO created = this.shopArticleService.create(shopArticleDTO);
+            final ShopArticleDTO created = this.shopArticleService.store(shopArticleDTO, new MockMultipartFile("file", "test_sdffds.jpg", "image/jpeg", new byte[0]));
             created.setName(UUID.randomUUID().toString());
             created.setPrice(100.0);
 

@@ -32,7 +32,7 @@ class PacifistaPlayerSessionResourceTest extends ResourceTestHandler {
 
     @Test
     void createAndEditSessionSuccess() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
         final PacifistaPlayerSessionDTO sessionDTO = new PacifistaPlayerSessionDTO();
         sessionDTO.setConnectedAt(new Date());
         sessionDTO.setDisconnectedAt(new Date());

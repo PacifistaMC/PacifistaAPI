@@ -44,7 +44,7 @@ public abstract class ShopResourceModuleTest<DTO extends ApiDTO> extends Resourc
     void testCreateAdmin() throws Exception {
         final DTO request = generateDTO();
 
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(post(this.route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
@@ -57,7 +57,7 @@ public abstract class ShopResourceModuleTest<DTO extends ApiDTO> extends Resourc
     void testPatchAdmin() throws Exception {
         final DTO request = generateDTO();
 
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(patch(this.route)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
@@ -68,7 +68,7 @@ public abstract class ShopResourceModuleTest<DTO extends ApiDTO> extends Resourc
 
     @Test
     void testDeleteAdmin() throws Exception {
-        super.setupAdmin();
+        super.setupPacifistaAdmin();
 
         mockMvc.perform(delete(this.route + "?id=" + UUID.randomUUID())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())

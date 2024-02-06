@@ -1,6 +1,6 @@
 package fr.pacifista.api.web.shop.client.articles.dtos;
 
-import com.funixproductions.core.crud.dtos.ApiDTO;
+import com.funixproductions.core.files.dtos.ApiStorageFileDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ShopArticleDTO extends ApiDTO {
+public class ShopArticleDTO extends ApiStorageFileDTO {
 
     @NotNull(message = "La catégorie ne peut pas être nulle")
     private ShopCategoryDTO category;
