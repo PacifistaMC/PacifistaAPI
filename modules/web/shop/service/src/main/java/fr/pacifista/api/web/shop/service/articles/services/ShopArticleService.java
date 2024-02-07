@@ -1,11 +1,8 @@
 package fr.pacifista.api.web.shop.service.articles.services;
 
-import com.funixproductions.api.user.client.dtos.UserDTO;
-import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.funixproductions.core.files.services.ApiStorageService;
-import com.funixproductions.core.tools.pdf.tools.VATInformation;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
@@ -29,7 +26,6 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
 
     private final ShopCategoryService shopCategoryService;
     private final ShopArticlePurchaseRepository shopArticlePurchaseRepository;
-    private final CurrentSession currentSession;
 
     private final Cache<String, Resource> cache = CacheBuilder.newBuilder()
             .expireAfterAccess(30, TimeUnit.MINUTES)
@@ -38,28 +34,10 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
     public ShopArticleService(ShopArticleRepository repository,
                               ShopArticleMapper mapper,
                               ShopCategoryService shopCategoryService,
-                              ShopArticlePurchaseRepository shopArticlePurchaseRepository,
-                              CurrentSession currentSession) {
+                              ShopArticlePurchaseRepository shopArticlePurchaseRepository) {
         super("pacifista_shop_web_articles", repository, mapper);
         this.shopCategoryService = shopCategoryService;
         this.shopArticlePurchaseRepository = shopArticlePurchaseRepository;
-        this.currentSession = currentSession;
-    }
-
-    @Override
-    public void beforeSendingDTO(@NonNull Iterable<ShopArticleDTO> dto) {
-        final UserDTO user = currentSession.getCurrentUser();
-        VATInformation vatInformation = VATInformation.FRANCE;
-
-        if (user != null) {
-            vatInformation = VATInformation.getVATInformation(user.getCountry().getCountryCode2Chars());
-        }
-        if (vatInformation == null) {
-            vatInformation = VATInformation.FRANCE;
-        }
-        for (ShopArticleDTO article : dto) {
-            article.setPrice(article.getPrice() + (article.getPrice() * (vatInformation.getVatRate() / 100)));
-        }
     }
 
     @Override

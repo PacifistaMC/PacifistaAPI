@@ -2,7 +2,6 @@ package fr.pacifista.api.web.shop.service.articles.services;
 
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
-import com.funixproductions.core.tools.pdf.tools.VATInformation;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService;
@@ -55,7 +54,7 @@ class ShopArticleServiceTest {
             assertEquals(shopArticleDTO.getDescription(), created.getDescription());
             assertEquals(shopArticleDTO.getHtmlDescription(), created.getHtmlDescription());
             assertEquals(shopArticleDTO.getLogoUrl(), created.getLogoUrl());
-            assertTrue(created.getPrice() > shopArticleDTO.getPrice());
+            assertEquals(shopArticleDTO.getPrice(), created.getPrice());
 
             this.shopArticleService.loadAsResource(created.getId().toString());
             this.shopArticleService.delete(created.getId().toString());
@@ -83,7 +82,7 @@ class ShopArticleServiceTest {
 
             final ShopArticleDTO patched = this.shopArticleService.update(created);
             assertEquals(created.getName(), patched.getName());
-            assertEquals(created.getPrice() + (created.getPrice() * (VATInformation.FRANCE.getVatRate() /100)), patched.getPrice());
+            assertEquals(shopArticleDTO.getPrice(), created.getPrice());
             assertEquals(shopArticleDTO.getDescription(), patched.getDescription());
         });
     }

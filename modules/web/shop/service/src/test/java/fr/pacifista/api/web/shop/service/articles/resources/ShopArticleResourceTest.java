@@ -1,7 +1,11 @@
 package fr.pacifista.api.web.shop.service.articles.resources;
 
+import com.funixproductions.api.user.client.dtos.UserDTO;
+import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.test.beans.JsonHelper;
+import com.funixproductions.core.tools.pdf.tools.VATInformation;
+import com.google.gson.reflect.TypeToken;
 import fr.pacifista.api.core.tests.services.ResourceTestHandler;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
@@ -17,9 +21,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -40,18 +48,63 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     @Autowired
     JsonHelper jsonHelper;
 
+    @MockBean
+    CurrentSession currentSession;
+
     private final String route = "/web/shop/articles";
+
+    private final double price = 10;
 
     @BeforeEach
     void setupMock() {
+        final PageDTO<ShopArticleDTO> pageDTO = new PageDTO<>();
+        final ShopArticleDTO shopArticleDTO = new ShopArticleDTO();
+        shopArticleDTO.setPrice(price);
+        pageDTO.setContent(List.of(shopArticleDTO));
+
+        final UserDTO userDTO = new UserDTO();
+        userDTO.setCountry(new UserDTO.Country(
+                "France", 100, "FR", "FRA"
+        ));
+        when(currentSession.getCurrentUser()).thenReturn(userDTO);
+
         reset(articleService);
         when(articleService.getAll(
                 anyString(), anyString(), anyString(), anyString()
-        )).thenReturn(new PageDTO<>());
+        )).thenReturn(pageDTO);
+        when(articleService.findById(anyString())).thenReturn(shopArticleDTO);
+
         when(articleService.store(any(), any())).thenReturn(new ShopArticleDTO());
         when(articleService.create(any(ShopArticleDTO.class))).thenReturn(new ShopArticleDTO());
         when(articleService.update(any(ShopArticleDTO.class))).thenReturn(new ShopArticleDTO());
         doNothing().when(articleService).delete(anyString());
+    }
+
+    @Test
+    void testGetAllWithPrices() throws Exception {
+        final MvcResult mvcResult = mockMvc.perform(get(this.route)
+        ).andExpect(status().isOk()).andReturn();
+
+        final Type type = new TypeToken<PageDTO<ShopArticleDTO>>() {}.getType();
+        final PageDTO<ShopArticleDTO> pageDTO = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+
+        assertEquals(1, pageDTO.getContent().size());
+        final ShopArticleDTO shopArticleDTO = pageDTO.getContent().get(0);
+        assertEquals(price, shopArticleDTO.getPrice());
+        assertEquals(price * (VATInformation.FRANCE.getVatRate() / 100), shopArticleDTO.getTax());
+        assertEquals(price + (price * (VATInformation.FRANCE.getVatRate() / 100)), shopArticleDTO.getPriceWithTax());
+    }
+
+    @Test
+    void testGetIdWithPrices() throws Exception {
+        final MvcResult mvcResult = mockMvc.perform(get(this.route + "/" + UUID.randomUUID())
+        ).andExpect(status().isOk()).andReturn();
+
+        final ShopArticleDTO shopArticleDTO = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), ShopArticleDTO.class);
+
+        assertEquals(price, shopArticleDTO.getPrice());
+        assertEquals(price * (VATInformation.FRANCE.getVatRate() / 100), shopArticleDTO.getTax());
+        assertEquals(price + (price * (VATInformation.FRANCE.getVatRate() / 100)), shopArticleDTO.getPriceWithTax());
     }
 
     @Test

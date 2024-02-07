@@ -102,6 +102,7 @@ public class PaypalPaymentService {
 
         return Collections.singletonList(purchaseUnitDTO);
     }
+
     private VATInformation getVatFromUser(final UserDTO userDTO) {
         for (final VATInformation vat : VATInformation.values()) {
             if (vat.getCountryCode().equalsIgnoreCase(userDTO.getCountry().getCountryCode2Chars())) {

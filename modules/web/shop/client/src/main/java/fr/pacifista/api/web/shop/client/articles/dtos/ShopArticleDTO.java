@@ -38,4 +38,8 @@ public class ShopArticleDTO extends ApiStorageFileDTO {
     @Size(min = 3, max = 255, message = "La commande exécutée doit contenir entre 3 et 255 caractères")
     private String commandExecuted;
 
+    private Double tax;
+
+    private Double priceWithTax;
+
 }
