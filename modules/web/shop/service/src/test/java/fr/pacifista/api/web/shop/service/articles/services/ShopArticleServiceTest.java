@@ -82,7 +82,7 @@ class ShopArticleServiceTest {
 
             final ShopArticleDTO patched = this.shopArticleService.update(created);
             assertEquals(created.getName(), patched.getName());
-            assertEquals(shopArticleDTO.getPrice(), created.getPrice());
+            assertEquals(created.getPrice(), patched.getPrice());
             assertEquals(shopArticleDTO.getDescription(), patched.getDescription());
         });
     }
