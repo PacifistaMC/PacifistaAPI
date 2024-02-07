@@ -20,10 +20,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -146,12 +148,25 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     void testCreateAdmin() throws Exception {
         super.setupAdmin();
 
-        mockMvc.perform(multipart(this.route + "/file")
-                .file("file", new byte[0])
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonHelper.toJson(generateDTO()))
-        ).andExpect(status().isOk());
+        final String fileName = "fileNameTest" + UUID.randomUUID();
+        final String fileExt = "txt";
+        final String fileContent = "test";
+        final ShopArticleDTO request = generateDTO();
+        final MockMultipartFile file = new MockMultipartFile("file", fileName + "." + fileExt, "text/plain", fileContent.getBytes());
+
+        final MockMultipartFile metadata = new MockMultipartFile(
+                "dto",
+                "dto",
+                MediaType.APPLICATION_JSON_VALUE,
+                jsonHelper.toJson(request).getBytes(StandardCharsets.UTF_8));
+
+        this.mockMvc.perform(multipart(this.route + "/file")
+                        .file(file)
+                        .file(metadata)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + UUID.randomUUID())
+                )
+                .andExpect(status().isOk());
     }
 
     @Test
