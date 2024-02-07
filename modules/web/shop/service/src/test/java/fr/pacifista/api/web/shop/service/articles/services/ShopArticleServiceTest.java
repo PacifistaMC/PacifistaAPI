@@ -43,7 +43,6 @@ class ShopArticleServiceTest {
         shopArticleDTO.setDescription(UUID.randomUUID().toString());
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
-        shopArticleDTO.setLogoUrl(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
@@ -53,7 +52,6 @@ class ShopArticleServiceTest {
             assertEquals(shopArticleDTO.getCategory(), created.getCategory());
             assertEquals(shopArticleDTO.getDescription(), created.getDescription());
             assertEquals(shopArticleDTO.getHtmlDescription(), created.getHtmlDescription());
-            assertEquals(shopArticleDTO.getLogoUrl(), created.getLogoUrl());
             assertEquals(shopArticleDTO.getPrice(), created.getPrice());
 
             this.shopArticleService.loadAsResource(created.getId().toString());
@@ -72,7 +70,6 @@ class ShopArticleServiceTest {
         shopArticleDTO.setDescription(UUID.randomUUID().toString());
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
-        shopArticleDTO.setLogoUrl(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {

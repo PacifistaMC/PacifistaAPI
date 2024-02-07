@@ -205,7 +205,6 @@ class ShopArticleResourceTest extends ResourceTestHandler {
         shopArticleDTO.setDescription(UUID.randomUUID().toString());
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
-        shopArticleDTO.setLogoUrl(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         return shopArticleDTO;

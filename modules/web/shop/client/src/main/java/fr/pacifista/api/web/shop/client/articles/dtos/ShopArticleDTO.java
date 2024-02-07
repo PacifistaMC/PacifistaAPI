@@ -27,9 +27,6 @@ public class ShopArticleDTO extends ApiStorageFileDTO {
     @NotBlank(message = "La description HTML ne peut pas être vide")
     private String htmlDescription;
 
-    @NotBlank(message = "L'URL de l'image ne peut pas être vide")
-    private String logoUrl;
-
     @NotNull(message = "Le prix ne peut pas être nul")
     @Min(value = 0, message = "Le prix ne peut pas être négatif")
     private Double price;

@@ -27,9 +27,6 @@ public class ShopArticle extends ApiStorageFile {
     @Column(nullable = false, name = "html_description", length = 10000)
     private String htmlDescription;
 
-    @Column(nullable = false, name = "logo_url")
-    private String logoUrl;
-
     @Column(nullable = false)
     private Double price;
 
