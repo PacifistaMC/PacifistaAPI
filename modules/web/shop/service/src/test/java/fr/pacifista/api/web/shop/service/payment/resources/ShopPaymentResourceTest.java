@@ -347,7 +347,6 @@ class ShopPaymentResourceTest {
             article.setName("testArticle" + i);
             article.setDescription("testDescription" + i);
             article.setHtmlDescription("testHtmlDescription" + i);
-            article.setLogoUrl("testLogoUrl" + i);
             article.setPrice(random.nextDouble(300) * 100);
             article.setCommandExecuted("testCommandExecuted" + i);
             article.setFileExtension("jpg");
