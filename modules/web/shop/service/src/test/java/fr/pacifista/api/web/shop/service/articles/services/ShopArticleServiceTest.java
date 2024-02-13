@@ -88,6 +88,7 @@ class ShopArticleServiceTest {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
         shopCategoryDTO.setDescription(UUID.randomUUID().toString());
+        shopCategoryDTO.setMultiPurchaseAllowed(false);
 
         return this.shopCategoryService.create(shopCategoryDTO);
     }

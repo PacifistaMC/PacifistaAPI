@@ -331,6 +331,7 @@ class ShopPaymentResourceTest {
         ShopCategory category = new ShopCategory();
         category.setName("testCategory");
         category.setDescription("testDescription");
+        category.setMultiPurchaseAllowed(false);
         this.shopArticlePurchaseRepository.deleteAll();
         this.shopPaymentRepository.deleteAll();
         this.shopArticleRepository.deleteAll();

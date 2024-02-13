@@ -135,6 +135,7 @@ class ShopCategoryResourceTest extends ResourceTestHandler {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
         shopCategoryDTO.setDescription(UUID.randomUUID().toString());
+        shopCategoryDTO.setMultiPurchaseAllowed(false);
 
         return shopCategoryDTO;
     }
