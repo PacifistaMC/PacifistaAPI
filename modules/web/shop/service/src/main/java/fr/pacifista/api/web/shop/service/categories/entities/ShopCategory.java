@@ -17,4 +17,7 @@ public class ShopCategory extends ApiEntity {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false, name = "multi_purchase_allowed")
+    private Boolean multiPurchaseAllowed;
+
 }

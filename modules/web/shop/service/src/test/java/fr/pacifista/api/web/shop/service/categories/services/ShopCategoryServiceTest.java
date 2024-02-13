@@ -21,6 +21,7 @@ class ShopCategoryServiceTest {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
         shopCategoryDTO.setDescription(UUID.randomUUID().toString());
+        shopCategoryDTO.setMultiPurchaseAllowed(false);
 
         assertDoesNotThrow(() -> {
             final ShopCategoryDTO created = this.shopCategoryService.create(shopCategoryDTO);
@@ -33,6 +34,7 @@ class ShopCategoryServiceTest {
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
         shopCategoryDTO.setName(UUID.randomUUID().toString());
         shopCategoryDTO.setDescription(UUID.randomUUID().toString());
+        shopCategoryDTO.setMultiPurchaseAllowed(false);
 
         assertDoesNotThrow(() -> {
             final ShopCategoryDTO created = this.shopCategoryService.create(shopCategoryDTO);
