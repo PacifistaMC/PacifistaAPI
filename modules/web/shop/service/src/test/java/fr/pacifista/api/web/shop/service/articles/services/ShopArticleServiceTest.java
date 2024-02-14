@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.UUID;
@@ -72,15 +73,27 @@ class ShopArticleServiceTest {
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
+        final String fileName = "fileNameTest" + UUID.randomUUID();
+        final String fileExt = "txt";
+        final String fileContent = "test";
+        final MockMultipartFile file = new MockMultipartFile("file", fileName + "." + fileExt, "image/jpeg", fileContent.getBytes());
+
         assertDoesNotThrow(() -> {
-            final ShopArticleDTO created = this.shopArticleService.store(shopArticleDTO, new MockMultipartFile("file", "test_sdffds.jpg", "image/jpeg", new byte[0]));
+            final ShopArticleDTO created = this.shopArticleService.store(shopArticleDTO, file);
             created.setName(UUID.randomUUID().toString());
             created.setPrice(100.0);
 
-            final ShopArticleDTO patched = this.shopArticleService.update(created);
+            final String fileContent2 = "test";
+            final MockMultipartFile file2 = new MockMultipartFile("file2", fileName + "." + fileExt, "image/jpeg", fileContent2.getBytes());
+
+            final ShopArticleDTO patched = this.shopArticleService.updateFull(created, file2);
             assertEquals(created.getName(), patched.getName());
             assertEquals(created.getPrice(), patched.getPrice());
             assertEquals(shopArticleDTO.getDescription(), patched.getDescription());
+
+            final Resource resource = this.shopArticleService.loadAsResource(patched.getId().toString());
+            assertNotNull(resource);
+            assertEquals(fileContent2, new String(resource.getInputStream().readAllBytes()));
         });
     }
 
