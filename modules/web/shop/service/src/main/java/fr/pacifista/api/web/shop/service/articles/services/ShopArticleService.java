@@ -66,6 +66,7 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
         final Iterable<String> uids = getUuidsFromCategories(articles);
         final Iterable<ShopCategory> categories = shopCategoryService.getRepository().findAllByUuidIn(uids);
 
+        this.cache.invalidateAll(uids);
         for (ShopArticle article : articles) {
             if (article.getCategory() != null && article.getCategory().getUuid() != null) {
                 final ShopCategory category = shopCategoryService.getEntityFromUidInList(categories, article.getCategory().getUuid());
@@ -92,7 +93,7 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
         final List<String> uids = new ArrayList<>();
 
         for (ShopArticle category : articles) {
-            if (category.getCategory() != null) {
+            if (category.getCategory() != null && category.getCategory().getUuid() != null) {
                 uids.add(category.getCategory().getUuid().toString());
             }
         }
