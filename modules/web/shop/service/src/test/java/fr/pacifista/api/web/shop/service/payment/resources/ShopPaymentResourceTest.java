@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ShopPaymentResourceTest {
 
-    private static final String ROUTE = "/web/shop";
+    private static final String ROUTE = "/web/shop/";
 
     private final List<ShopArticle> articles = new ArrayList<>();
 

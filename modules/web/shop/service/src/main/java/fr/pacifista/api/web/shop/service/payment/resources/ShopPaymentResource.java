@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/web/shop")
+@RequestMapping("/web/shop/")
 @RequiredArgsConstructor
 public class ShopPaymentResource implements ShopPaymentClient {
 

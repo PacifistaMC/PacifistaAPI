@@ -19,6 +19,7 @@ public class WebSecurity extends ApiWebSecurity {
         return ex -> ex
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/web/shop").authenticated()
+                .requestMatchers("/web/shop/").authenticated()
                 .requestMatchers("/web/shop/capture").authenticated()
                 .requestMatchers(HttpMethod.GET, "/web/shop/articles/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/web/shop/categories/**").permitAll()
