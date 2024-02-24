@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.server.players</groupId>
         <artifactId>pacifista-server-players</artifactId>
-        <version>1.5.1.4</version>
+        <version>1.5.1.5</version>
     </parent>
 
     <groupId>fr.pacifista.api.server.players.sync</groupId>
