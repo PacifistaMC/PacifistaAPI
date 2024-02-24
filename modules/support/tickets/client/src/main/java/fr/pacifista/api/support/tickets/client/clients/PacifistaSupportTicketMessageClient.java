@@ -2,7 +2,7 @@ package fr.pacifista.api.support.tickets.client.clients;
 
 import com.funixproductions.core.crud.clients.CrudClient;
 import com.funixproductions.core.crud.dtos.PageDTO;
-import fr.pacifista.api.core.client.enums.clients.FeignTokenInterceptor;
+import fr.pacifista.api.core.client.clients.FeignTokenInterceptor;
 import fr.pacifista.api.support.tickets.client.dtos.PacifistaSupportTicketMessageDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

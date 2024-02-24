@@ -1,6 +1,6 @@
 package fr.pacifista.api.server.warps.service.services;
 
-import fr.pacifista.api.core.client.enums.enums.ServerType;
+import fr.pacifista.api.core.client.enums.ServerType;
 import fr.pacifista.api.server.warps.client.dtos.WarpDTO;
 import fr.pacifista.api.server.warps.client.enums.WarpType;
 import org.junit.jupiter.api.Test;

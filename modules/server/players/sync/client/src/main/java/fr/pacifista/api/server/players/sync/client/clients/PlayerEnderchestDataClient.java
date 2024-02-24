@@ -1,7 +1,7 @@
 package fr.pacifista.api.server.players.sync.client.clients;
 
 import com.funixproductions.core.crud.clients.CrudClient;
-import fr.pacifista.api.core.client.enums.clients.FeignTokenInterceptor;
+import fr.pacifista.api.core.client.clients.FeignTokenInterceptor;
 import fr.pacifista.api.server.players.sync.client.dtos.PlayerEnderchestDataDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 

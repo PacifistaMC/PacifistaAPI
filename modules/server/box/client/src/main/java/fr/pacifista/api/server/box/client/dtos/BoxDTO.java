@@ -1,7 +1,7 @@
 package fr.pacifista.api.server.box.client.dtos;
 
 import com.funixproductions.core.crud.dtos.ApiDTO;
-import fr.pacifista.api.core.client.enums.enums.ServerGameMode;
+import fr.pacifista.api.core.client.enums.ServerGameMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

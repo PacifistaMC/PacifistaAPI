@@ -2,7 +2,7 @@ package fr.pacifista.api.server.sanctions.client.clients;
 
 import com.funixproductions.core.exceptions.ApiException;
 import feign.FeignException;
-import fr.pacifista.api.core.client.enums.clients.FeignImpl;
+import fr.pacifista.api.core.client.clients.FeignImpl;
 import fr.pacifista.api.server.sanctions.client.dtos.SanctionDTO;
 import fr.pacifista.api.server.sanctions.client.enums.SanctionType;
 import jakarta.validation.constraints.NotBlank;

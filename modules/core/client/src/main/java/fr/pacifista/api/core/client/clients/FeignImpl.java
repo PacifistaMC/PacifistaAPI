@@ -1,4 +1,4 @@
-package fr.pacifista.api.core.client.enums.clients;
+package fr.pacifista.api.core.client.clients;
 
 import com.funixproductions.core.crud.clients.CrudClient;
 import com.funixproductions.core.crud.dtos.ApiDTO;

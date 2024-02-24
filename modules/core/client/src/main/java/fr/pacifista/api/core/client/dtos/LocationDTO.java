@@ -1,7 +1,7 @@
-package fr.pacifista.api.core.client.enums.dtos;
+package fr.pacifista.api.core.client.dtos;
 
 import com.funixproductions.core.crud.dtos.ApiDTO;
-import fr.pacifista.api.core.client.enums.enums.ServerType;
+import fr.pacifista.api.core.client.enums.ServerType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

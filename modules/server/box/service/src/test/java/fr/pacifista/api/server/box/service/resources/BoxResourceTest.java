@@ -1,7 +1,7 @@
 package fr.pacifista.api.server.box.service.resources;
 
 import com.funixproductions.core.crud.dtos.PageDTO;
-import fr.pacifista.api.core.client.enums.enums.ServerGameMode;
+import fr.pacifista.api.core.client.enums.ServerGameMode;
 import fr.pacifista.api.server.box.client.dtos.BoxDTO;
 import fr.pacifista.api.server.box.service.services.BoxService;
 import org.junit.jupiter.api.BeforeEach;

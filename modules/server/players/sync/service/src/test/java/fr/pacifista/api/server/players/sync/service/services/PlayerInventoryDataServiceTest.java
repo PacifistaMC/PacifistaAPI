@@ -1,6 +1,6 @@
 package fr.pacifista.api.server.players.sync.service.services;
 
-import fr.pacifista.api.core.client.enums.enums.ServerGameMode;
+import fr.pacifista.api.core.client.enums.ServerGameMode;
 import fr.pacifista.api.server.players.sync.client.dtos.PlayerInventoryDataDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

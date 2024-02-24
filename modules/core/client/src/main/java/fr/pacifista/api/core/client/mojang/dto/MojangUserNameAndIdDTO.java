@@ -1,4 +1,4 @@
-package fr.pacifista.api.core.client.enums.mojang.dto;
+package fr.pacifista.api.core.client.mojang.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +24,16 @@ public class MojangUserNameAndIdDTO {
         }
 
         return UUID.fromString(buffer.toString());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+
+        if (obj instanceof MojangUserNameAndIdDTO other) {
+            return other.id.equals(this.id) && other.name.equalsIgnoreCase(this.name);
+        } else {
+            return false;
+        }
     }
 }

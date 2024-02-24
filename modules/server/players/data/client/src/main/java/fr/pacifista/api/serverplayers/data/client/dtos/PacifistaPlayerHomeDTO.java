@@ -1,7 +1,7 @@
 package fr.pacifista.api.serverplayers.data.client.dtos;
 
-import fr.pacifista.api.core.client.enums.dtos.LocationDTO;
-import fr.pacifista.api.core.client.enums.enums.ServerType;
+import fr.pacifista.api.core.client.dtos.LocationDTO;
+import fr.pacifista.api.core.client.enums.ServerType;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package fr.pacifista.api.serverplayers.data.client.clients;
 
-import fr.pacifista.api.core.client.enums.clients.FeignImpl;
+import fr.pacifista.api.core.client.clients.FeignImpl;
 import fr.pacifista.api.serverplayers.data.client.dtos.PacifistaPlayerChatMessageDTO;
 
 public class PacifistaPlayerChatMessageImplClient extends FeignImpl<PacifistaPlayerChatMessageDTO, PacifistaPlayerChatMessageClient> implements PacifistaPlayerChatMessageClient {

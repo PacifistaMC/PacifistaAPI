@@ -1,6 +1,6 @@
 package fr.pacifista.api.server.players.sync.service.entities;
 
-import fr.pacifista.api.core.client.enums.enums.ServerGameMode;
+import fr.pacifista.api.core.client.enums.ServerGameMode;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

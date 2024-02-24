@@ -1,4 +1,4 @@
-package fr.pacifista.api.core.client.enums.clients;
+package fr.pacifista.api.core.client.clients;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

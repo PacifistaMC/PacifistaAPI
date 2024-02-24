@@ -1,7 +1,7 @@
 package fr.pacifista.api.serverplayers.data.client.dtos;
 
-import fr.pacifista.api.core.client.enums.dtos.MinecraftPlayerDTO;
-import fr.pacifista.api.core.client.enums.enums.ServerType;
+import fr.pacifista.api.core.client.dtos.MinecraftPlayerDTO;
+import fr.pacifista.api.core.client.enums.ServerType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

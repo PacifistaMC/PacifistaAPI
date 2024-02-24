@@ -1,6 +1,6 @@
 package fr.pacifista.api.server.warps.client.dtos;
 
-import fr.pacifista.api.core.client.enums.dtos.LocationDTO;
+import fr.pacifista.api.core.client.dtos.LocationDTO;
 import fr.pacifista.api.server.warps.client.enums.WarpType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

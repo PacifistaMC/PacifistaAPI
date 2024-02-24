@@ -1,4 +1,4 @@
-package fr.pacifista.api.core.client.enums.enums;
+package fr.pacifista.api.core.client.enums;
 
 public enum ServerGameMode {
     NEUTRAL,

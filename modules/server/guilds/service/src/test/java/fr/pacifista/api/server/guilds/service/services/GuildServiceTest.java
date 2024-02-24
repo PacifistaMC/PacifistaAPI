@@ -1,7 +1,7 @@
 package fr.pacifista.api.server.guilds.service.services;
 
 import com.funixproductions.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.core.client.enums.enums.ServerType;
+import fr.pacifista.api.core.client.enums.ServerType;
 import fr.pacifista.api.server.guilds.client.dtos.GuildDTO;
 import fr.pacifista.api.server.guilds.client.dtos.GuildHomeDTO;
 import fr.pacifista.api.server.guilds.client.dtos.GuildMemberDTO;

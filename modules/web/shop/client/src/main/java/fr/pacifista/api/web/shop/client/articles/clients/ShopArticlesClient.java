@@ -1,7 +1,7 @@
 package fr.pacifista.api.web.shop.client.articles.clients;
 
 import com.funixproductions.core.files.clients.StorageCrudClient;
-import fr.pacifista.api.core.client.enums.clients.FeignTokenInterceptor;
+import fr.pacifista.api.core.client.clients.FeignTokenInterceptor;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 

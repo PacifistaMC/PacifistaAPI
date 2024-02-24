@@ -1,4 +1,4 @@
-package fr.pacifista.api.core.client.enums.dtos;
+package fr.pacifista.api.core.client.dtos;
 
 import com.funixproductions.core.crud.dtos.ApiDTO;
 import jakarta.validation.constraints.NotBlank;

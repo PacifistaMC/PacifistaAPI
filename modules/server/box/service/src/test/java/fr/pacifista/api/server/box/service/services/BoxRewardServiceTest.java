@@ -2,7 +2,7 @@ package fr.pacifista.api.server.box.service.services;
 
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.core.client.enums.enums.ServerGameMode;
+import fr.pacifista.api.core.client.enums.ServerGameMode;
 import fr.pacifista.api.server.box.client.dtos.BoxDTO;
 import fr.pacifista.api.server.box.client.dtos.BoxRewardDTO;
 import org.junit.jupiter.api.Test;

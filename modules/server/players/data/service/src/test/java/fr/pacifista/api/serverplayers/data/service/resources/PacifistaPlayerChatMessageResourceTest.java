@@ -1,7 +1,7 @@
 package fr.pacifista.api.serverplayers.data.service.resources;
 
 import com.funixproductions.core.test.beans.JsonHelper;
-import fr.pacifista.api.core.client.enums.enums.ServerType;
+import fr.pacifista.api.core.client.enums.ServerType;
 import fr.pacifista.api.core.tests.services.ResourceTestHandler;
 import fr.pacifista.api.serverplayers.data.client.dtos.PacifistaPlayerChatMessageDTO;
 import org.junit.jupiter.api.Test;
