@@ -9,7 +9,7 @@ metadata:
     service: web-shop
 
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: springboot
@@ -69,6 +69,11 @@ spec:
                 secretKeyRef:
                   name: postgres-secret-pacifista
                   key: postgres-password
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sentry-secret
+                  key: sentry-pacifista-api-key
       volumes:
         - name: pacifista-shop-storage
           hostPath:

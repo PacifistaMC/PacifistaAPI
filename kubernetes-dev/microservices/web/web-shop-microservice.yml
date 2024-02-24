@@ -71,6 +71,11 @@ spec:
                 secretKeyRef:
                   name: postgres-secret-pacifista
                   key: postgres-password
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sentry-secret
+                  key: sentry-pacifista-api-key
       volumes:
         - name: pacifista-shop-storage
           hostPath:
