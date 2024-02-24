@@ -71,7 +71,7 @@ spec:
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: sentry-secret
+                  name: sentry-secret-pacifista
                   key: sentry-pacifista-api-key
 
 ---
