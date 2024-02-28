@@ -24,6 +24,10 @@ public abstract class PlayerData extends ApiEntity {
     }
 
     public void setPlayerOwnerUuid(UUID playerOwnerUuid) {
-        this.playerOwnerUuid = playerOwnerUuid.toString();
+        if (playerOwnerUuid == null) {
+            this.playerOwnerUuid = null;
+        } else {
+            this.playerOwnerUuid = playerOwnerUuid.toString();
+        }
     }
 }
