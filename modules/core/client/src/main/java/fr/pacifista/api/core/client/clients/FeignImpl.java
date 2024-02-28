@@ -44,7 +44,11 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
                 .client(new OkHttpClient())
                 .decoder(new GsonDecoder(gson))
                 .encoder(new GsonEncoder(gson))
-                .target(clientClass, String.format("%s/%s", Strings.isBlank(pacifistaApiDomain) ? "https://api.pacifista.fr" : pacifistaApiDomain, moduleName));
+                .target(
+                        clientClass, String.format("%s/%s",
+                        Strings.isBlank(pacifistaApiDomain) ? "https://api.pacifista.fr" : pacifistaApiDomain,
+                        moduleName)
+                );
     }
 
     @Override

@@ -4,29 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.pacifista.api</groupId>
-        <artifactId>pacifista-api</artifactId>
+        <groupId>fr.pacifista.api.server.jobs</groupId>
+        <artifactId>pacifista-server-jobs</artifactId>
         <version>1.5.1.5</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>fr.pacifista.api.server</groupId>
-    <artifactId>pacifista-server</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>box</module>
-        <module>guilds</module>
-        <module>permissions</module>
-        <module>players</module>
-        <module>sanctions</module>
-        <module>warps</module>
-        <module>jobs</module>
-    </modules>
+    <groupId>fr.pacifista.api.server.jobs.client</groupId>
+    <artifactId>pacifista-server-jobs-client</artifactId>
 
     <properties>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.pacifista.api.core.client</groupId>
+            <artifactId>pacifista-core-client</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
