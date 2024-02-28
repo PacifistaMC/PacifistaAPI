@@ -34,12 +34,12 @@ public class JobPlayerTask extends JobPlayerEntity {
     /**
      * Les données de la tâche en JSON, utile quand on veut stocker des données complexes comme des enchantements ou des potions
      */
-    @Column(name = "json_task_data")
+    @Column(name = "json_task_data", length = 10000000)
     private String jsonTaskData;
 
     /**
      * Le type de tâche, pour savoir si c'est une tâche de collecte, de craft, de pêche, etc. Utile pour les données complexes
      */
-    @Column(name = "task_type")
+    @Column(name = "task_type", length = 10000000)
     private String taskType;
 }

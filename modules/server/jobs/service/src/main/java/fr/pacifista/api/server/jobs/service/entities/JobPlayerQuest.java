@@ -36,7 +36,7 @@ public class JobPlayerQuest extends JobPlayerEntity {
     /**
      * Les données de la quête en JSON, utile quand on veut stocker des données complexes comme des enchantements ou des potions
      */
-    @Column(name = "json_quest_data", nullable = false)
+    @Column(name = "json_quest_data", nullable = false, length = 1000000)
     private String jsonQuestData;
 
 }
