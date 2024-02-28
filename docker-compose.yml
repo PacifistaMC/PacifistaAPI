@@ -64,6 +64,15 @@ services:
         service_name: server-warps
         service_base_dir: server/warps
 
+  #Server - Jobs service
+  build-production-server-jobs-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-jobs:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: server-jobs
+        service_base_dir: server/jobs
+
   #Support - Tickets service
   build-production-support-tickets-service:
     image: ghcr.io/pacifistamc/pacifista-api-support-tickets:${IMAGE_TAG}
