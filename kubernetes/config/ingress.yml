@@ -61,6 +61,13 @@ spec:
                 name: server-warps-service
                 port:
                   number: 80
+          - path: /jobs
+            pathType: Prefix
+            backend:
+              service:
+                name: server-jobs-service
+                port:
+                  number: 80
           - path: /support/ticket
             pathType: Prefix
             backend:
