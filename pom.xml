@@ -22,7 +22,6 @@
         <module>modules/server</module>
         <module>modules/web</module>
         <module>modules/support</module>
-        <module>modules/server/jobs/service</module>
     </modules>
 
     <properties>
