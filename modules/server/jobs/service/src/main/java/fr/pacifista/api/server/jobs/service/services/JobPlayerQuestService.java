@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class JobPlayerQuestService extends ApiService<JobPlayerQuestDTO, JobPlayerQuest, JobPlayerQuestMapper, JobPlayerQuestRepository> {
 
-    public JobPlayerQuestService(JobPlayerQuestRepository repository, JobPlayerQuestMapper mapper) {
+    public JobPlayerQuestService(JobPlayerQuestRepository repository,
+                                 JobPlayerQuestMapper mapper) {
         super(repository, mapper);
     }
 
