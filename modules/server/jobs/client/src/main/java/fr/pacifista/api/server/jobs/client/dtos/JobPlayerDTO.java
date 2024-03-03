@@ -17,7 +17,7 @@ public class JobPlayerDTO extends JobPlayerEntityDTO {
      */
     @NotNull(message = "L'expérience du joueur job est requise")
     @Min(value = 0, message = "L'expérience du joueur job doit être supérieure ou égale à 0")
-    private Integer exp;
+    private Double exp;
 
     /**
      * Le niveau du joueur job

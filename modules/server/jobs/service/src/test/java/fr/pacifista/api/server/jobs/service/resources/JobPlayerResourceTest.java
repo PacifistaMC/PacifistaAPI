@@ -50,7 +50,7 @@ class JobPlayerResourceTest {
     @Test
     void testCrud() throws Exception {
         final JobPlayerDTO jobPlayerDTO = new JobPlayerDTO();
-        jobPlayerDTO.setExp(0);
+        jobPlayerDTO.setExp(0.0);
         jobPlayerDTO.setLevel(1);
         jobPlayerDTO.setPoints(10);
         jobPlayerDTO.setIsActive(true);

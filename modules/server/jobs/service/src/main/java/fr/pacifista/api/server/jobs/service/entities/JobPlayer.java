@@ -17,7 +17,7 @@ public class JobPlayer extends JobPlayerEntity {
      * L'expérience du joueur job
      */
     @Column(name = "exp", nullable = false)
-    private Integer exp;
+    private Double exp;
 
     /**
      * Le niveau du joueur job
