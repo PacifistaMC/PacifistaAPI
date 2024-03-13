@@ -28,6 +28,12 @@ public class JobPlayerTaskDTO extends JobPlayerEntityDTO {
     private Integer amountCollected;
 
     /**
+     * Indique si la tache est terminée, utilisée pour la recherche de tâches à compléter en cours
+     */
+    @NotNull(message = "La tâche doit être complétée ou non")
+    private Boolean isTaskCompleted;
+
+    /**
      * Le nom de la ressource à collecter, nom mojang
      */
     @NotNull(message = "Le nom de la ressource à collecter est requis")

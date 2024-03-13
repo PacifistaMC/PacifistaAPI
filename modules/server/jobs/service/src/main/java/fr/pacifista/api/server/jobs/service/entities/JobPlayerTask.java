@@ -26,6 +26,12 @@ public class JobPlayerTask extends JobPlayerEntity {
     private Integer amountCollected;
 
     /**
+     * Indique si la tache est terminée, utilisée pour la recherche de tâches à compléter en cours
+     */
+    @Column(name = "is_task_completed", nullable = false)
+    private Boolean isTaskCompleted;
+
+    /**
      * Le nom de la ressource à collecter, nom mojang
      */
     @Column(name = "material_name_to_collect", nullable = false)
