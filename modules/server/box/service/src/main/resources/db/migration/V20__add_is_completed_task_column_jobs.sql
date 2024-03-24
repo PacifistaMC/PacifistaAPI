@@ -1,1 +1,1 @@
-ALTER TABLE job_player ADD COLUMN is_task_completed BOOLEAN DEFAULT FALSE;
+ALTER TABLE job_player ADD COLUMN is_task_completed BOOLEAN DEFAULT FALSE NOT NULL;
