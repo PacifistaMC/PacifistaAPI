@@ -52,6 +52,7 @@ class JobPlayerTaskResourceTest {
         final JobPlayerTaskDTO jobPlayerTaskDTO = new JobPlayerTaskDTO();
         jobPlayerTaskDTO.setAmountRequired(10);
         jobPlayerTaskDTO.setAmountCollected(0);
+        jobPlayerTaskDTO.setCollectedTaskItems(false);
         jobPlayerTaskDTO.setIsTaskCompleted(false);
         jobPlayerTaskDTO.setMaterialNameToCollect("materialNameToCollect");
         jobPlayerTaskDTO.setPlayerUuid(UUID.randomUUID().toString());

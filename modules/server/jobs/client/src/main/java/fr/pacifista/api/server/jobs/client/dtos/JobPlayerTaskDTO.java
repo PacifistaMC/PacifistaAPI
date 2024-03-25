@@ -34,6 +34,12 @@ public class JobPlayerTaskDTO extends JobPlayerEntityDTO {
     private Boolean isTaskCompleted;
 
     /**
+     * Indique si les objets de la tâche ont été collectés
+     */
+    @NotNull(message = "Les objets de la tâche doivent être collectés ou non")
+    private Boolean collectedTaskItems;
+
+    /**
      * Le nom de la ressource à collecter, nom mojang
      */
     @NotNull(message = "Le nom de la ressource à collecter est requis")

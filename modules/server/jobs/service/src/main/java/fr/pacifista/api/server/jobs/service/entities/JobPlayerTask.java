@@ -32,6 +32,12 @@ public class JobPlayerTask extends JobPlayerEntity {
     private Boolean isTaskCompleted;
 
     /**
+     * Indique si les objets de la tâche ont été collectés
+     */
+    @Column(name = "collected_task_items", nullable = false)
+    private Boolean collectedTaskItems;
+
+    /**
      * Le nom de la ressource à collecter, nom mojang
      */
     @Column(name = "material_name_to_collect", nullable = false)
