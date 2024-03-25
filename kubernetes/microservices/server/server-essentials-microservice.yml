@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: server-essentials-microservice-deployment
+  namespace: 'funixproductions'
+  labels:
+    app: springboot
+    service: server-essentials
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot
+      service: server-essentials
+  template:
+    metadata:
+      namespace: 'funixproductions'
+      annotations:
+        build-time: "TIME-UPDATE-BUILD-FNG"
+      labels:
+        app: springboot
+        service: server-essentials
+    spec:
+      containers:
+        - name: springboot-server-essentials
+          image: ghcr.io/pacifistamc/pacifista-api-server-essentials:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+                memory: "1200Mi"
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          env:
+            - name: APP_PORT
+              value: '80'
+            - name: DB_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres-url
+                  name: postgres-config-pacifista
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-pacifista
+                  key: postgres-port
+            - name: DB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-pacifista
+                  key: postgres-db
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret-pacifista
+                  key: postgres-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret-pacifista
+                  key: postgres-password
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sentry-secret-pacifista
+                  key: sentry-pacifista-api-key
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  namespace: 'funixproductions'
+  name: server-essentials-service
+
+spec:
+  type: ClusterIP
+  selector:
+    app: springboot
+    service: server-essentials
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
