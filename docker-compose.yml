@@ -73,6 +73,15 @@ services:
         service_name: server-jobs
         service_base_dir: server/jobs
 
+  #Server - Essentials service
+  build-production-server-essentials-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-essentials:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: server-essentials
+        service_base_dir: server/essentials
+
   #Support - Tickets service
   build-production-support-tickets-service:
     image: ghcr.io/pacifistamc/pacifista-api-support-tickets:${IMAGE_TAG}
