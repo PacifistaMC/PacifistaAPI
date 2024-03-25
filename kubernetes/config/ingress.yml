@@ -54,6 +54,13 @@ spec:
                 name: server-sanctions-service
                 port:
                   number: 80
+          - path: /essentials
+            pathType: Prefix
+            backend:
+              service:
+                name: server-essentials-service
+                port:
+                  number: 80
           - path: /warps
             pathType: Prefix
             backend:
