@@ -5,6 +5,6 @@ import fr.pacifista.api.support.tickets.client.dtos.PacifistaSupportTicketDTO;
 import fr.pacifista.api.support.tickets.service.entities.PacifistaSupportTicket;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {PacifistaSupportTicketMapper.class})
+@Mapper(componentModel = "spring")
 public interface PacifistaSupportTicketMapper extends ApiMapper<PacifistaSupportTicket, PacifistaSupportTicketDTO> {
 }
