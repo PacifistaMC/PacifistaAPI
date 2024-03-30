@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class ClaimDataDTO extends ApiDTO {
+
+    @Nullable
+    private ClaimDataDTO parent;
 
     @NotNull(message = "serverType is required")
     private ServerType serverType;
@@ -49,5 +53,66 @@ public class ClaimDataDTO extends ApiDTO {
         this.lesserBoundaryCornerZ = lesserBoundaryCornerZ;
         this.greaterBoundaryCornerX = greaterBoundaryCornerX;
         this.greaterBoundaryCornerZ = greaterBoundaryCornerZ;
+    }
+
+    public ClaimDataDTO(@Nullable final ClaimDataDTO parent,
+                        final ServerType serverType,
+                        final UUID worldId,
+                        final Double lesserBoundaryCornerX,
+                        final Double lesserBoundaryCornerZ,
+                        final Double greaterBoundaryCornerX,
+                        final Double greaterBoundaryCornerZ) {
+        this.parent = parent;
+        this.serverType = serverType;
+        this.worldId = worldId;
+        this.lesserBoundaryCornerX = lesserBoundaryCornerX;
+        this.lesserBoundaryCornerZ = lesserBoundaryCornerZ;
+        this.greaterBoundaryCornerX = greaterBoundaryCornerX;
+        this.greaterBoundaryCornerZ = greaterBoundaryCornerZ;
+    }
+
+    public double getClaimCost(final double blocPrice) {
+        return (greaterBoundaryCornerX - lesserBoundaryCornerX) * (greaterBoundaryCornerZ - lesserBoundaryCornerZ) * blocPrice;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof final ClaimDataDTO other) {
+            return serverType.equals(other.serverType) &&
+                    worldId.equals(other.worldId) &&
+                    lesserBoundaryCornerX.equals(other.lesserBoundaryCornerX) &&
+                    lesserBoundaryCornerZ.equals(other.lesserBoundaryCornerZ) &&
+                    greaterBoundaryCornerX.equals(other.greaterBoundaryCornerX) &&
+                    greaterBoundaryCornerZ.equals(other.greaterBoundaryCornerZ) &&
+                    this.getId().equals(other.getId());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return 13 + this.serverType.hashCode() +
+                this.worldId.hashCode() +
+                this.lesserBoundaryCornerX.hashCode() +
+                this.lesserBoundaryCornerZ.hashCode() +
+                this.greaterBoundaryCornerX.hashCode() +
+                this.greaterBoundaryCornerZ.hashCode() +
+                this.getId().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "ClaimDataDTO{" +
+                "serverType=" + serverType +
+                ", worldId=" + worldId +
+                ", lesserBoundaryCornerX=" + lesserBoundaryCornerX +
+                ", lesserBoundaryCornerZ=" + lesserBoundaryCornerZ +
+                ", greaterBoundaryCornerX=" + greaterBoundaryCornerX +
+                ", greaterBoundaryCornerZ=" + greaterBoundaryCornerZ +
+                ", config=" + config +
+                ", users=" + users +
+                ", id=" + getId() +
+                '}';
     }
 }

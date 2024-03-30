@@ -84,4 +84,58 @@ public class ClaimDataConfigDTO extends ApiDTO {
         this.griefProtection = true;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof final ClaimDataConfigDTO other) {
+            return this.claimDataId.equals(other.claimDataId) &&
+                    this.explosionEnabled.equals(other.explosionEnabled) &&
+                    this.fireSpreadEnabled.equals(other.fireSpreadEnabled) &&
+                    this.mobGriefingEnabled.equals(other.mobGriefingEnabled) &&
+                    this.pvpEnabled.equals(other.pvpEnabled) &&
+                    this.publicAccess.equals(other.publicAccess) &&
+                    this.publicInteractButtons.equals(other.publicInteractButtons) &&
+                    this.publicInteractDoorsTrapDoors.equals(other.publicInteractDoorsTrapDoors) &&
+                    this.publicInteractChests.equals(other.publicInteractChests) &&
+                    this.animalProtection.equals(other.animalProtection) &&
+                    this.griefProtection.equals(other.griefProtection) &&
+                    this.getId().equals(other.getId());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return 13 +
+                this.claimDataId.hashCode() +
+                this.explosionEnabled.hashCode() +
+                this.fireSpreadEnabled.hashCode() +
+                this.mobGriefingEnabled.hashCode() +
+                this.pvpEnabled.hashCode() +
+                this.publicAccess.hashCode() +
+                this.publicInteractButtons.hashCode() +
+                this.publicInteractDoorsTrapDoors.hashCode() +
+                this.publicInteractChests.hashCode() +
+                this.animalProtection.hashCode() +
+                this.griefProtection.hashCode() +
+                this.getId().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "ClaimDataConfigDTO{" +
+                "claimDataId=" + this.claimDataId +
+                ", explosionEnabled=" + this.explosionEnabled +
+                ", fireSpreadEnabled=" + this.fireSpreadEnabled +
+                ", mobGriefingEnabled=" + this.mobGriefingEnabled +
+                ", pvpEnabled=" + this.pvpEnabled +
+                ", publicAccess=" + this.publicAccess +
+                ", publicInteractButtons=" + this.publicInteractButtons +
+                ", publicInteractDoorsTrapDoors=" + this.publicInteractDoorsTrapDoors +
+                ", publicInteractChests=" + this.publicInteractChests +
+                ", animalProtection=" + this.animalProtection +
+                ", griefProtection=" + this.griefProtection +
+                ", id=" + getId() +
+                '}';
+    }
 }
