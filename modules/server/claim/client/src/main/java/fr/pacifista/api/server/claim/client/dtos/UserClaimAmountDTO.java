@@ -28,6 +28,22 @@ public class UserClaimAmountDTO extends ApiDTO {
         this.blocksAmount = blocksAmount;
     }
 
+    public String getPlayerId() {
+        if (this.playerId == null) {
+            return null;
+        } else {
+            return this.playerId.toString();
+        }
+    }
+
+    public void setPlayerId(String playerId) {
+        if (playerId == null) {
+            this.playerId = null;
+        } else {
+            this.playerId = UUID.fromString(playerId);
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final UserClaimAmountDTO other) {

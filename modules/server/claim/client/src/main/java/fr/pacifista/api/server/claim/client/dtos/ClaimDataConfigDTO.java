@@ -84,6 +84,22 @@ public class ClaimDataConfigDTO extends ApiDTO {
         this.griefProtection = true;
     }
 
+    public String getClaimDataId() {
+        if (this.claimDataId == null) {
+            return null;
+        } else {
+            return this.claimDataId.toString();
+        }
+    }
+
+    public void setClaimDataId(String claimDataId) {
+        if (claimDataId == null) {
+            this.claimDataId = null;
+        } else {
+            this.claimDataId = UUID.fromString(claimDataId);
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final ClaimDataConfigDTO other) {

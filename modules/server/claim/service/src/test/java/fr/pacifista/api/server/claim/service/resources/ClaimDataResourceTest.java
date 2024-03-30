@@ -63,6 +63,7 @@ class ClaimDataResourceTest {
                 40.0
         ));
 
+        assertNull(response.getParent());
         response.setWorldId(UUID.randomUUID());
         final ClaimDataDTO updatedResponse = updateClaim(response);
         assertEquals(response.getWorldId(), updatedResponse.getWorldId());
@@ -88,6 +89,20 @@ class ClaimDataResourceTest {
 
         final ClaimDataDTO foundResponseAfterUserCreation = findClaimById(updatedResponse.getId());
         assertTrue(foundResponseAfterUserCreation.getUsers().contains(updatedClaimDataUserDTO));
+
+        final ClaimDataDTO childClaim = createClaimDataDTO(new ClaimDataDTO(
+                foundResponseAfterUserCreation,
+                ServerType.SURVIE_ALPHA,
+                UUID.randomUUID(),
+                10.0,
+                20.0,
+                30.0,
+                40.0
+        ));
+        assertEquals(childClaim.getParent(), foundResponseAfterUserCreation);
+
+        final ClaimDataDTO checkIfChildClaimIsFound = findClaimById(foundResponseAfterUserCreation.getId());
+        assertTrue(checkIfChildClaimIsFound.getChildrens().contains(childClaim));
 
         deleteClaim(updatedResponse);
         checkIfClaimIsDeleted(foundResponseAfterUserCreation);

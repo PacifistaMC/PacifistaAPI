@@ -63,6 +63,38 @@ public class ClaimDataUserDTO extends ApiDTO {
         this.role = role;
     }
 
+    public String getPlayerId() {
+        if (this.playerId == null) {
+            return null;
+        } else {
+            return this.playerId.toString();
+        }
+    }
+
+    public void setPlayerId(String playerId) {
+        if (playerId == null) {
+            this.playerId = null;
+        } else {
+            this.playerId = UUID.fromString(playerId);
+        }
+    }
+
+    public String getClaimDataId() {
+        if (this.claimDataId == null) {
+            return null;
+        } else {
+            return this.claimDataId.toString();
+        }
+    }
+
+    public void setClaimDataId(String claimDataId) {
+        if (claimDataId == null) {
+            this.claimDataId = null;
+        } else {
+            this.claimDataId = UUID.fromString(claimDataId);
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final ClaimDataUserDTO other) {

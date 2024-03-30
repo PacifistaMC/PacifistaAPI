@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity(name = "claim_data")
 public class ClaimData extends ApiEntity {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     private ClaimData parent;
 
@@ -42,6 +42,9 @@ public class ClaimData extends ApiEntity {
 
     @OneToMany(mappedBy = "claim", orphanRemoval = true)
     private List<ClaimDataUser> users;
+
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<ClaimData> childrens;
 
     public UUID getWorldId() {
         if (this.worldId == null) {
