@@ -14,7 +14,7 @@ import lombok.Setter;
 public class ClaimDataConfig extends ApiEntity {
 
     @OneToOne
-    @JoinColumn(name = "claim_data_id", nullable = false)
+    @JoinColumn(name = "claim_id", nullable = false)
     private ClaimData claim;
 
     @Column(name = "explosion_enabled", nullable = false)
