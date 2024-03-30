@@ -11,7 +11,7 @@ public interface ClaimDataUserMapper extends ApiMapper<ClaimDataUser, ClaimDataU
     @Override
     @Mapping(target = "uuid", source = "id")
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "claim", source = "claimDataId")
+    @Mapping(target = "claim.uuid", source = "claimDataId")
     ClaimDataUser toEntity(ClaimDataUserDTO dto);
 
     @Override

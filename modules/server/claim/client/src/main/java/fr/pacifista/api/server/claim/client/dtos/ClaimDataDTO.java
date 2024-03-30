@@ -78,13 +78,19 @@ public class ClaimDataDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final ClaimDataDTO other) {
-            return serverType.equals(other.serverType) &&
+            final boolean similar = serverType.equals(other.serverType) &&
                     worldId.equals(other.worldId) &&
                     lesserBoundaryCornerX.equals(other.lesserBoundaryCornerX) &&
                     lesserBoundaryCornerZ.equals(other.lesserBoundaryCornerZ) &&
                     greaterBoundaryCornerX.equals(other.greaterBoundaryCornerX) &&
-                    greaterBoundaryCornerZ.equals(other.greaterBoundaryCornerZ) &&
-                    this.getId().equals(other.getId());
+                    greaterBoundaryCornerZ.equals(other.greaterBoundaryCornerZ);
+            final UUID id = getId();
+
+            if (id == null) {
+                return similar;
+            } else {
+                return similar && id.equals(other.getId());
+            }
         } else {
             return false;
         }
@@ -92,13 +98,14 @@ public class ClaimDataDTO extends ApiDTO {
 
     @Override
     public int hashCode() {
+        final int hash = getId() == null ? 0 : getId().hashCode();
         return 13 + this.serverType.hashCode() +
                 this.worldId.hashCode() +
                 this.lesserBoundaryCornerX.hashCode() +
                 this.lesserBoundaryCornerZ.hashCode() +
                 this.greaterBoundaryCornerX.hashCode() +
                 this.greaterBoundaryCornerZ.hashCode() +
-                this.getId().hashCode();
+                hash;
     }
 
     @Override

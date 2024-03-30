@@ -31,16 +31,23 @@ public class UserClaimAmountDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final UserClaimAmountDTO other) {
-            return playerId.equals(other.playerId) &&
-                    blocksAmount.equals(other.blocksAmount) &&
-                    getId().equals(other.getId());
+            final boolean similar = playerId.equals(other.playerId) &&
+                    blocksAmount.equals(other.blocksAmount);
+            final UUID id = getId();
+
+            if (id == null) {
+                return similar;
+            } else {
+                return similar && id.equals(other.getId());
+            }
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return 13 + playerId.hashCode() + blocksAmount.hashCode() + getId().hashCode();
+        int idHash = getId() == null ? 0 : getId().hashCode();
+        return 13 + playerId.hashCode() + blocksAmount.hashCode() + idHash;
     }
 
     @Override

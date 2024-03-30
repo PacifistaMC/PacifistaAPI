@@ -87,7 +87,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final ClaimDataConfigDTO other) {
-            return this.claimDataId.equals(other.claimDataId) &&
+            final boolean similar = this.claimDataId.equals(other.claimDataId) &&
                     this.explosionEnabled.equals(other.explosionEnabled) &&
                     this.fireSpreadEnabled.equals(other.fireSpreadEnabled) &&
                     this.mobGriefingEnabled.equals(other.mobGriefingEnabled) &&
@@ -97,8 +97,14 @@ public class ClaimDataConfigDTO extends ApiDTO {
                     this.publicInteractDoorsTrapDoors.equals(other.publicInteractDoorsTrapDoors) &&
                     this.publicInteractChests.equals(other.publicInteractChests) &&
                     this.animalProtection.equals(other.animalProtection) &&
-                    this.griefProtection.equals(other.griefProtection) &&
-                    this.getId().equals(other.getId());
+                    this.griefProtection.equals(other.griefProtection);
+            final UUID id = getId();
+
+            if (id == null) {
+                return similar;
+            } else {
+                return similar && id.equals(other.getId());
+            }
         } else {
             return false;
         }
@@ -106,6 +112,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
 
     @Override
     public int hashCode() {
+        final int hash = getId() == null ? 0 : getId().hashCode();
         return 13 +
                 this.claimDataId.hashCode() +
                 this.explosionEnabled.hashCode() +
@@ -118,7 +125,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
                 this.publicInteractChests.hashCode() +
                 this.animalProtection.hashCode() +
                 this.griefProtection.hashCode() +
-                this.getId().hashCode();
+                hash;
     }
 
     @Override
