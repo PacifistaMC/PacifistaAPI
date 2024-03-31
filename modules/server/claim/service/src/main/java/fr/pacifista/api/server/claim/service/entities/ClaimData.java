@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -43,22 +42,4 @@ public class ClaimData extends ApiEntity {
     @OneToMany(mappedBy = "claim", orphanRemoval = true)
     private List<ClaimDataUser> users;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-    private List<ClaimData> childrens;
-
-    public UUID getWorldId() {
-        if (this.worldId == null) {
-            return null;
-        } else {
-            return UUID.fromString(this.worldId);
-        }
-    }
-
-    private void setWorldId(UUID worldId) {
-        if (worldId == null) {
-            this.worldId = null;
-        } else {
-            this.worldId = worldId.toString();
-        }
-    }
 }

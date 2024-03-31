@@ -1,6 +1,7 @@
 package fr.pacifista.api.server.claim.service.services;
 
 import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.server.claim.client.dtos.ClaimDataConfigDTO;
 import fr.pacifista.api.server.claim.service.entities.ClaimData;
@@ -26,39 +27,17 @@ public class ClaimDataConfigService extends ApiService<ClaimDataConfigDTO, Claim
     @Override
     public void afterMapperCall(@NonNull ClaimDataConfigDTO dto,
                                 @NonNull ClaimDataConfig entity) {
-        if (dto.getId() != null) {
-            entity.setClaim(null);
-        } else {
-            assignClaim(dto, entity);
-        }
-    }
-
-    protected ClaimDataConfig generateNewConfig(final ClaimData newClaim) {
-        final ClaimDataConfig config = new ClaimDataConfig();
-
-        config.setExplosionEnabled(false);
-        config.setFireSpreadEnabled(false);
-        config.setMobGriefingEnabled(false);
-        config.setPvpEnabled(false);
-        config.setPublicAccess(true);
-        config.setPublicInteractButtons(true);
-        config.setPublicInteractDoorsTrapDoors(true);
-        config.setPublicInteractChests(false);
-        config.setAnimalProtection(true);
-        config.setGriefProtection(true);
-
-        config.setClaim(newClaim);
-        return this.getRepository().save(config);
+        assignClaim(dto, entity);
     }
 
     private void assignClaim(@NonNull ClaimDataConfigDTO dto,
                              @NonNull ClaimDataConfig entity) {
         if (dto.getClaimDataId() != null) {
-            final ClaimData claim = claimDataRepository.findByUuid(dto.getClaimDataId().toString())
+            final ClaimData claim = claimDataRepository.findByUuid(dto.getClaimDataId())
                     .orElseThrow(() -> new ApiNotFoundException("Claim parent non trouvé"));
             entity.setClaim(claim);
         } else {
-            entity.setClaim(null);
+            throw new ApiBadRequestException("Claim parent non trouvé. Id manquant.");
         }
     }
 

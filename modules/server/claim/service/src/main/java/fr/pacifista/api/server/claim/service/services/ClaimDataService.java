@@ -2,12 +2,17 @@ package fr.pacifista.api.server.claim.service.services;
 
 import com.funixproductions.core.crud.services.ApiService;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
+import fr.pacifista.api.server.claim.client.dtos.ClaimDataConfigDTO;
 import fr.pacifista.api.server.claim.client.dtos.ClaimDataDTO;
 import fr.pacifista.api.server.claim.service.entities.ClaimData;
 import fr.pacifista.api.server.claim.service.mappers.ClaimDataMapper;
 import fr.pacifista.api.server.claim.service.repositories.ClaimDataRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ClaimDataService extends ApiService<ClaimDataDTO, ClaimData, ClaimDataMapper, ClaimDataRepository> {
@@ -22,6 +27,30 @@ public class ClaimDataService extends ApiService<ClaimDataDTO, ClaimData, ClaimD
     }
 
     @Override
+    @Transactional
+    public @NonNull ClaimDataDTO create(ClaimDataDTO request) {
+        final ClaimDataDTO res = super.create(request);
+
+        if (res.getConfig() == null) {
+            res.setConfig(configService.create(new ClaimDataConfigDTO(res)));
+        }
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public List<ClaimDataDTO> create(List<@Valid ClaimDataDTO> request) {
+        final List<ClaimDataDTO> res = super.create(request);
+
+        for (ClaimDataDTO dto : res) {
+            if (dto.getConfig() == null) {
+                dto.setConfig(configService.create(new ClaimDataConfigDTO(dto)));
+            }
+        }
+        return res;
+    }
+
+    @Override
     public void afterMapperCall(@NonNull ClaimDataDTO dto,
                                 @NonNull ClaimData entity) {
         if (dto.getId() != null) {
@@ -32,11 +61,8 @@ public class ClaimDataService extends ApiService<ClaimDataDTO, ClaimData, ClaimD
     }
 
     @Override
-    public void afterSavingEntity(@NonNull Iterable<ClaimData> entity) {
-        for (ClaimData claim : entity) {
-            claim.setConfig(configService.generateNewConfig(claim));
-        }
-        getRepository().saveAll(entity);
+    public void beforeDeletingEntity(@NonNull Iterable<ClaimData> entity) {
+        super.getRepository().deleteAllByParentIn(entity);
     }
 
     private void assignParent(@NonNull ClaimDataDTO dto,

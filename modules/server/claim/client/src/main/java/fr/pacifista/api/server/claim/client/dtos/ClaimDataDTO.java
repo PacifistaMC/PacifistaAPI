@@ -41,8 +41,6 @@ public class ClaimDataDTO extends ApiDTO {
 
     private List<ClaimDataUserDTO> users;
 
-    private List<ClaimDataDTO> childrens;
-
     public ClaimDataDTO(final ServerType serverType,
                         final UUID worldId,
                         final Double lesserBoundaryCornerX,
@@ -75,10 +73,6 @@ public class ClaimDataDTO extends ApiDTO {
 
     public double getClaimCost(final double blocPrice) {
         return (greaterBoundaryCornerX - lesserBoundaryCornerX) * (greaterBoundaryCornerZ - lesserBoundaryCornerZ) * blocPrice;
-    }
-
-    public void setWorldId(UUID worldId) {
-        this.worldId = worldId;
     }
 
     public void setWorldId(String worldId) {

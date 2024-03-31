@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClaimDataRepository extends ApiRepository<ClaimData> {
+    void deleteAllByParentIn(Iterable<ClaimData> parent);
 }
