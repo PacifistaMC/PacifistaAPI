@@ -75,6 +75,13 @@ spec:
                 name: server-jobs-service
                 port:
                   number: 80
+          - path: /claim
+            pathType: Prefix
+            backend:
+              service:
+                name: server-claim-service
+                port:
+                  number: 80
           - path: /support/ticket
             pathType: Prefix
             backend:

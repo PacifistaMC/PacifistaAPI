@@ -73,6 +73,15 @@ services:
         service_name: server-jobs
         service_base_dir: server/jobs
 
+  #Server - Claim service
+  build-production-server-claim-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-claim:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: server-claim
+        service_base_dir: server/claim
+
   #Server - Essentials service
   build-production-server-essentials-service:
     image: ghcr.io/pacifistamc/pacifista-api-server-essentials:${IMAGE_TAG}
