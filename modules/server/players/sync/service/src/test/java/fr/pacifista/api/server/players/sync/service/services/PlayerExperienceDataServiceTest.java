@@ -1,5 +1,6 @@
 package fr.pacifista.api.server.players.sync.service.services;
 
+import com.funixproductions.core.exceptions.ApiBadRequestException;
 import fr.pacifista.api.core.client.enums.ServerGameMode;
 import fr.pacifista.api.server.players.sync.client.dtos.PlayerExperienceDataDTO;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PlayerExperienceDataServiceTest {
@@ -59,6 +59,22 @@ class PlayerExperienceDataServiceTest {
             assertEquals(res.getExp(), patched.getExp());
             assertEquals(res.getLevel(), patched.getLevel());
         });
+    }
+
+    @Test
+    void testCreateReplica() {
+        final PlayerExperienceDataDTO experienceDataDTO = new PlayerExperienceDataDTO();
+        experienceDataDTO.setPlayerOwnerUuid(UUID.randomUUID());
+        experienceDataDTO.setTotalExperience(100);
+        experienceDataDTO.setGameMode(ServerGameMode.SKYBLOCK);
+        experienceDataDTO.setExp(0.4f);
+        experienceDataDTO.setLevel(10);
+
+        final PlayerExperienceDataDTO res = playerExperienceDataService.create(experienceDataDTO);
+        assertThrowsExactly(ApiBadRequestException.class, () -> playerExperienceDataService.create(res));
+
+        experienceDataDTO.setGameMode(ServerGameMode.CREATIVE);
+        assertDoesNotThrow(() -> playerExperienceDataService.create(experienceDataDTO));
     }
 
 }

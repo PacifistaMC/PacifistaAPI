@@ -1,5 +1,6 @@
 package fr.pacifista.api.server.players.sync.service.services;
 
+import com.funixproductions.core.exceptions.ApiBadRequestException;
 import fr.pacifista.api.core.client.enums.ServerGameMode;
 import fr.pacifista.api.server.players.sync.client.dtos.PlayerInventoryDataDTO;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PlayerInventoryDataServiceTest {
@@ -53,6 +53,21 @@ class PlayerInventoryDataServiceTest {
             assertEquals(res.getArmor(), patched.getArmor());
             assertEquals(res.getGameMode(), patched.getGameMode());
         });
+    }
+
+    @Test
+    void testCreateReplica() {
+        final PlayerInventoryDataDTO inventoryDataDTO = new PlayerInventoryDataDTO();
+        inventoryDataDTO.setInventory("inventory");
+        inventoryDataDTO.setArmor("armor");
+        inventoryDataDTO.setGameMode(ServerGameMode.SKYBLOCK);
+        inventoryDataDTO.setPlayerOwnerUuid(UUID.randomUUID());
+
+        final PlayerInventoryDataDTO res = playerInventoryDataService.create(inventoryDataDTO);
+        assertThrowsExactly(ApiBadRequestException.class, () -> playerInventoryDataService.create(res));
+
+        inventoryDataDTO.setGameMode(ServerGameMode.CREATIVE);
+        assertDoesNotThrow(() -> playerInventoryDataService.create(inventoryDataDTO));
     }
 
 }
