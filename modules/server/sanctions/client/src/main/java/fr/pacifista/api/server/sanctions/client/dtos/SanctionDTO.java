@@ -21,12 +21,6 @@ public class SanctionDTO extends ApiDTO {
     private UUID playerSanctionUuid;
 
     /**
-     * Player sanctionned IPv4 addess
-     */
-    @NotBlank
-    private String playerSanctionIp;
-
-    /**
      * Sanction reason
      * Used to know why the player received this one
      */
@@ -44,19 +38,6 @@ public class SanctionDTO extends ApiDTO {
      * Last Player UUID who updated the sanction
      */
     private UUID playerActionUuid;
-
-    /**
-     * Last Player IPv4 who updated the sanction
-     */
-    private String playerActionIp;
-
-    /**
-     * Know if the sanction is ip sanction
-     * If it's true its tells that every player with this ip will be
-     * affected by this sanction
-     */
-    @NotNull
-    private Boolean ipSanction;
 
     /**
      * Know if the sanction is active

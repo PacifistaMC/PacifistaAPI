@@ -1,10 +1,12 @@
 package fr.pacifista.api.server.sanctions.service.entities;
 
-import com.funixproductions.api.encryption.client.utils.EncryptionString;
 import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.server.sanctions.client.dtos.SanctionDTO;
 import fr.pacifista.api.server.sanctions.client.enums.SanctionType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,10 +24,6 @@ public class Sanction extends ApiEntity {
     @Column(name = "player_sanction_uuid", nullable = false)
     private String playerSanctionUuid;
 
-    @Convert(converter = EncryptionString.class)
-    @Column(name = "player_sanction_ip", nullable = false)
-    private String playerSanctionIp;
-
     @Column(nullable = false)
     private String reason;
 
@@ -35,13 +33,6 @@ public class Sanction extends ApiEntity {
 
     @Column(name = "player_action_uuid")
     private String playerActionUuid;
-
-    @Convert(converter = EncryptionString.class)
-    @Column(name = "player_action_ip")
-    private String playerActionIp;
-
-    @Column(name = "ip_sanction", nullable = false)
-    private Boolean ipSanction;
 
     @Column(nullable = false)
     private Boolean active;
