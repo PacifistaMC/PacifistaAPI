@@ -76,14 +76,16 @@ public class ClaimDataDTO extends ApiDTO {
     }
 
     public boolean isClaimInside(final ClaimDataDTO other) {
-        return lesserBoundaryCornerX >= other.lesserBoundaryCornerX &&
+        return worldId.equals(other.worldId) &&
+                lesserBoundaryCornerX >= other.lesserBoundaryCornerX &&
                 lesserBoundaryCornerZ >= other.lesserBoundaryCornerZ &&
                 greaterBoundaryCornerX <= other.greaterBoundaryCornerX &&
                 greaterBoundaryCornerZ <= other.greaterBoundaryCornerZ;
     }
 
     public boolean isClaimOverlap(final ClaimDataDTO other) {
-        return lesserBoundaryCornerX < other.greaterBoundaryCornerX &&
+        return worldId.equals(other.worldId) &&
+                lesserBoundaryCornerX < other.greaterBoundaryCornerX &&
                 lesserBoundaryCornerZ < other.greaterBoundaryCornerZ &&
                 greaterBoundaryCornerX > other.lesserBoundaryCornerX &&
                 greaterBoundaryCornerZ > other.lesserBoundaryCornerZ;
