@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "MojangAPIProfileClient", url = MojangApiImplClient.MOJANG_SESSION_SERVER_API_DOMAIN)
+@FeignClient(name = "MojangApiSessionClient", url = MojangApiImplClient.MOJANG_SESSION_SERVER_API_DOMAIN)
 public interface MojangApiSessionClient {
 
     /**

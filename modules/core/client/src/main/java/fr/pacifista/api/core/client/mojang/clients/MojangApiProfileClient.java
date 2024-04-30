@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "MojangAPIProfileClient", url = MojangApiImplClient.MOJANG_MINECRAFT_SERVICES_API_DOMAIN)
+@FeignClient(name = "MojangApiProfileClient", url = MojangApiImplClient.MOJANG_MINECRAFT_SERVICES_API_DOMAIN)
 public interface MojangApiProfileClient {
 
     /**
