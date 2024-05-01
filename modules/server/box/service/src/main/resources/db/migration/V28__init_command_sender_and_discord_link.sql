@@ -21,4 +21,3 @@ create table discord_link
     minecraft_uuid                   varchar(255)    not null constraint UK_discord_link_minecraft_uuid unique,
     is_linked                        boolean         not null
 );
-
