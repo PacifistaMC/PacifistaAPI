@@ -18,6 +18,7 @@ create table discord_link
     updated_at                       timestamp,
     uuid                             varchar(255)    not null constraint UK_discord_link_public_id unique,
     discord_user_id                  varchar(255)    not null constraint UK_discord_link_discord_user_id unique,
-    minecraft_uuid                   varchar(255)    not null constraint UK_discord_link_minecraft_uuid unique
+    minecraft_uuid                   varchar(255)    not null constraint UK_discord_link_minecraft_uuid unique,
+    is_linked                        boolean         not null
 );
 
