@@ -25,6 +25,12 @@ public class DiscordLink extends ApiEntity {
     @Column(name = "minecraft_uuid", nullable = false, unique = true)
     private String minecraftUuid;
 
+    /**
+     * Is linked (pending or not)
+     */
+    @Column(name = "is_linked", nullable = false)
+    private Boolean isLinked;
+
     public UUID getMinecraftUuid() {
         if (minecraftUuid == null) {
             return null;
@@ -46,6 +52,7 @@ public class DiscordLink extends ApiEntity {
         if (obj instanceof final DiscordLink discordLink) {
             return discordUserId.equals(discordLink.discordUserId) &&
                     minecraftUuid.equals(discordLink.minecraftUuid) &&
+                    isLinked.equals(discordLink.isLinked) &&
                     super.equals(obj);
         } else {
             return false;
@@ -56,7 +63,9 @@ public class DiscordLink extends ApiEntity {
     public int hashCode() {
         return super.hashCode() +
                 (discordUserId == null ? 0 : discordUserId.hashCode()) +
-                (minecraftUuid == null ? 0 : minecraftUuid.hashCode()) + 13;
+                (minecraftUuid == null ? 0 : minecraftUuid.hashCode()) +
+                (isLinked == null ? 0 : isLinked.hashCode()) +
+                13;
     }
 
 }

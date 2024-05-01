@@ -27,10 +27,17 @@ public class DiscordLinkDTO extends ApiDTO {
     @NotNull(message = "minecraftUuid is mandatory")
     private UUID minecraftUuid;
 
+    /**
+     * Is linked (pending or not)
+     */
+    @NotNull(message = "isLinked is mandatory")
+    private Boolean isLinked;
+
     public DiscordLinkDTO(@NonNull final String discordUserId,
                           @NonNull final UUID minecraftUuid) {
         this.discordUserId = discordUserId;
         this.minecraftUuid = minecraftUuid;
+        this.isLinked = false;
     }
 
     public String getMinecraftUuid() {
@@ -54,6 +61,7 @@ public class DiscordLinkDTO extends ApiDTO {
         if (obj instanceof final DiscordLinkDTO discordLinkDTO) {
             return discordUserId.equals(discordLinkDTO.discordUserId) &&
                     minecraftUuid.equals(discordLinkDTO.minecraftUuid) &&
+                    isLinked.equals(discordLinkDTO.isLinked) &&
                     super.equals(obj);
         } else {
             return false;
@@ -64,6 +72,8 @@ public class DiscordLinkDTO extends ApiDTO {
     public int hashCode() {
         return super.hashCode() +
                 (discordUserId == null ? 0 : discordUserId.hashCode()) +
-                (minecraftUuid == null ? 0 : minecraftUuid.hashCode()) + 13;
+                (minecraftUuid == null ? 0 : minecraftUuid.hashCode()) +
+                (isLinked == null ? 0 : isLinked.hashCode()) +
+                13;
     }
 }

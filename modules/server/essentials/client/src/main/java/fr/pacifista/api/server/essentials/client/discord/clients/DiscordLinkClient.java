@@ -6,7 +6,7 @@ import fr.pacifista.api.server.essentials.client.discord.dtos.DiscordLinkDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 
 @FeignClient(
-        name = "HomeClient",
+        name = "DiscordLinkClient",
         url = "${pacifista.api.server.essentials.app-domain-url}",
         path = DiscordLinkClientImpl.PATH,
         configuration = FeignTokenInterceptor.class
