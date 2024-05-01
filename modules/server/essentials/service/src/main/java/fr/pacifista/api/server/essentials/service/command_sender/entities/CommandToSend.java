@@ -4,18 +4,21 @@ import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.core.client.enums.ServerType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "CommandToSend")
+@Entity(name = "command_to_send")
 public class CommandToSend extends ApiEntity {
 
     @Column(name = "command", nullable = false)
     private String command;
 
     @Column(name = "server_type", nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private ServerType serverType;
 
     @Column(name = "is_command_for_proxy", nullable = false)
