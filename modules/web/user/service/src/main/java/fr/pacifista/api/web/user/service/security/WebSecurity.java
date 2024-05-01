@@ -21,4 +21,4 @@ public class WebSecurity extends ApiWebSecurity {
                 .requestMatchers("/" + PacifistaWebUserLinkClientImpl.PATH + "/public/**").authenticated()
                 .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
-}²
+}
