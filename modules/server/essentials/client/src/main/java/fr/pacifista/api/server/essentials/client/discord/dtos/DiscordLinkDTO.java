@@ -33,6 +33,8 @@ public class DiscordLinkDTO extends ApiDTO {
     @NotNull(message = "isLinked is mandatory")
     private Boolean isLinked;
 
+    private String linkingKey;
+
     public DiscordLinkDTO(@NonNull final String discordUserId,
                           @NonNull final UUID minecraftUuid) {
         this.discordUserId = discordUserId;

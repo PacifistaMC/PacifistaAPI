@@ -31,6 +31,9 @@ public class DiscordLink extends ApiEntity {
     @Column(name = "is_linked", nullable = false)
     private Boolean isLinked;
 
+    @Column(name = "linking_key", unique = true)
+    private String linkingKey;
+
     public UUID getMinecraftUuid() {
         if (minecraftUuid == null) {
             return null;
