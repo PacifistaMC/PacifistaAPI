@@ -117,3 +117,12 @@ services:
       args:
         service_name: web-shop
         service_base_dir: web/shop
+
+  #Web - User service
+  build-production-web-user-service:
+    image: ghcr.io/pacifistamc/pacifista-api-web-user:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: web-user
+        service_base_dir: web/user
