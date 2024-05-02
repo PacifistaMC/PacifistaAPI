@@ -1,6 +1,7 @@
 package fr.pacifista.api.web.shop.client.articles.dtos;
 
 import com.funixproductions.core.files.dtos.ApiStorageFileDTO;
+import fr.pacifista.api.core.client.enums.ServerType;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
@@ -34,6 +36,12 @@ public class ShopArticleDTO extends ApiStorageFileDTO {
     @NotBlank(message = "La commande exécutée ne peut pas être vide")
     @Size(min = 3, max = 255, message = "La commande exécutée doit contenir entre 3 et 255 caractères")
     private String commandExecuted;
+
+    /**
+     * Si le type de serveur est null c'est que la commande sera exécutée sur le proxy
+     */
+    @Nullable
+    private ServerType serverType;
 
     private Double tax;
 

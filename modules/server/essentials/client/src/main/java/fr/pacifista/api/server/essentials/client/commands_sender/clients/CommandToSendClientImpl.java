@@ -6,6 +6,7 @@ import fr.pacifista.api.server.essentials.client.commands_sender.dtos.CommandToS
 public class CommandToSendClientImpl extends FeignImpl<CommandToSendDTO, CommandToSendClient> {
 
     public static final String PATH = "essentials/command-sender";
+    public static final String INTERNAL_PATH = "kubeinternal/essentials/command-sender";
 
     public CommandToSendClientImpl() {
         super(PATH, CommandToSendClient.class);

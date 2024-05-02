@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = {
         "com.funixproductions.api.user",
         "com.funixproductions.api.payment.paypal",
+        "fr.pacifista",
 })
 @SpringBootApplication(scanBasePackages = {
         "com.funixproductions",
