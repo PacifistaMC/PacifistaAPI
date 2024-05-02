@@ -1,7 +1,7 @@
 package fr.pacifista.api.web.user.client.dtos;
 
 import com.funixproductions.core.crud.dtos.ApiDTO;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +16,10 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PacifistaWebUserLinkDTO extends ApiDTO {
 
-    @NotBlank(message = "Le champ funixProdUserId est obligatoire")
+    @NotNull(message = "Le champ funixProdUserId est obligatoire")
     private UUID funixProdUserId;
 
-    @NotBlank(message = "Le champ minecraftUuid est obligatoire")
+    @NotNull(message = "Le champ minecraftUuid est obligatoire")
     private UUID minecraftUuid;
 
     /**

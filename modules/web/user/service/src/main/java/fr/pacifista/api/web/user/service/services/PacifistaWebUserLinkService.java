@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,28 +39,6 @@ public class PacifistaWebUserLinkService extends ApiService<PacifistaWebUserLink
                 pacifistaWebUserLink.setLinked(false);
                 pacifistaWebUserLink.setLinkKey(this.passwordGenerator.generateRandomPassword());
             }
-        }
-    }
-
-    @Transactional
-    public PacifistaWebUserLinkDTO validateLink(final UUID funixProdId, final String linkKey) throws ApiException {
-        final Optional<PacifistaWebUserLink> existing = this.getRepository().findByFunixProdUserId(funixProdId.toString());
-
-        if (existing.isEmpty()) {
-            throw new ApiBadRequestException("Aucun lien n'existe pour cet utilisateur. Veuillez en créer un avant de le valider");
-        }
-
-        final PacifistaWebUserLink link = existing.get();
-        if (link.getLinked()) {
-            throw new ApiBadRequestException("Ce lien a déjà été validé");
-        }
-
-        if (link.getLinkKey().equals(linkKey)) {
-            link.setLinked(true);
-            link.setUpdatedAt(new Date());
-            return this.getMapper().toDto(this.getRepository().save(link));
-        } else {
-            throw new ApiBadRequestException("La clé de validation est incorrecte");
         }
     }
 
@@ -95,12 +72,11 @@ public class PacifistaWebUserLinkService extends ApiService<PacifistaWebUserLink
             if (!existingLink.getMinecraftUuid().equals(newCreation.getMinecraftUuid()) && this.getRepository().findByMinecraftUuid(newCreation.getMinecraftUuid().toString()).isPresent()) {
                 throw new ApiBadRequestException("Un lien existe déjà pour ce compte Minecraft");
             }
-            if (existingLink.getLinked()) {
+
+            if (Boolean.TRUE.equals(existingLink.getLinked())) {
                 throw new ApiBadRequestException("Un lien existe déjà pour cet utilisateur. Veuillez le délier avant d'en créer un nouveau");
             } else {
-                newCreation.setId(existingLink.getId());
-                newCreation.setCreatedAt(existingLink.getCreatedAt());
-                newCreation.setUpdatedAt(new Date());
+                throw new ApiBadRequestException("Un lien est en cours de création pour cet utilisateur. Veuillez le délier avant d'en créer un nouveau");
             }
         } else {
             if (this.getRepository().findByMinecraftUuid(newCreation.getMinecraftUuid().toString()).isPresent()) {
