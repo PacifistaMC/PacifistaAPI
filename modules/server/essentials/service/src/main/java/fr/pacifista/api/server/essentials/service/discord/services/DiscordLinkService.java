@@ -10,7 +10,6 @@ import fr.pacifista.api.server.essentials.service.discord.repositories.DiscordLi
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -45,19 +44,18 @@ public class DiscordLinkService extends ApiService<DiscordLinkDTO, DiscordLink, 
         if (existing.isPresent()) {
             final DiscordLink existingLink = existing.get();
 
-            if (!existingLink.getMinecraftUuid().equals(newCreation.getMinecraftUuid()) && this.getRepository().findDiscordLinkByMinecraftUuid(newCreation.getMinecraftUuid().toString()).isPresent()) {
-                throw new ApiBadRequestException("Un lien existe déjà pour ce compte Minecraft");
+            if (!existingLink.getMinecraftUuid().equals(newCreation.getMinecraftUuid()) &&
+                    this.getRepository().findDiscordLinkByMinecraftUuid(newCreation.getMinecraftUuid().toString()).isPresent()) {
+                throw new ApiBadRequestException("Un lien existe déjà pour ce compte Minecraft.");
             }
-            if (existingLink.getIsLinked()) {
-                throw new ApiBadRequestException("Un lien existe déjà pour cet utilisateur discord. Veuillez le délier avant d'en créer un nouveau");
+            if (Boolean.TRUE.equals(existingLink.getIsLinked())) {
+                throw new ApiBadRequestException("Un lien existe déjà pour cet utilisateur discord. Veuillez le délier avant d'en créer un nouveau.");
             } else {
-                newCreation.setId(existingLink.getId());
-                newCreation.setCreatedAt(existingLink.getCreatedAt());
-                newCreation.setUpdatedAt(new Date());
+                throw new ApiBadRequestException("Un lien est en attente de validation pour cet utilisateur discord. Veuillez le valider avant d'en créer un nouveau.");
             }
         } else {
             if (this.getRepository().findDiscordLinkByMinecraftUuid(newCreation.getMinecraftUuid().toString()).isPresent()) {
-                throw new ApiBadRequestException("Un lien existe déjà pour ce compte Minecraft");
+                throw new ApiBadRequestException("Un lien existe déjà pour ce compte Minecraft.");
             }
         }
     }
