@@ -30,14 +30,14 @@ public class DiscordLinkDTO extends ApiDTO {
     /**
      * Is linked (pending or not)
      */
-    @NotNull(message = "isLinked is mandatory")
     private Boolean isLinked;
+
+    private String linkingKey;
 
     public DiscordLinkDTO(@NonNull final String discordUserId,
                           @NonNull final UUID minecraftUuid) {
         this.discordUserId = discordUserId;
         this.minecraftUuid = minecraftUuid;
-        this.isLinked = false;
     }
 
     public String getMinecraftUuid() {
