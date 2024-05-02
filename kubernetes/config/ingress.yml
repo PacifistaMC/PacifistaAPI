@@ -103,3 +103,10 @@ spec:
                 name: web-news-service
                 port:
                   number: 80
+          - path: /web/user
+            pathType: Prefix
+            backend:
+              service:
+                name: web-user-service
+                port:
+                  number: 80
