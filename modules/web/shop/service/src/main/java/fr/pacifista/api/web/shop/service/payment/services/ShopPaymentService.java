@@ -9,6 +9,7 @@ import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.exceptions.ApiForbiddenException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
+import fr.pacifista.api.server.essentials.client.commands_sender.dtos.CommandToSendDTO;
 import fr.pacifista.api.web.shop.client.payment.clients.ShopPaymentClient;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentRequestDTO;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentResponseDTO;
@@ -38,9 +39,14 @@ public class ShopPaymentService implements ShopPaymentClient {
     private final CurrentSession currentSession;
     private final PaypalPaymentService paypalPaymentService;
 
+    private final CommandCreationService commandCreationService;
+    private final FetchPlayerDataService fetchPlayerDataService;
+
     @Override
     public PacifistaShopPaymentResponseDTO createOrder(PacifistaShopPaymentRequestDTO request) {
         final UserDTO currentUser = getCurrentUser();
+        this.fetchPlayerDataService.getPlayerData(currentUser.getId().toString());
+
         final Map<ShopArticle, Integer> articles = getArticles(request.getArticles());
         final ShopPayment shopPayment = createDTO(request, currentUser.getId(), articles);
         final PaypalOrderDTO paypalOrderDTO;
@@ -78,8 +84,15 @@ public class ShopPaymentService implements ShopPaymentClient {
         final ShopPayment shopPayment = getShopPaymentByUser(paymentExternalOrderId, currentUser);
 
         if (shopPayment.getPaymentType().equals(PaymentType.PAYPAL) || shopPayment.getPaymentType().equals(PaymentType.CREDIT_CARD)) {
-            final PaypalOrderDTO paypalOrderDTO = paypalPaymentService.captureOrder(paymentExternalOrderId);
-            return new PacifistaShopPaymentResponseDTO(paypalOrderDTO, currentUser);
+            final List<CommandToSendDTO> commandsCreated = commandCreationService.sendCommandCreation(shopPayment);
+
+            try {
+                final PaypalOrderDTO paypalOrderDTO = paypalPaymentService.captureOrder(paymentExternalOrderId);
+                return new PacifistaShopPaymentResponseDTO(paypalOrderDTO, currentUser);
+            } catch (ApiException e) {
+                commandCreationService.rollbackCreation(commandsCreated);
+                throw e;
+            }
         } else {
             throw new ApiBadRequestException(String.format("Le type de paiement %s n'est pas supporté.", shopPayment.getPaymentType()));
         }

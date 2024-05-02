@@ -23,6 +23,6 @@ public class ShopPayment extends ApiEntity {
     @Column(nullable = false, name = "user_id")
     private String userId;
 
-    @OneToMany(mappedBy = "payment")
+    @OneToMany(mappedBy = "payment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<ShopArticlePurchase> purchases;
 }

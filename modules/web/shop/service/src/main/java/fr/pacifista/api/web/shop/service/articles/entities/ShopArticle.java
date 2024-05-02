@@ -1,11 +1,9 @@
 package fr.pacifista.api.web.shop.service.articles.entities;
 
 import com.funixproductions.core.files.entities.ApiStorageFile;
+import fr.pacifista.api.core.client.enums.ServerType;
 import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,5 +30,9 @@ public class ShopArticle extends ApiStorageFile {
 
     @Column(nullable = false, name = "command_executed")
     private String commandExecuted;
+
+    @Column(name = "server_type")
+    @Enumerated(EnumType.STRING)
+    private ServerType serverType;
 
 }

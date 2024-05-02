@@ -7,8 +7,14 @@ import com.funixproductions.api.payment.paypal.client.enums.OrderStatus;
 import com.funixproductions.api.user.client.clients.UserAuthClient;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.enums.UserRole;
+import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.test.beans.JsonHelper;
 import com.funixproductions.core.tools.pdf.tools.VATInformation;
+import fr.pacifista.api.core.client.enums.ServerType;
+import fr.pacifista.api.server.essentials.client.commands_sender.clients.CommandToSendInternalClient;
+import fr.pacifista.api.server.essentials.client.commands_sender.dtos.CommandToSendDTO;
+import fr.pacifista.api.server.players.data.client.clients.PacifistaPlayerDataInternalClient;
+import fr.pacifista.api.server.players.data.client.dtos.PacifistaPlayerDataDTO;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentRequestDTO;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentResponseDTO;
 import fr.pacifista.api.web.shop.service.articles.entities.ShopArticle;
@@ -17,6 +23,8 @@ import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import fr.pacifista.api.web.shop.service.categories.repositories.ShopCategoryRepository;
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopPaymentRepository;
+import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
+import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +39,8 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,6 +76,15 @@ class ShopPaymentResourceTest {
 
     @MockBean
     private PaypalOrderFeignClient paypalOrderFeignClient;
+
+    @MockBean
+    private PacifistaWebUserLinkInternalClient pacifistaWebUserLinkInternalClient;
+
+    @MockBean
+    private PacifistaPlayerDataInternalClient pacifistaPlayerDataInternalClient;
+
+    @MockBean
+    private CommandToSendInternalClient commandToSendInternalClient;
 
     @Test
     void testCardOrder() throws Exception {
@@ -358,6 +375,26 @@ class ShopPaymentResourceTest {
             articles.add(article);
         }
         this.articles.addAll(this.shopArticleRepository.saveAll(articles));
+
+        final PacifistaWebUserLinkDTO pacifistaWebUserLinkDTO = new PacifistaWebUserLinkDTO(UUID.randomUUID(), UUID.randomUUID());
+        when(pacifistaWebUserLinkInternalClient.getAll(any(), any(), any(), any())).thenReturn(new PageDTO<>(List.of(pacifistaWebUserLinkDTO), 1, 1, 1L, 1));
+
+        final PacifistaPlayerDataDTO pacifistaPlayerDataDTO = new PacifistaPlayerDataDTO();
+        pacifistaPlayerDataDTO.setId(UUID.randomUUID());
+        pacifistaPlayerDataDTO.setMinecraftUsername("testMinecraftUsername");
+        pacifistaPlayerDataDTO.setMinecraftUuid(UUID.randomUUID());
+        when(pacifistaPlayerDataInternalClient.getAll(any(), any(), any(), any())).thenReturn(new PageDTO<>(List.of(pacifistaPlayerDataDTO), 1, 1, 1L, 1));
+
+        when(commandToSendInternalClient.create(anyList())).thenReturn(List.of(
+                new CommandToSendDTO(
+                        "testCommand",
+                        ServerType.SURVIE_ALPHA,
+                        false,
+                        "testSpringBoot"
+                )
+        ));
+        doNothing().when(commandToSendInternalClient).delete(anyString());
+        doNothing().when(commandToSendInternalClient).delete(any(String[].class));
     }
 
 }

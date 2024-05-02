@@ -18,6 +18,7 @@ public class WebSecurity extends ApiWebSecurity {
     public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> getUrlsMatchers() {
         return ex -> ex
                 .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/kubeinternal/**").permitAll()
                 .requestMatchers("/" + PacifistaWebUserLinkClientImpl.PATH + "/public/**").authenticated()
                 .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
