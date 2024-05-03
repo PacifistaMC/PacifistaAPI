@@ -23,6 +23,7 @@
         <module>jobs</module>
         <module>essentials</module>
         <module>claim</module>
+        <module>shop</module>
     </modules>
 
     <properties>

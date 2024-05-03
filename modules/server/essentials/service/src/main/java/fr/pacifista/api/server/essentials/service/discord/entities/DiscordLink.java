@@ -53,9 +53,10 @@ public class DiscordLink extends ApiEntity {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final DiscordLink discordLink) {
-            return discordUserId.equals(discordLink.discordUserId) &&
-                    minecraftUuid.equals(discordLink.minecraftUuid) &&
-                    isLinked.equals(discordLink.isLinked) &&
+            return (discordUserId != null && discordLink.discordUserId != null && discordUserId.equals(discordLink.discordUserId)) &&
+                    (minecraftUuid != null && discordLink.minecraftUuid != null && minecraftUuid.equals(discordLink.minecraftUuid)) &&
+                    (isLinked != null && discordLink.isLinked != null && isLinked.equals(discordLink.isLinked)) &&
+                    (linkingKey != null && discordLink.linkingKey != null && linkingKey.equals(discordLink.linkingKey)) &&
                     super.equals(obj);
         } else {
             return false;

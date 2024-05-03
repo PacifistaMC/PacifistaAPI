@@ -61,6 +61,13 @@ spec:
                 name: server-essentials-service
                 port:
                   number: 80
+          - path: /shop
+            pathType: Prefix
+            backend:
+              service:
+                name: server-shop-service
+                port:
+                  number: 80
           - path: /warps
             pathType: Prefix
             backend:
