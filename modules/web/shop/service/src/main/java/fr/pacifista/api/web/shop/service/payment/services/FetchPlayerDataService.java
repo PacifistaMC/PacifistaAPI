@@ -30,7 +30,7 @@ public class FetchPlayerDataService {
                     "1",
                     String.format(
                             "minecraftUuid:%s:%s",
-                            SearchOperation.EQUALS,
+                            SearchOperation.EQUALS.getOperation(),
                             linkedMinecraftAccount.getMinecraftUuid()
                     ),
                     ""
@@ -53,7 +53,7 @@ public class FetchPlayerDataService {
                     "1",
                     String.format(
                             "funixProdUserId:%s:%s",
-                            SearchOperation.EQUALS,
+                            SearchOperation.EQUALS.getOperation(),
                             userId
                     ),
                     ""
