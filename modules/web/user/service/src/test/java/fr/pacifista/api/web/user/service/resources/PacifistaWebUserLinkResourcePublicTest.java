@@ -81,6 +81,7 @@ class PacifistaWebUserLinkResourcePublicTest {
         assertEquals(minecraftUuid.toString(), pacifistaWebUserLinkDTO.getMinecraftUuid());
         assertFalse(pacifistaWebUserLinkDTO.getLinked());
         assertNotNull(pacifistaWebUserLinkDTO.getLinkKey());
+        assertEquals(pacifistaPlayerDataDTO.getMinecraftUsername(), pacifistaWebUserLinkDTO.getMinecraftUsername());
 
         mockMvc.perform(get(ROUTE + "/linked"))
                 .andExpect(status().isUnauthorized());
@@ -93,6 +94,7 @@ class PacifistaWebUserLinkResourcePublicTest {
         assertEquals(minecraftUuid.toString(), linked.getMinecraftUuid());
         assertEquals(pacifistaWebUserLinkDTO.getLinkKey(), linked.getLinkKey());
         assertEquals(pacifistaWebUserLinkDTO.getLinked(), linked.getLinked());
+        assertEquals(pacifistaPlayerDataDTO.getMinecraftUsername(), linked.getMinecraftUsername());
 
         confirmLink(pacifistaWebUserLinkDTO);
 

@@ -22,6 +22,8 @@ public class PacifistaWebUserLinkDTO extends ApiDTO {
     @NotNull(message = "Le champ minecraftUuid est obligatoire")
     private UUID minecraftUuid;
 
+    private String minecraftUsername;
+
     /**
      * Indique si le compte est lié ou non
      */
