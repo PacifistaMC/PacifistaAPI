@@ -3,7 +3,10 @@ package fr.pacifista.api.web.user.service.resources;
 import com.funixproductions.api.user.client.clients.UserAuthClient;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.enums.UserRole;
+import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.test.beans.JsonHelper;
+import fr.pacifista.api.server.players.data.client.clients.PacifistaPlayerDataInternalClient;
+import fr.pacifista.api.server.players.data.client.dtos.PacifistaPlayerDataDTO;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkClientImpl;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +20,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,12 +45,25 @@ class PacifistaWebUSerLinkResourceTest {
     @MockBean
     private UserAuthClient userAuthClient;
 
+    @MockBean
+    private PacifistaPlayerDataInternalClient pacifistaPlayerDataInternalClient;
+
     @BeforeEach
     void setUp() {
         final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
         userDTO.setRole(UserRole.PACIFISTA_ADMIN);
 
         when(userAuthClient.current(anyString())).thenReturn(userDTO);
+
+        final UUID minecraftUuid = UUID.randomUUID();
+
+        final PacifistaPlayerDataDTO pacifistaPlayerDataDTO = new PacifistaPlayerDataDTO();
+        pacifistaPlayerDataDTO.setMinecraftUuid(minecraftUuid);
+        pacifistaPlayerDataDTO.setMinecraftUsername(UUID.randomUUID().toString());
+        pacifistaPlayerDataDTO.setId(UUID.randomUUID());
+
+        when(pacifistaPlayerDataInternalClient.getAll(any(), any(), any(), any()))
+                .thenReturn(new PageDTO<>(List.of(pacifistaPlayerDataDTO), 1, 1, 1L, 1));
     }
 
     @Test
