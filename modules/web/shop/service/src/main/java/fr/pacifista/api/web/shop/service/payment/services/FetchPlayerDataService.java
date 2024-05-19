@@ -42,6 +42,8 @@ public class FetchPlayerDataService {
             } else {
                 return data.get(0);
             }
+        } catch (ApiException e) {
+            throw e;
         } catch (Exception e) {
             throw new ApiException("Impossible de récupérer les données du joueur.", e);
         }
@@ -71,6 +73,8 @@ public class FetchPlayerDataService {
                     throw new ApiBadRequestException("Le compte Minecraft n'a pas encore été validé.");
                 }
             }
+        } catch (ApiException e) {
+            throw e;
         } catch (Exception e) {
             throw new ApiException("Impossible de récupérer le lien entre le compte funixproductions et le compte Minecraft de l'utilisateur id : " + userId + ".", e);
         }
