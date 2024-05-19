@@ -115,6 +115,8 @@ public class PacifistaWebUserLinkService extends ApiService<PacifistaWebUserLink
             } else {
                 return data.get(0).getMinecraftUuid();
             }
+        } catch (ApiException e) {
+            throw e;
         } catch (Exception e) {
             throw new ApiException("Erreur interne, impossible de récupérer l'identifiant du joueur minecraft.", e);
         }
