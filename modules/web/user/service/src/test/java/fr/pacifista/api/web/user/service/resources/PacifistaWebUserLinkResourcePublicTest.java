@@ -83,6 +83,12 @@ class PacifistaWebUserLinkResourcePublicTest {
         assertNotNull(pacifistaWebUserLinkDTO.getLinkKey());
         assertEquals(pacifistaPlayerDataDTO.getMinecraftUsername(), pacifistaWebUserLinkDTO.getMinecraftUsername());
 
+        mockMvc.perform(post(ROUTE + "/link")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonHelper.toJson(minecraftUuid)))
+                .andExpect(status().isBadRequest());
+
         mockMvc.perform(get(ROUTE + "/linked"))
                 .andExpect(status().isUnauthorized());
 

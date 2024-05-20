@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class PacifistaWebUSerLinkResourceTest {
+class PacifistaWebUserLinkResourceTest {
 
     private static final String ROUTE = "/" + PacifistaWebUserLinkClientImpl.PATH;
 
