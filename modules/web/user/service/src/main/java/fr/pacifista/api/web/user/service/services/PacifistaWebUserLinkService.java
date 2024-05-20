@@ -126,7 +126,7 @@ public class PacifistaWebUserLinkService extends ApiService<PacifistaWebUserLink
         try {
             return this.pacifistaPlayerDataInternalClient.getAll(
                     "0",
-                    String.valueOf(minecraftUuids.size()),
+                    "300",
                     String.format(
                             "minecraftUuid:%s:[%s]",
                             SearchOperation.EQUALS.getOperation(),
