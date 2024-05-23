@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Random;
 import java.util.UUID;
 
 @Getter
@@ -58,5 +59,21 @@ public abstract class LocationDTO extends ApiDTO {
                 yaw.hashCode() +
                 pitch.hashCode() +
                 super.hashCode();
+    }
+
+    /**
+     * Fill the entity with random values for testing purposes. unit testing util
+     * @param locationEntity class extended by location dto
+     */
+    public static void fillWithRandomValuesForTestingPurposes(final LocationDTO locationEntity) {
+        final Random random = new Random();
+
+        locationEntity.worldUuid = UUID.randomUUID();
+        locationEntity.serverType = ServerType.values()[random.nextInt(ServerType.values().length)];
+        locationEntity.x = random.nextDouble();
+        locationEntity.y = random.nextDouble();
+        locationEntity.z = random.nextDouble();
+        locationEntity.yaw = random.nextFloat();
+        locationEntity.pitch = random.nextFloat();
     }
 }

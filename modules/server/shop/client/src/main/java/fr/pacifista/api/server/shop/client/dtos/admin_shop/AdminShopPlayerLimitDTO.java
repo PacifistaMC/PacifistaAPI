@@ -2,7 +2,6 @@ package fr.pacifista.api.server.shop.client.dtos.admin_shop;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class AdminShopPlayerLimitDTO extends AdminShopDataWithCategoryDTO {
 
     @NotNull(message = "L'identifiant du joueur est obligatoire")

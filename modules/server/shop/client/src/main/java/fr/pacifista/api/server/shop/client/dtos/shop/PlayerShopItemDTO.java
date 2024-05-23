@@ -3,11 +3,13 @@ package fr.pacifista.api.server.shop.client.dtos.shop;
 import fr.pacifista.api.core.client.dtos.MinecraftPlayerDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,13 +19,18 @@ public class PlayerShopItemDTO extends MinecraftPlayerDTO {
     @NotBlank(message = "L'item est obligatoire")
     private String itemSerialized;
 
-    @NotBlank(message = "Le prix est obligatoire")
+    @NotNull(message = "Le prix est obligatoire")
     @Min(value = 1, message = "Le prix doit être supérieur à 0")
     private Double price;
 
     private Date soldAt;
 
-    public PlayerShopItemDTO(String itemSerialized, Double price) {
+    public PlayerShopItemDTO(UUID playerId,
+                             String playerName,
+                             String itemSerialized,
+                             Double price) {
+        super.setMinecraftUsername(playerName);
+        super.setMinecraftUuid(playerId);
         this.itemSerialized = itemSerialized;
         this.price = price;
     }
