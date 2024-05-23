@@ -80,9 +80,9 @@ public class PacifistaWebUserLinkDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final PacifistaWebUserLinkDTO other) {
-            return funixProdUserId.equals(other.funixProdUserId) &&
-                    minecraftUuid.equals(other.minecraftUuid) &&
-                    linked.equals(other.linked) &&
+            return (funixProdUserId != null && other.funixProdUserId != null && funixProdUserId.equals(other.funixProdUserId)) &&
+                    (minecraftUuid != null && other.minecraftUuid != null && minecraftUuid.equals(other.minecraftUuid)) &&
+                    (linked != null && other.linked != null && linked.equals(other.linked)) &&
                     super.equals(obj);
         } else {
             return false;

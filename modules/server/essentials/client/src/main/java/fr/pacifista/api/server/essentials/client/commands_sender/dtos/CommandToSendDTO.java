@@ -69,11 +69,11 @@ public class CommandToSendDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final CommandToSendDTO commandToSendDTO) {
-            return command.equals(commandToSendDTO.command) &&
-                    serverType.equals(commandToSendDTO.serverType) &&
-                    isCommandForProxy.equals(commandToSendDTO.isCommandForProxy) &&
-                    executed.equals(commandToSendDTO.executed) &&
-                    creationCanal.equals(commandToSendDTO.creationCanal) &&
+            return (command != null && commandToSendDTO.command != null && command.equals(commandToSendDTO.command)) &&
+                    (serverType != null && commandToSendDTO.serverType != null && serverType.equals(commandToSendDTO.serverType)) &&
+                    (isCommandForProxy != null && commandToSendDTO.isCommandForProxy != null && isCommandForProxy.equals(commandToSendDTO.isCommandForProxy)) &&
+                    (executed != null && commandToSendDTO.executed != null && executed.equals(commandToSendDTO.executed)) &&
+                    (creationCanal != null && commandToSendDTO.creationCanal != null && creationCanal.equals(commandToSendDTO.creationCanal)) &&
                     super.equals(obj);
         } else {
             return false;

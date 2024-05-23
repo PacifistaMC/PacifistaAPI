@@ -91,6 +91,15 @@ services:
         service_name: server-essentials
         service_base_dir: server/essentials
 
+  #Server - Shop service
+  build-production-server-shop-service:
+    image: ghcr.io/pacifistamc/pacifista-api-server-shop:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: server-shop
+        service_base_dir: server/shop
+
   #Support - Tickets service
   build-production-support-tickets-service:
     image: ghcr.io/pacifistamc/pacifista-api-support-tickets:${IMAGE_TAG}

@@ -59,9 +59,9 @@ public class DiscordLinkDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final DiscordLinkDTO discordLinkDTO) {
-            return discordUserId.equals(discordLinkDTO.discordUserId) &&
-                    minecraftUuid.equals(discordLinkDTO.minecraftUuid) &&
-                    isLinked.equals(discordLinkDTO.isLinked) &&
+            return (discordUserId != null && discordLinkDTO.discordUserId != null && discordUserId.equals(discordLinkDTO.discordUserId)) &&
+                    (minecraftUuid != null && discordLinkDTO.minecraftUuid != null && minecraftUuid.equals(discordLinkDTO.minecraftUuid)) &&
+                    (isLinked != null && discordLinkDTO.isLinked != null && isLinked.equals(discordLinkDTO.isLinked)) &&
                     super.equals(obj);
         } else {
             return false;

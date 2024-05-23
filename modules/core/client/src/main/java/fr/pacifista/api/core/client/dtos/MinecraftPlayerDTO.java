@@ -40,4 +40,22 @@ public abstract class MinecraftPlayerDTO extends ApiDTO {
             return minecraftUsername.toLowerCase();
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof final MinecraftPlayerDTO other) {
+            return super.equals(obj) &&
+                    (minecraftUuid != null && other.minecraftUuid != null && minecraftUuid.equals(other.minecraftUuid)) &&
+                    (minecraftUsername != null && other.minecraftUsername != null && minecraftUsername.equals(other.minecraftUsername));
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + 13 +
+            (minecraftUuid != null ? minecraftUuid.hashCode() : 0) +
+            (minecraftUsername != null ? minecraftUsername.hashCode() : 0);
+    }
 }
