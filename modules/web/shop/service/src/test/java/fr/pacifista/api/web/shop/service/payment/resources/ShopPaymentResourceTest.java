@@ -377,6 +377,7 @@ class ShopPaymentResourceTest {
         this.articles.addAll(this.shopArticleRepository.saveAll(articles));
 
         final PacifistaWebUserLinkDTO pacifistaWebUserLinkDTO = new PacifistaWebUserLinkDTO(UUID.randomUUID(), UUID.randomUUID());
+        pacifistaWebUserLinkDTO.setLinked(true);
         when(pacifistaWebUserLinkInternalClient.getAll(any(), any(), any(), any())).thenReturn(new PageDTO<>(List.of(pacifistaWebUserLinkDTO), 1, 1, 1L, 1));
 
         final PacifistaPlayerDataDTO pacifistaPlayerDataDTO = new PacifistaPlayerDataDTO();

@@ -1,6 +1,7 @@
 package fr.pacifista.api.web.shop.service.payment.services;
 
 import com.funixproductions.core.crud.enums.SearchOperation;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.server.players.data.client.clients.PacifistaPlayerDataInternalClient;
@@ -30,7 +31,7 @@ public class FetchPlayerDataService {
                     "1",
                     String.format(
                             "minecraftUuid:%s:%s",
-                            SearchOperation.EQUALS,
+                            SearchOperation.EQUALS.getOperation(),
                             linkedMinecraftAccount.getMinecraftUuid()
                     ),
                     ""
@@ -41,6 +42,8 @@ public class FetchPlayerDataService {
             } else {
                 return data.get(0);
             }
+        } catch (ApiException e) {
+            throw e;
         } catch (Exception e) {
             throw new ApiException("Impossible de récupérer les données du joueur.", e);
         }
@@ -53,7 +56,7 @@ public class FetchPlayerDataService {
                     "1",
                     String.format(
                             "funixProdUserId:%s:%s",
-                            SearchOperation.EQUALS,
+                            SearchOperation.EQUALS.getOperation(),
                             userId
                     ),
                     ""
@@ -62,8 +65,16 @@ public class FetchPlayerDataService {
             if (users.isEmpty()) {
                 throw new ApiNotFoundException("Le compte funixproductions n'est lié à aucun compte Minecraft.");
             } else {
-                return users.get(0);
+                final PacifistaWebUserLinkDTO webUserLinkDTO = users.get(0);
+
+                if (Boolean.TRUE.equals(webUserLinkDTO.getLinked())) {
+                    return webUserLinkDTO;
+                } else {
+                    throw new ApiBadRequestException("Le compte Minecraft n'a pas encore été validé.");
+                }
             }
+        } catch (ApiException e) {
+            throw e;
         } catch (Exception e) {
             throw new ApiException("Impossible de récupérer le lien entre le compte funixproductions et le compte Minecraft de l'utilisateur id : " + userId + ".", e);
         }
