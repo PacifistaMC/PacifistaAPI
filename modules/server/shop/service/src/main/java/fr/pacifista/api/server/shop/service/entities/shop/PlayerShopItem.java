@@ -22,4 +22,7 @@ public class PlayerShopItem extends MinecraftPlayer {
     @Column(name = "sold_at")
     private Date soldAt;
 
+    @Column(name = "buyer_name")
+    private String buyerName;
+
 }

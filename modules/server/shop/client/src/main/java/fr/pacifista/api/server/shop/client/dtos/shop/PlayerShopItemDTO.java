@@ -23,6 +23,8 @@ public class PlayerShopItemDTO extends MinecraftPlayerDTO {
     @Min(value = 1, message = "Le prix doit être supérieur à 0")
     private Double price;
 
+    private String buyerName;
+
     private Date soldAt;
 
     public PlayerShopItemDTO(UUID playerId,
