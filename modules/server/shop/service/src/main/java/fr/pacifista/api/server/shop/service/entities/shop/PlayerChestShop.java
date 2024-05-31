@@ -14,10 +14,13 @@ public class PlayerChestShop extends Location {
     @Column(name = "player_id", nullable = false)
     private String playerId;
 
-    @Column(name = "item_serialized", nullable = false)
+    @Column(name = "item_serialized")
     private String itemSerialized;
 
-    @Column(nullable = false)
-    private Double price;
+    @Column(nullable = false, name = "price_buy")
+    private Double priceBuy;
+
+    @Column(nullable = false, name = "price_sell")
+    private Double priceSell;
 
 }

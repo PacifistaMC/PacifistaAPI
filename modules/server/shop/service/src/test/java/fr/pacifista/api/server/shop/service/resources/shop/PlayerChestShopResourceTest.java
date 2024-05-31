@@ -52,6 +52,7 @@ class PlayerChestShopResourceTest {
         final PlayerChestShopDTO playerChestShopDTO = new PlayerChestShopDTO(
                 UUID.randomUUID(),
                 UUID.randomUUID().toString(),
+                new Random().nextDouble(1000),
                 new Random().nextDouble(1000)
         );
         LocationDTO.fillWithRandomValuesForTestingPurposes(playerChestShopDTO);
@@ -65,12 +66,13 @@ class PlayerChestShopResourceTest {
         final PlayerChestShopDTO created = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), PlayerChestShopDTO.class);
         assertEquals(playerChestShopDTO.getPlayerId(), created.getPlayerId());
         assertEquals(playerChestShopDTO.getItemSerialized(), created.getItemSerialized());
-        assertEquals(playerChestShopDTO.getPrice(), created.getPrice());
+        assertEquals(playerChestShopDTO.getPriceBuy(), created.getPriceBuy());
+        assertEquals(playerChestShopDTO.getPriceSell(), created.getPriceSell());
         assertNotEquals(playerChestShopDTO, created);
         assertEquals(playerChestShopDTO.getX(), created.getX());
 
         created.setY(playerChestShopDTO.getY() + 10);
-        created.setPrice(created.getPrice() + 100);
+        created.setPriceBuy(created.getPriceBuy() + 100);
         mvcResult = this.mockMvc.perform(patch("/" + PlayerChestShopImplClient.PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + UUID.randomUUID())
@@ -79,7 +81,7 @@ class PlayerChestShopResourceTest {
                 .andReturn();
         final PlayerChestShopDTO updated = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), PlayerChestShopDTO.class);
         assertEquals(created.getPlayerId(), updated.getPlayerId());
-        assertEquals(created.getPrice(), updated.getPrice());
+        assertEquals(created.getPriceBuy(), updated.getPriceBuy());
         assertEquals(created.getX(), updated.getX());
         assertEquals(created.getY(), updated.getY());
         assertNotEquals(playerChestShopDTO.getY(), updated.getY());
