@@ -1,5 +1,5 @@
-ALTER TABLE player_chest_shop DROP COLUMN itemSerialized;
-ALTER TABLE player_chest_shop ADD COLUMN itemSerialized VARCHAR(250);
+ALTER TABLE player_chest_shop DROP COLUMN item_serialized;
+ALTER TABLE player_chest_shop ADD COLUMN item_serialized VARCHAR(250);
 
 ALTER TABLE player_chest_shop DROP COLUMN price;
 
