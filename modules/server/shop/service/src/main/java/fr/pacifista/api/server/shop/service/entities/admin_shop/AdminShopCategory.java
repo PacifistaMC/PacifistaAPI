@@ -17,4 +17,7 @@ public class AdminShopCategory extends ApiEntity {
     @Column(nullable = false, name = "money_sell_limit")
     private Double moneySellLimit;
 
+    @Column(nullable = false, name = "item_menu_material")
+    private String itemMenuMaterial;
+
 }

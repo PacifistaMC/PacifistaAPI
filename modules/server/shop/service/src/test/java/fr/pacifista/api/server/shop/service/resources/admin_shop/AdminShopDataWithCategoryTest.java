@@ -15,6 +15,6 @@ abstract class AdminShopDataWithCategoryTest {
     private AdminShopCategoryService adminShopCategoryService;
 
     protected AdminShopCategoryDTO generateCategory() {
-        return adminShopCategoryService.create(new AdminShopCategoryDTO(UUID.randomUUID().toString(), new Random().nextDouble(1000)));
+        return adminShopCategoryService.create(new AdminShopCategoryDTO(UUID.randomUUID().toString(), new Random().nextDouble(1000), UUID.randomUUID().toString()));
     }
 }

@@ -61,7 +61,7 @@ class AdminShopCategoryResourceTest  {
 
     @Test
     void testCrud() throws Exception {
-        final AdminShopCategoryDTO adminShopCategoryDTO = new AdminShopCategoryDTO(UUID.randomUUID().toString(), 10.0);
+        final AdminShopCategoryDTO adminShopCategoryDTO = new AdminShopCategoryDTO(UUID.randomUUID().toString(), 10.0, UUID.randomUUID().toString());
 
         MvcResult mvcResult = mockMvc.perform(post("/" + AdminShopCategoryImplClient.PATH)
                         .contentType(MediaType.APPLICATION_JSON)

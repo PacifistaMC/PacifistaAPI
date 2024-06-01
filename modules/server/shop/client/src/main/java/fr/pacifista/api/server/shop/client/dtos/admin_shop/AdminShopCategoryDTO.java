@@ -28,6 +28,9 @@ public class AdminShopCategoryDTO extends ApiDTO {
     @Min(value = 0, message = "La limite de vente de la catégorie doit être supérieure ou égale à 0")
     private Double moneySellLimit;
 
+    @NotBlank(message = "L'item menu material est obligatoire")
+    private String itemMenuMaterial;
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final AdminShopCategoryDTO other) {
