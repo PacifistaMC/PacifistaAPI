@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.server.guilds</groupId>
         <artifactId>pacifista-server-guilds</artifactId>
-        <version>1.5.3.3</version>
+        <version>1.5.3.4</version>
     </parent>
 
     <groupId>fr.pacifista.api.server.guilds.service</groupId>

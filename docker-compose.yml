@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   #Server - box service
   build-production-server-box-service:
