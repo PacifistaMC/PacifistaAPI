@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.server.claim</groupId>
         <artifactId>pacifista-server-claim</artifactId>
-        <version>1.5.3.4</version>
+        <version>1.5.3.5</version>
     </parent>
 
     <groupId>fr.pacifista.api.server.claim.service</groupId>

@@ -49,4 +49,10 @@ public class PacifistaPlayerData extends MinecraftPlayer {
     @Column(nullable = false, name = "accept_ping_sound_tag_message")
     private Boolean acceptPingSoundTagMessage;
 
+    /**
+     * The player's skull item serialized.
+     */
+    @Column(name = "player_skull_item_serialized", length = 10000)
+    private String playerSkullItemSerialized;
+
 }
