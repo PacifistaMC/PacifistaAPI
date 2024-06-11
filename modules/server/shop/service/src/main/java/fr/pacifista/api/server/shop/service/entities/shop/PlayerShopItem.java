@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity(name = "player_shop_item")
 public class PlayerShopItem extends MinecraftPlayer {
 
-    @Column(name = "item_serialized", nullable = false)
+    @Column(name = "item_serialized", nullable = false, length = 10000)
     private String itemSerialized;
 
     @Column(nullable = false)
