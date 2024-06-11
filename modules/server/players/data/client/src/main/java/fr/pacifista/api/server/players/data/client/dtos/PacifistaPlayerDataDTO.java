@@ -4,6 +4,7 @@ import fr.pacifista.api.core.client.dtos.MinecraftPlayerDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
@@ -46,5 +47,11 @@ public class PacifistaPlayerDataDTO extends MinecraftPlayerDTO {
      */
     @NotNull
     private Boolean acceptPingSoundTagMessage;
+
+    /**
+     * The player's skull item serialized.
+     */
+    @Nullable
+    private String playerSkullItemSerialized;
 
 }

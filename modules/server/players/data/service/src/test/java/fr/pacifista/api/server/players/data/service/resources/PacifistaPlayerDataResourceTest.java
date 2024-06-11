@@ -50,6 +50,7 @@ class PacifistaPlayerDataResourceTest extends ResourceTestHandler {
         final PacifistaPlayerDataDTO response = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), PacifistaPlayerDataDTO.class);
 
         response.setPlayTime(10L);
+        response.setPlayerSkullItemSerialized("Oui");
         mvcResult = mockMvc.perform(patch("/playerdata/data")
                         .header("Authorization", "Bearer dd")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,6 +58,7 @@ class PacifistaPlayerDataResourceTest extends ResourceTestHandler {
                 .andExpect(status().isOk()).andReturn();
         final PacifistaPlayerDataDTO response2 = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), PacifistaPlayerDataDTO.class);
         assertEquals(response.getPlayTime(), response2.getPlayTime());
+        assertEquals(response.getPlayerSkullItemSerialized(), response2.getPlayerSkullItemSerialized());
     }
 
     @Test
