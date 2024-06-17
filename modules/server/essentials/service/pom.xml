@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.server.essentials</groupId>
         <artifactId>pacifista-server-essentials</artifactId>
-        <version>1.5.3.5</version>
+        <version>1.5.3.6</version>
     </parent>
 
     <groupId>fr.pacifista.api.server.essentials.service</groupId>
