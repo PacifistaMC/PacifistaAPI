@@ -15,8 +15,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -83,6 +82,36 @@ class PacifistaPlayerDataResourceTest extends ResourceTestHandler {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(playerDataDTO)))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void accessGetRouteWithNoBearerSuccess() throws Exception {
+        super.setupPacifistaAdmin();
+        final PacifistaPlayerDataDTO playerDataDTO = new PacifistaPlayerDataDTO();
+        playerDataDTO.setMinecraftUsername("Oui");
+        playerDataDTO.setMinecraftUuid(UUID.randomUUID());
+        playerDataDTO.setPlayTime(0L);
+        playerDataDTO.setLastConnection(new Date());
+        playerDataDTO.setFirstConnection(new Date());
+        playerDataDTO.setAcceptPayments(true);
+        playerDataDTO.setAcceptTeleportation(true);
+        playerDataDTO.setAcceptPingSoundTagMessage(true);
+
+        MvcResult mvcResult = mockMvc.perform(post("/playerdata/data")
+                        .header("Authorization", "Bearer dd")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonHelper.toJson(playerDataDTO)))
+                .andExpect(status().isOk()).andReturn();
+        final PacifistaPlayerDataDTO response = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), PacifistaPlayerDataDTO.class);
+
+        super.resetClient();
+
+        mockMvc.perform(get("/playerdata/data"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/playerdata/data/" + UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/playerdata/data/" + response.getId()))
+                .andExpect(status().isOk());
     }
 
 }

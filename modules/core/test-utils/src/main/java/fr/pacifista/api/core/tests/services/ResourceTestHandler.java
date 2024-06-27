@@ -77,4 +77,8 @@ public abstract class ResourceTestHandler {
         return userDTO;
     }
 
+    public void resetClient() {
+        reset(authClient);
+    }
+
 }
