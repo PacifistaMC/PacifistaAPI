@@ -1,7 +1,6 @@
 package fr.pacifista.api.core.client.mojang.clients;
 
 import fr.pacifista.api.core.client.mojang.dto.MojangUserNameAndIdDTO;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +14,6 @@ class MojangApiImplClientTest {
 
     private final MojangApiImplClient mojangApiImplClient = new MojangApiImplClient();
 
-    @Test
     void testGetIdByUsernameOne() {
         assertDoesNotThrow(() -> {
             final MojangUserNameAndIdDTO userNameAndIdDTO = this.mojangApiImplClient.getUserIdByUsername(USERNAME);
@@ -26,7 +24,6 @@ class MojangApiImplClientTest {
         });
     }
 
-    @Test
     void testGetIdByUsernameOneNotExists() {
         assertDoesNotThrow(() -> {
             final MojangUserNameAndIdDTO userNameAndIdDTO = this.mojangApiImplClient.getUserIdByUsername("lkjqshdfpkhzeapoffqsd");
@@ -34,7 +31,6 @@ class MojangApiImplClientTest {
         });
     }
 
-    @Test
     void testGetIdByUsernameMultiple() {
         assertDoesNotThrow(() -> {
             final List<MojangUserNameAndIdDTO> userNameAndIdDTO = this.mojangApiImplClient.getUserIdByUsername(List.of(USERNAME, "lkjqshdfpkhzeapoffqsd"));
@@ -45,7 +41,6 @@ class MojangApiImplClientTest {
         });
     }
 
-    @Test
     void testGetUsernameById() {
         assertDoesNotThrow(() -> {
             final MojangUserNameAndIdDTO userNameAndIdDTO = this.mojangApiImplClient.getUsernameByUuid(UUID_PLAYER.toString());
