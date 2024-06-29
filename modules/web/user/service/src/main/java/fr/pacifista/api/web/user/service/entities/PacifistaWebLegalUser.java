@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Entity(name = "PacifistaWebLegalUser")
+@Entity(name = "pacifista_web_legals_users")
 public class PacifistaWebLegalUser extends ApiEntity {
 
     /**
