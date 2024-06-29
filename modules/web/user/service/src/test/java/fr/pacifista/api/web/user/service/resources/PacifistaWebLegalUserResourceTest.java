@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,18 +52,20 @@ class PacifistaWebLegalUserResourceTest {
                 PacifistaLegalDocumentType.CGU
         );
 
-        user.setRole(UserRole.PACIFISTA_ADMIN);
+        reset(userAuthClient);
         when(userAuthClient.current(anyString())).thenReturn(user);
         mockMvc.perform(post(ROUTE)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ddavv")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(legalUserDTO)))
                 .andExpect(status().isForbidden());
+
         mockMvc.perform(post(ROUTE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(legalUserDTO)))
                 .andExpect(status().isUnauthorized());
 
+        reset(userAuthClient);
         user.setRole(UserRole.ADMIN);
         when(userAuthClient.current(anyString())).thenReturn(user);
 

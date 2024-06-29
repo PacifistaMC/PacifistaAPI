@@ -46,13 +46,14 @@ class PacifistaWebLegalResourceTest {
                 null
         );
 
-        user.setRole(UserRole.PACIFISTA_ADMIN);
         when(userAuthClient.current(anyString())).thenReturn(user);
+
         mockMvc.perform(post(ROUTE)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer dd")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(legalDTO)))
                 .andExpect(status().isForbidden());
+
         mockMvc.perform(post(ROUTE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonHelper.toJson(legalDTO)))
