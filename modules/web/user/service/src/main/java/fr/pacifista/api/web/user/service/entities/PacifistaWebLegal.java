@@ -12,10 +12,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "PacifistaWebLegal")
+@Entity(name = "pacifista_web_legals")
 public class PacifistaWebLegal extends ApiEntity {
 
-    @Column(nullable = false, name = "content_html")
+    @Column(nullable = false, name = "content_html", length = 100000)
     private String contentHtml;
 
     @Enumerated(EnumType.STRING)
