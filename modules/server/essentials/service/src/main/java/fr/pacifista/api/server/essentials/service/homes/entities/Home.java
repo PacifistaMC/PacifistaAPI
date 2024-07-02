@@ -19,6 +19,9 @@ public class Home extends Location {
     @Column(nullable = false, name = "player_uuid")
     private String playerUuid;
 
+    @Column
+    private String material;
+
     public void setPlayerUuid(UUID playerUuid) {
         if (playerUuid != null) {
             this.playerUuid = playerUuid.toString();
