@@ -81,13 +81,11 @@ class PacifistaPlusResourceTest {
 
         mockMvc.perform(delete(route + "?id=" + updatedSubscriptionDTO.getId())
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer token")
-                        .content(jsonHelper.toJson(createSubscriptionDTO)))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                 .andExpect(status().isOk());
         mockMvc.perform(delete(route + "?id=" + updatedSubscriptionDTO.getId())
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer token")
-                        .content(jsonHelper.toJson(createSubscriptionDTO)))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                 .andExpect(status().isNotFound());
     }
 
