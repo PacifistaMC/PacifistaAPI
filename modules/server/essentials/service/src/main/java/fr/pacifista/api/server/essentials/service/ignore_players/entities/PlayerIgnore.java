@@ -19,7 +19,7 @@ public class PlayerIgnore extends ApiEntity {
     @Column(nullable = false, name = "ignored_player_id")
     private String ignoredPlayerId;
 
-    public UUID getPlayerUuid() {
+    public UUID getPlayerId() {
         if (this.playerId != null) {
             return UUID.fromString(this.playerId);
         } else {
@@ -27,7 +27,7 @@ public class PlayerIgnore extends ApiEntity {
         }
     }
 
-    public void setPlayerUuid(UUID playerUuid) {
+    public void setPlayerId(UUID playerUuid) {
         if (playerUuid != null) {
             this.playerId = playerUuid.toString();
         } else {
@@ -35,7 +35,7 @@ public class PlayerIgnore extends ApiEntity {
         }
     }
 
-    public UUID getIgnoredPlayerUuid() {
+    public UUID getIgnoredPlayerId() {
         if (this.ignoredPlayerId != null) {
             return UUID.fromString(this.ignoredPlayerId);
         } else {
@@ -43,7 +43,7 @@ public class PlayerIgnore extends ApiEntity {
         }
     }
 
-    public void setIgnoredPlayerUuid(UUID ignoredPlayerUuid) {
+    public void setIgnoredPlayerId(UUID ignoredPlayerUuid) {
         if (ignoredPlayerUuid != null) {
             this.ignoredPlayerId = ignoredPlayerUuid.toString();
         } else {

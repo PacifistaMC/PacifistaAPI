@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.server.permissions</groupId>
         <artifactId>pacifista-server-permissions</artifactId>
-        <version>1.5.3.10</version>
+        <version>1.5.3.11</version>
     </parent>
 
     <groupId>fr.pacifista.api.server.permissions.service</groupId>

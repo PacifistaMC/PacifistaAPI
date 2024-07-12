@@ -117,3 +117,10 @@ spec:
                 name: web-user-service
                 port:
                   number: 80
+          - path: /web/vote
+            pathType: Prefix
+            backend:
+              service:
+                name: web-vote-service
+                port:
+                  number: 80
