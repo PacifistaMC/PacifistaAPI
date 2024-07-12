@@ -27,14 +27,14 @@ import java.util.List;
 public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudClient<DTO>> implements CrudClient<DTO> {
 
     public static final String KUBE_INTERNAL_PATH = "/kubeinternal";
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     private final FEIGN_CLIENT client;
 
     /**
      * @param moduleName route to access service, like for example you have <a href="https://api.pacifista.fr/sanctions">https://api.pacifista.fr/sanctions</a> the arg will be sanctions
      * @param clientClass the class to create feign client for example "PacifistaSanctionClient.class"
      */
-    public FeignImpl(@NonNull final String moduleName, @NonNull final Class<FEIGN_CLIENT> clientClass) {
+     protected FeignImpl(@NonNull final String moduleName, @NonNull final Class<FEIGN_CLIENT> clientClass) {
         final String pacifistaApiDomain = System.getenv("PACIFISTA_API_URL_DOMAIN");
         final Gson gson = new GsonBuilder().setDateFormat(DATE_FORMAT).create();
 
@@ -144,7 +144,7 @@ public abstract class FeignImpl<DTO extends ApiDTO, FEIGN_CLIENT extends CrudCli
         }
     }
 
-    public ApiException handleFeignException(FeignException e) throws ApiException {
+    public static ApiException handleFeignException(FeignException e) throws ApiException {
         final int httpCode = e.status();
 
         switch (httpCode) {

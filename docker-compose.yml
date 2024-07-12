@@ -133,3 +133,12 @@ services:
       args:
         service_name: web-user
         service_base_dir: web/user
+
+  #Web - Vote service
+  build-production-web-vote-service:
+    image: ghcr.io/pacifistamc/pacifista-api-web-vote:${IMAGE_TAG}
+    build:
+      context: .
+      args:
+        service_name: web-vote
+        service_base_dir: web/vote

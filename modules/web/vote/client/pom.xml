@@ -4,27 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.pacifista.api</groupId>
-        <artifactId>pacifista-api</artifactId>
+        <groupId>fr.pacifista.api.web.vote</groupId>
+        <artifactId>pacifista-web-vote</artifactId>
         <version>1.5.3.10</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>fr.pacifista.api.web</groupId>
-    <artifactId>pacifista-web</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>news</module>
-        <module>shop</module>
-        <module>user</module>
-        <module>vote</module>
-    </modules>
+    <groupId>fr.pacifista.api.web.vote.client</groupId>
+    <artifactId>pacifista-web-vote-client</artifactId>
 
     <properties>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.pacifista.api.core.client</groupId>
+            <artifactId>pacifista-core-client</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+        </dependency>
+    </dependencies>
+
 
 </project>
