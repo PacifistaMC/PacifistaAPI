@@ -31,6 +31,16 @@ public interface VoteClient {
     );
 
     /**
+     * Utilisé pour récupérer les votes pour les utilisateurs donnés, permet de savoir quand on utilisateur a voté et permet de lui dire de voter par exemple
+     * @param usernames les noms d'utilisateurs
+     * @return liste de votes
+     */
+    @GetMapping("check")
+    List<VoteDTO> checkVotes(
+            @RequestParam(value = "usernames") String[] usernames
+    );
+
+    /**
      * Utilisé pour récupérer les votes pour le top classement (top 50)
      * @param month le mois, non null (1-12)
      * @param year l'année, non null (yyyy)

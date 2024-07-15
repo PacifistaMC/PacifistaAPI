@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,38 @@ public class VoteService implements VoteClient {
                 parseInt(month, "Le mois"),
                 parseInt(year, "L'année")
         );
+    }
+
+    @Override
+    public List<VoteDTO> checkVotes(String[] usernames) {
+        final List<VoteDTO> votes = new ArrayList<>();
+        final String query = String.format(
+                "username:%s:[%s],voteValidationDate:%s:%s,nextVoteDate:%s:true",
+                SearchOperation.EQUALS_IGNORE_CASE.getOperation(),
+                String.join("|", usernames),
+                SearchOperation.GREATER_THAN_OR_EQUAL_TO.getOperation(),
+                Instant.now().minus(1, ChronoUnit.DAYS),
+                SearchOperation.IS_NOT_NULL.getOperation()
+        );
+
+        PageDTO<VoteDTO> page = new PageDTO<>(new ArrayList<>(), 2, 0, 10L, 10);
+        while (page.getActualPage() < page.getTotalPages()) {
+            page = this.crudService.getAll(
+                    String.valueOf(page.getActualPage()),
+                    "300",
+                    query,
+                    "createdAt:desc"
+            );
+            page.setActualPage(page.getActualPage() + 1);
+
+            for (final VoteDTO vote : page.getContent()) {
+                if (!this.isVoteListHasWebsite(votes, vote)) {
+                    votes.add(vote);
+                }
+            }
+        }
+
+        return votes;
     }
 
     @Override
@@ -160,4 +194,16 @@ public class VoteService implements VoteClient {
 
         return String.join(",", queryBuilder);
     }
+
+    private boolean isVoteListHasWebsite(final List<VoteDTO> votes, final VoteDTO vote) {
+        for (final VoteDTO voteInList : votes) {
+            if (voteInList.getUsername().equalsIgnoreCase(vote.getUsername()) &&
+                    voteInList.getVoteWebsite().equals(vote.getVoteWebsite())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

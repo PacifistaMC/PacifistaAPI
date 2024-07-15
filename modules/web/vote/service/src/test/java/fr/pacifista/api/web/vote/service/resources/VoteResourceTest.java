@@ -262,6 +262,66 @@ class VoteResourceTest {
     }
 
     @Test
+    void testGetCheckVotes() throws Exception {
+        final String ipAddress = "test";
+        when(encryptionClient.encrypt(anyString())).thenReturn(ipAddress);
+        when(encryptionClient.decrypt(anyString())).thenReturn(ipAddress);
+        final Type type = new TypeToken<List<VoteDTO>>() {}.getType();
+
+        Vote vote = generateDummyVote("funix", 1, 2020, true);
+        generateDummyVote("popol", 1, 2020, true);
+        generateDummyVote("popol2", 2, 2020, false);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(BASE_URL + "/check?usernames=funix,popol")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<VoteDTO> votes = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+        assertEquals(2, votes.size());
+
+        mvcResult = this.mockMvc.perform(get(BASE_URL + "/check?usernames=funix")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        votes = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+        assertEquals(1, votes.size());
+        assertEquals(vote.getUsername(), votes.getFirst().getUsername());
+        assertEquals(vote.getUuid(), votes.getFirst().getId());
+
+        mvcResult = this.mockMvc.perform(get(BASE_URL + "/check?usernames=popol")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        votes = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+        assertEquals(1, votes.size());
+        assertEquals("popol", votes.getFirst().getUsername());
+
+        mvcResult = this.mockMvc.perform(get(BASE_URL + "/check?usernames=popol2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        votes = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+        assertEquals(0, votes.size());
+
+        mvcResult = this.mockMvc.perform(get(BASE_URL + "/check?usernames=wtfRandom")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        votes = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+        assertEquals(0, votes.size());
+
+        vote = generateDummyVote("funix", 1, 2020, true);
+        mvcResult = this.mockMvc.perform(get(BASE_URL + "/check?usernames=funix")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        votes = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), type);
+        assertEquals(1, votes.size());
+        assertEquals(vote.getUsername(), votes.getFirst().getUsername());
+        assertEquals(vote.getUuid(), votes.getFirst().getId());
+    }
+
+    @Test
     void testTopVotesRanking() throws Exception {
         when(encryptionClient.encrypt("test")).thenReturn("test");
         when(encryptionClient.decrypt("test")).thenReturn("test");
@@ -317,7 +377,7 @@ class VoteResourceTest {
         return jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), new TypeToken<List<VotesCountDTO>>() {}.getType());
     }
 
-    private void generateDummyVote(final String username, final int month, final int year, boolean valid) {
+    private Vote generateDummyVote(final String username, final int month, final int year, boolean valid) {
         final Vote vote = new Vote();
 
         vote.setUsername(username);
@@ -331,7 +391,7 @@ class VoteResourceTest {
 
         vote.setVoteWebsite(VoteWebsite.SERVEUR_MINECRAFT_COM);
         vote.setPlayerIp("test");
-        this.voteRepository.saveAndFlush(vote);
+        return this.voteRepository.saveAndFlush(vote);
     }
 
 }
