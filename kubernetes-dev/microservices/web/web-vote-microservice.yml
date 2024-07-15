@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: web-user-microservice-deployment
+  name: web-vote-microservice-deployment
   namespace: 'funixproductions-dev'
   labels:
     app: springboot
