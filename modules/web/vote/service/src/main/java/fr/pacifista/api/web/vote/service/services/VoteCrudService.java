@@ -15,6 +15,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,8 +69,23 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
     @Nullable
     protected VoteDTO getVoteByUserIpAndWebsite(String userIp, VoteWebsite voteWebsite) {
         final Optional<Vote> vote = this.getRepository().findFirstByPlayerIpAndVoteWebsiteOrderByCreatedAtDesc(userIp, voteWebsite);
+        final VoteDTO voteDTO = vote.map(this.getMapper()::toDto).orElse(null);
 
-        return vote.map(this.getMapper()::toDto).orElse(null);
+        if (voteDTO != null) {
+            final Date nextVoteDate = voteDTO.getNextVoteDate();
+
+            if (nextVoteDate == null) {
+                return voteDTO;
+            } else {
+                if (nextVoteDate.toInstant().isBefore(Instant.now())) {
+                    return null;
+                } else {
+                    return voteDTO;
+                }
+            }
+        } else {
+            return null;
+        }
     }
 
     @Scheduled(fixedRate = 10, initialDelay = 10, timeUnit = TimeUnit.SECONDS)
