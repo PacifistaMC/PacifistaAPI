@@ -3,7 +3,9 @@ package fr.pacifista.api.web.vote.service.services;
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
 import fr.pacifista.api.web.vote.service.services.external.ExternalVoteService;
 import fr.pacifista.api.web.vote.service.services.external.com.minecraft.serveur.ServeurMinecraftComVoteService;
+import fr.pacifista.api.web.vote.service.services.external.net.prive.serveur.ServeurPriveNetVoteService;
 import fr.pacifista.api.web.vote.service.services.external.net.serveurs.top.TopServeursNetVoteService;
+import fr.pacifista.api.web.vote.service.services.external.org.minecraft.serveur.ServeurMinecraftOrgVoteService;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,8 @@ public class VoteCheckerService {
     private final Map<VoteWebsite, ExternalVoteService> externalVoteServices;
 
     public VoteCheckerService(ServeurMinecraftComVoteService serveurMinecraftComVoteService,
-                              ServeurMinecraftComVoteService serveurMinecraftOrgVoteService,
-                              ServeurMinecraftComVoteService serveurPriveNetVoteService,
+                              ServeurMinecraftOrgVoteService serveurMinecraftOrgVoteService,
+                              ServeurPriveNetVoteService serveurPriveNetVoteService,
                               TopServeursNetVoteService topServeursNetVoteService) {
         this.externalVoteServices = Map.of(
                 VoteWebsite.SERVEUR_MINECRAFT_COM, serveurMinecraftComVoteService,
