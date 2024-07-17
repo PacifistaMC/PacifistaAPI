@@ -27,7 +27,13 @@ public class VoteCheckerService {
     }
 
     public boolean hasVoted(@NonNull VoteWebsite voteWebsite, @NonNull String userIp) {
-        return this.externalVoteServices.get(voteWebsite).checkVote(userIp);
+        final ExternalVoteService externalVoteService = this.externalVoteServices.get(voteWebsite);
+
+        if (externalVoteService != null) {
+            return externalVoteService.checkVote(userIp);
+        } else {
+            return false;
+        }
     }
 
 }

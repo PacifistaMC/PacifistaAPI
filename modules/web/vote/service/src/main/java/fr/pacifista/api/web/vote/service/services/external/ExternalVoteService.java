@@ -6,7 +6,6 @@ import com.google.common.cache.CacheBuilder;
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.yaml.snakeyaml.util.UriEncoder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -72,9 +71,7 @@ public abstract class ExternalVoteService {
     }
 
     private String makeUriAndEncodeUrl(final String userIp) {
-        return UriEncoder.encode(
-                this.voteWebsite.getApiUrl().replace("{playerIp}", userIp)
-        );
+        return this.voteWebsite.getApiUrl().replace("{playerIp}", userIp);
     }
 
 }
