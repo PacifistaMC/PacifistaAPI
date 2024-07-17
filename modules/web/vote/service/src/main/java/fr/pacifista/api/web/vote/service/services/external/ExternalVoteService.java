@@ -35,7 +35,7 @@ public abstract class ExternalVoteService {
         } else {
             try {
                 final String httpResponse = callEndpoint(userIp);
-                log.debug("Response from {} : {}", this.voteWebsite, httpResponse);
+                log.info("Response from {} : {}", this.voteWebsite, httpResponse);
                 hasVoted = this.hasVoted(httpResponse);
 
                 this.cache.put(userIp, hasVoted);
