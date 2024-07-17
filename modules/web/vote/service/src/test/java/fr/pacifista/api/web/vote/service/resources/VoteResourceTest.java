@@ -106,7 +106,7 @@ class VoteResourceTest {
         final String username = "funixLeGaming";
         final String ipAddress1 = "10.10.2.1";
         final String ipAddress2 = "11.10.2.1";
-        final VoteWebsite voteWebsite = VoteWebsite.SERVEUR_MINECRAFT_COM;
+        final VoteWebsite voteWebsite = VoteWebsite.SERVEUR_MINECRAFT_ORG;
 
         when(encryptionClient.encrypt(ipAddress1)).thenReturn(ipAddress1);
         when(encryptionClient.encrypt(ipAddress2)).thenReturn(ipAddress2);
@@ -389,7 +389,7 @@ class VoteResourceTest {
             vote.setVoteValidationDate(Date.from(Instant.now()));
         }
 
-        vote.setVoteWebsite(VoteWebsite.SERVEUR_MINECRAFT_COM);
+        vote.setVoteWebsite(VoteWebsite.SERVEUR_MINECRAFT_ORG);
         vote.setPlayerIp("test");
         return this.voteRepository.saveAndFlush(vote);
     }

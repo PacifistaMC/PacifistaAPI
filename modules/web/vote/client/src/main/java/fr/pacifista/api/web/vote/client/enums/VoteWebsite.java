@@ -14,12 +14,12 @@ public enum VoteWebsite {
     /**
      * <a href="https://serveur-minecraft.com/faq/api">Doc</a>
      */
-    SERVEUR_MINECRAFT_COM(
+    /*SERVEUR_MINECRAFT_COM(
             "https://serveur-minecraft.com/4031",
             "https://serveur-minecraft.com/api/1/vote/4031/{playerIp}",
             "Serveur-Minecraft.com",
             3 * 60
-    ),
+    ),*/
 
     /**
      * <a href="https://serveur-prive.net/documentation">Doc</a>

@@ -17,7 +17,7 @@ public class VoteCheckerService {
                               ServeurMinecraftComVoteService serveurMinecraftOrgVoteService,
                               ServeurMinecraftComVoteService serveurPriveNetVoteService) {
         this.externalVoteServices = Map.of(
-                VoteWebsite.SERVEUR_MINECRAFT_COM, serveurMinecraftComVoteService,
+                //VoteWebsite.SERVEUR_MINECRAFT_COM, serveurMinecraftComVoteService,
                 VoteWebsite.SERVEUR_MINECRAFT_ORG, serveurMinecraftOrgVoteService,
                 VoteWebsite.SERVEUR_PRIVE_NET, serveurPriveNetVoteService
         );

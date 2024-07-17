@@ -49,6 +49,7 @@ public abstract class ExternalVoteService {
         final String uri = makeUriAndEncodeUrl(userIp);
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
+                .GET()
                 .build();
 
         try {
