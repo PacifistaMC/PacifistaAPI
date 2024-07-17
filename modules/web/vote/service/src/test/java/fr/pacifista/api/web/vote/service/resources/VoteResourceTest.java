@@ -165,7 +165,7 @@ class VoteResourceTest {
 
         Vote vote = this.voteRepository.findByUuid(voteDTO.getId().toString()).orElseThrow();
         vote.setVoteValidationDate(new Date());
-        vote.setNextVoteDate(new Date());
+        vote.setNextVoteDate(Date.from(Instant.now().plus(10, ChronoUnit.MINUTES)));
         this.voteRepository.save(vote);
 
         mvcResult = this.mockMvc.perform(get(BASE_URL + "/user/" + voteWebsite.name())
