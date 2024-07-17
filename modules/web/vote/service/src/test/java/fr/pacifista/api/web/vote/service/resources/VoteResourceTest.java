@@ -233,7 +233,13 @@ class VoteResourceTest {
                 .andReturn();
         final List<VoteWebsiteDTO> voteWebsites = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), new TypeToken<List<VoteWebsiteDTO>>() {}.getType());
 
-        assertEquals(VoteWebsite.values().length, voteWebsites.size());
+        int enabledWebs = 0;
+        for (final VoteWebsite voteWebsite : VoteWebsite.values()) {
+            if (voteWebsite.isEnabled()) {
+                ++enabledWebs;
+            }
+        }
+        assertEquals(enabledWebs, voteWebsites.size());
     }
 
     @Test
