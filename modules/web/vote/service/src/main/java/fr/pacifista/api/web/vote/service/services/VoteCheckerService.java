@@ -27,6 +27,8 @@ public class VoteCheckerService {
     }
 
     public boolean hasVoted(@NonNull VoteWebsite voteWebsite, @NonNull String userIp) {
+        if (Boolean.FALSE.equals(voteWebsite.isEnabled())) return false;
+
         final ExternalVoteService externalVoteService = this.externalVoteServices.get(voteWebsite);
 
         if (externalVoteService != null) {

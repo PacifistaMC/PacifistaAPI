@@ -80,7 +80,6 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             if (this.voteCheckerService.hasVoted(vote.getVoteWebsite(), vote.getPlayerIp())) {
                 vote.setVoteValidationDate(new Date());
                 vote.setNextVoteDate(vote.getVoteWebsite().getNextVoteDate());
-                vote.setPlayerIp("hidden-user-done-vote");
                 log.info("Vote validated for user {} website {}", vote.getUsername(), vote.getVoteWebsite());
                 successVotes.add(vote);
             }
