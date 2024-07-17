@@ -10,6 +10,7 @@ import fr.pacifista.api.web.vote.service.repositories.VoteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import kotlin.Pair;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j(topic = "VoteCrudService")
 @Service
 public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteRepository> {
 
@@ -79,11 +81,12 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
                 vote.setVoteValidationDate(new Date());
                 vote.setNextVoteDate(vote.getVoteWebsite().getNextVoteDate());
                 vote.setPlayerIp("hidden-user-done-vote");
+                log.info("Vote validated for user {} website {}", vote.getUsername(), vote.getVoteWebsite());
                 successVotes.add(vote);
             }
         });
         getRepository().saveAll(successVotes);
-
+        log.info("Saved and sending rewards for {} votes", successVotes.size());
         this.rewardService.sendRewards(successVotes);
     }
 
