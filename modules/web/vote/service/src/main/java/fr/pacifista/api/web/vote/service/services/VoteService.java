@@ -127,7 +127,9 @@ public class VoteService implements VoteClient {
         final List<VoteWebsiteDTO> websites = new ArrayList<>();
 
         for (VoteWebsite website : VoteWebsite.values()) {
-            websites.add(website.toDTO());
+            if (website.isEnabled()) {
+                websites.add(website.toDTO());
+            }
         }
 
         return websites;
