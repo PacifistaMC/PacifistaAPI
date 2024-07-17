@@ -86,7 +86,10 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             }
         });
         getRepository().saveAll(successVotes);
-        log.info("Saved and sending rewards for {} votes", successVotes.size());
+
+        if (!successVotes.isEmpty()) {
+            log.info("Saved and sending rewards for {} votes", successVotes.size());
+        }
         this.rewardService.sendRewards(successVotes);
     }
 
