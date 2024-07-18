@@ -63,6 +63,10 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             if (vote.getYearVote() == null) {
                 vote.setYearVote(monthAndYear.getSecond());
             }
+
+            if (vote.getUsername() != null) {
+                vote.setUsername(vote.getUsername().toLowerCase());
+            }
         }
     }
 

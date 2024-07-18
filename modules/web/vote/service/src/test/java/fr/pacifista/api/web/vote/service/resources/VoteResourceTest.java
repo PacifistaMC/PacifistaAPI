@@ -119,7 +119,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         VoteDTO voteDTO = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), VoteDTO.class);
-        assertEquals(username, voteDTO.getUsername());
+        assertEquals(username.toLowerCase(), voteDTO.getUsername());
         assertNull(voteDTO.getVoteValidationDate());
         assertNull(voteDTO.getNextVoteDate());
         assertNull(voteDTO.getUpdatedAt());
@@ -157,7 +157,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         voteDTO = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), VoteDTO.class);
-        assertEquals(username, voteDTO.getUsername());
+        assertEquals(username.toLowerCase(), voteDTO.getUsername());
         assertNull(voteDTO.getVoteValidationDate());
         assertNull(voteDTO.getNextVoteDate());
         assertNotNull(voteDTO.getUpdatedAt());
@@ -174,7 +174,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         voteDTO = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), VoteDTO.class);
-        assertEquals(username, voteDTO.getUsername());
+        assertEquals(username.toLowerCase(), voteDTO.getUsername());
         assertNotNull(voteDTO.getVoteValidationDate());
         assertNotNull(voteDTO.getNextVoteDate());
         assertNotNull(voteDTO.getUpdatedAt());
