@@ -32,6 +32,10 @@ public class JobPlayerTaskWorkerService extends ApiService<JobPlayerTaskWorkerDT
 
             final Iterable<JobPlayerTask> tasks = jobPlayerTaskService.findTaskByUuid(uuids);
             for (final JobPlayerTaskWorker worker : workerTasks) {
+                if (worker.getId() == null) {
+                    worker.setActive(true);
+                }
+
                 for (final JobPlayerTask task : tasks) {
                     if (worker.getTask().getUuid().equals(task.getUuid())) {
                         worker.setTask(task);
