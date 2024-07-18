@@ -25,4 +25,6 @@ public class JobPlayerTaskWorker extends JobPlayerEntity {
     @Column(name = "participation_amount", nullable = false)
     private Integer participationAmount;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active;
 }
