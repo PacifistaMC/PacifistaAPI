@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Entity(name = "pacifista_plus_subscription")
@@ -15,6 +17,6 @@ public class PacifistaPlusSubscription extends ApiEntity {
     private String playerId;
 
     @Column(name = "expiration_date")
-    private String expirationDate;
+    private Date expirationDate;
 
 }
