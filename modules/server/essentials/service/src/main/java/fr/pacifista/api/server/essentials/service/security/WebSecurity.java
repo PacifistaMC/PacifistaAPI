@@ -4,6 +4,7 @@ import com.funixproductions.api.user.client.enums.UserRole;
 import com.funixproductions.api.user.client.security.ApiWebSecurity;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +19,7 @@ public class WebSecurity extends ApiWebSecurity {
         return ex -> ex
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/kubeinternal/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/essentials/status").permitAll()
                 .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
 }
