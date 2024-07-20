@@ -1,4 +1,4 @@
-name: Update production image pterodactyl
+name: Update production image and publish maven package
 
 on:
   release:
