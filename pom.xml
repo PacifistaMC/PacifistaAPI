@@ -51,6 +51,14 @@
         </developer>
     </developers>
 
+    <repositories>
+        <repository>
+            <id>funixproductions-repository-releases</id>
+            <name>FunixProductions Repository</name>
+            <url>https://mvn.funixproductions.com/releases</url>
+        </repository>
+    </repositories>
+
     <scm>
         <connection>scm:git:git://github.com/PacifistaMC/PacifistaAPI.git</connection>
         <developerConnection>scm:git:ssh://github.com:PacifistaMC/PacifistaAPI.git</developerConnection>

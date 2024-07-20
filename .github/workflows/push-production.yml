@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish-maven-central:
+  publish-maven-package:
     runs-on: ubuntu-latest
 
     permissions:
@@ -29,15 +29,17 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+
+      - name: Set up Maven settings
+        run: |
+          mkdir -p $HOME/.m2
+          cp .github/settings.xml $HOME/.m2/settings.xml
 
       - name: Publish to the Maven Central Repository
         run: mvn --batch-mode clean deploy -T 6
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.FUNIXPROD_MVN_REPO_USER }}
+          MAVEN_PASSWORD: ${{ secrets.FUNIXPROD_MVN_REPO_TOKEN }}
 
   build-production-maven:
     runs-on: ubuntu-latest
