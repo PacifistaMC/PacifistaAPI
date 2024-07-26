@@ -8,6 +8,7 @@ import com.funixproductions.api.payment.paypal.client.dtos.responses.PaypalOrder
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.tools.pdf.tools.VATInformation;
+import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentRequestDTO;
 import fr.pacifista.api.web.shop.service.articles.entities.ShopArticle;
 import fr.pacifista.api.web.shop.service.configs.ShopConfig;
@@ -15,8 +16,6 @@ import fr.pacifista.api.web.shop.service.payment.mappers.ShopPaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -77,7 +76,9 @@ public class PaypalPaymentService {
         toFill.setCancelUrl(shopConfig.getCancelUrl());
         toFill.setReturnUrl(shopConfig.getReturnUrl());
         toFill.setUser(this.shopPaymentMapper.toUserPaymentDto(userDTO));
-        toFill.setPurchaseUnits(mapToPurchasesUnit(articles, vat == null ? 0 : vat.getVatRate(), paymentId));
+        toFill.setPurchaseUnits(
+                mapToPurchasesUnit(articles, vat == null ? 0 : vat.getVatRate(), paymentId)
+        );
         toFill.setVatInformation(vat);
         toFill.setOriginRequest("Pacifista");
         toFill.setBillingAddress(this.shopPaymentMapper.toBillingAddressDto(userDTO));
@@ -96,9 +97,9 @@ public class PaypalPaymentService {
 
             item.setQuantity(entry.getValue());
             if (vatAmount > 0) {
-                item.setTax(this.formatPrice(item.getPrice() * vatAmount));
+                item.setTax(ShopArticleDTO.formatPrice(item.getPrice() * vatAmount));
             }
-            item.setPrice(this.formatPrice(item.getPrice()));
+            item.setPrice(ShopArticleDTO.formatPrice(item.getPrice()));
             items.add(item);
         }
         purchaseUnitDTO.setItems(items);
@@ -113,15 +114,6 @@ public class PaypalPaymentService {
             }
         }
         return VATInformation.FRANCE;
-    }
-
-    private Double formatPrice(Double value) {
-        if (value == null) {
-            return null;
-        }
-
-        final BigDecimal bd = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
     }
 
 }
