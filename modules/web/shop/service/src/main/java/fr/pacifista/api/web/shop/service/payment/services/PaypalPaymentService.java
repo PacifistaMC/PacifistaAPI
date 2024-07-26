@@ -15,6 +15,8 @@ import fr.pacifista.api.web.shop.service.payment.mappers.ShopPaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -94,8 +96,9 @@ public class PaypalPaymentService {
 
             item.setQuantity(entry.getValue());
             if (vatAmount > 0) {
-                item.setTax(item.getPrice() * vatAmount);
+                item.setTax(this.formatPrice(item.getPrice() * vatAmount));
             }
+            item.setPrice(this.formatPrice(item.getPrice()));
             items.add(item);
         }
         purchaseUnitDTO.setItems(items);
@@ -110,6 +113,15 @@ public class PaypalPaymentService {
             }
         }
         return VATInformation.FRANCE;
+    }
+
+    private Double formatPrice(Double value) {
+        if (value == null) {
+            return null;
+        }
+
+        final BigDecimal bd = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 }

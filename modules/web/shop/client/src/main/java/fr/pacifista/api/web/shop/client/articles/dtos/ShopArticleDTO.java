@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Getter
 @Setter
 public class ShopArticleDTO extends ApiStorageFileDTO {
@@ -47,4 +50,20 @@ public class ShopArticleDTO extends ApiStorageFileDTO {
 
     private Double priceWithTax;
 
+    public void setTax(Double tax) {
+        this.tax = this.formatPrice(tax);
+    }
+
+    public void setPriceWithTax(Double priceWithTax) {
+        this.priceWithTax = this.formatPrice(priceWithTax);
+    }
+
+    private Double formatPrice(Double value) {
+        if (value == null) {
+            return null;
+        }
+
+        final BigDecimal bd = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 }
