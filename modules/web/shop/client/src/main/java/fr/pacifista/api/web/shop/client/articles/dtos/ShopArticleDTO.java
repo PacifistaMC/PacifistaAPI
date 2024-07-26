@@ -51,30 +51,30 @@ public class ShopArticleDTO extends ApiStorageFileDTO {
     private Double priceWithTax;
 
     public void setTax(Double tax) {
-        this.tax = this.formatPrice(tax);
+        this.tax = formatPrice(tax);
     }
 
     public void setPrice(@NotNull(message = "Le prix ne peut pas être nul") @Min(value = 0, message = "Le prix ne peut pas être négatif") Double price) {
-        this.price = this.formatPrice(price);
+        this.price = formatPrice(price);
     }
 
     public @Min(value = 0, message = "Le prix ne peut pas être négatif") Double getPrice() {
-        return this.formatPrice(this.price);
+        return formatPrice(this.price);
     }
 
     public Double getTax() {
-        return this.formatPrice(this.tax);
+        return formatPrice(this.tax);
     }
 
     public Double getPriceWithTax() {
-        return this.formatPrice(this.priceWithTax);
+        return formatPrice(this.priceWithTax);
     }
 
     public void setPriceWithTax(Double priceWithTax) {
-        this.priceWithTax = this.formatPrice(priceWithTax);
+        this.priceWithTax = formatPrice(priceWithTax);
     }
 
-    private Double formatPrice(Double value) {
+    public static Double formatPrice(Double value) {
         if (value == null) {
             return null;
         }

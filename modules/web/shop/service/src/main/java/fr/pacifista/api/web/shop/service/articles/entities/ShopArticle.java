@@ -2,6 +2,7 @@ package fr.pacifista.api.web.shop.service.articles.entities;
 
 import com.funixproductions.core.files.entities.ApiStorageFile;
 import fr.pacifista.api.core.client.enums.ServerType;
+import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,4 +36,11 @@ public class ShopArticle extends ApiStorageFile {
     @Enumerated(EnumType.STRING)
     private ServerType serverType;
 
+    public Double getPrice() {
+        return ShopArticleDTO.formatPrice(price);
+    }
+
+    public void setPrice(Double price) {
+        this.price = ShopArticleDTO.formatPrice(price);
+    }
 }
