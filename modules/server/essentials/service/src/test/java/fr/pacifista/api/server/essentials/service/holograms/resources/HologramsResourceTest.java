@@ -124,8 +124,10 @@ class HologramsResourceTest {
         assertEquals(parentHologramCreated, parentHologramRetrieved);
         assertEquals(2, parentHologramRetrieved.getChildHolograms().size());
         final List<HologramDTO> childHolograms = parentHologramRetrieved.getChildHolograms();
-        assertEquals(childHologram1Created, childHolograms.get(0));
-        assertEquals(childHologram2Created, childHolograms.get(1));
+        assertEquals(childHologram1Created.getId(), childHolograms.get(0).getId());
+        assertEquals(childHologram2Created.getId(), childHolograms.get(1).getId());
+
+
         mockMvc.perform(patch(route)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer token")
@@ -138,7 +140,20 @@ class HologramsResourceTest {
                         .content(jsonHelper.toJson(parentHologram)))
                 .andExpect(status().isBadRequest());
 
+        mockMvc.perform(delete(route + "?id=" + parentHologramCreated.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+                .andExpect(status().isOk());
 
+        mockMvc.perform(delete(route + "?id=" + childHologram2Created.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete(route + "?id=" + childHologram2Created.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+                .andExpect(status().isNotFound());
     }
 
 }

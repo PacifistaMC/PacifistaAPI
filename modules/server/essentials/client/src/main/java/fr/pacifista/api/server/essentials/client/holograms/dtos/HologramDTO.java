@@ -87,7 +87,7 @@ public class HologramDTO extends LocationDTO {
             return List.of();
         } else {
             return childHolograms.stream()
-                    .sorted(Comparator.comparing(HologramDTO::getCreatedAt).reversed())
+                    .sorted(Comparator.comparing(HologramDTO::getCreatedAt))
                     .toList();
         }
     }
@@ -96,8 +96,7 @@ public class HologramDTO extends LocationDTO {
     public boolean equals(Object obj) {
         if (obj instanceof final HologramDTO other) {
             return textSerialized.equals(other.textSerialized) &&
-                    ((parentHologram != null && parentHologram.equals(other.parentHologram)) || parentHologram == null && other.parentHologram == null) &&
-                    childHolograms.equals(other.childHolograms) &&
+                    ((parentHologram != null && parentHologram.equals(other.parentHologram)) || (parentHologram == null && other.parentHologram == null)) &&
                     super.equals(obj);
         } else {
             return false;
