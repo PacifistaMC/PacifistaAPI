@@ -9,7 +9,7 @@ metadata:
     service: server-players-sync
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: springboot
@@ -30,7 +30,7 @@ spec:
             - containerPort: 80
           resources:
             limits:
-                memory: "800Mi"
+                memory: "1200Mi"
           imagePullPolicy: Always
           readinessProbe:
             httpGet:
