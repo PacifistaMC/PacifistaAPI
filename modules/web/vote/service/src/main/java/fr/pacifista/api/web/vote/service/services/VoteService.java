@@ -103,16 +103,18 @@ public class VoteService implements VoteClient {
     @Override
     @Transactional
     public VoteDTO vote(String voteWebsite, String username) {
+        final VoteWebsite website = parseVoteWebsiteType(voteWebsite);
+
         final VoteDTO vote = this.crudService.getVoteByUserIpAndWebsite(
                 getClientIpAddress(),
-                parseVoteWebsiteType(voteWebsite)
+                website
         );
 
         if (vote == null || vote.getVoteValidationDate() != null) {
             return this.crudService.create(
                     new VoteDTO(
                             username,
-                            parseVoteWebsiteType(voteWebsite),
+                            website,
                             null,
                             null
                     )
