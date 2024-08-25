@@ -51,7 +51,6 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
         final String ip = ipUtils.getClientIp(servletRequest);
         final Pair<Integer, Integer> monthAndYear = getActualMonthAndYear();
 
-        log.info("Before saving ip: {}", ip);
         for (final Vote vote : entity) {
             if (vote.getPlayerIp() == null) {
                 vote.setPlayerIp(ip);
@@ -68,13 +67,6 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             if (vote.getUsername() != null) {
                 vote.setUsername(vote.getUsername().toLowerCase());
             }
-        }
-    }
-
-    @Override
-    public void afterSavingEntity(@NonNull Iterable<Vote> entity) {
-        for (final Vote vote : entity) {
-            log.info("After saving ip: {}", vote.getPlayerIp());
         }
     }
 
