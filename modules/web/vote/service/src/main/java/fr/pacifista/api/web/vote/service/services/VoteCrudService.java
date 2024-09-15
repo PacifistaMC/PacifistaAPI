@@ -1,7 +1,15 @@
 package fr.pacifista.api.web.vote.service.services;
 
+import com.funixproductions.api.user.client.dtos.UserDTO;
+import com.funixproductions.api.user.client.security.CurrentSession;
+import com.funixproductions.core.crud.enums.SearchOperation;
 import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.tools.network.IPUtils;
+import feign.FeignException;
+import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
+import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import fr.pacifista.api.web.vote.client.dtos.VoteDTO;
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
 import fr.pacifista.api.web.vote.service.entities.Vote;
@@ -32,18 +40,24 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
 
     private final HttpServletRequest servletRequest;
     private final IPUtils ipUtils;
+    private final CurrentSession currentSession;
+    private final PacifistaWebUserLinkInternalClient pacifistaWebUserLinkInternalClient;
 
     public VoteCrudService(VoteRepository repository,
                            VoteMapper mapper,
                            VoteCheckerService voteCheckerService,
                            VoteValidatedSuccessService rewardService,
                            HttpServletRequest servletRequest,
-                           IPUtils ipUtils) {
+                           IPUtils ipUtils,
+                           CurrentSession currentSession,
+                           PacifistaWebUserLinkInternalClient pacifistaWebUserLinkInternalClient) {
         super(repository, mapper);
         this.voteCheckerService = voteCheckerService;
         this.rewardService = rewardService;
         this.servletRequest = servletRequest;
         this.ipUtils = ipUtils;
+        this.currentSession = currentSession;
+        this.pacifistaWebUserLinkInternalClient = pacifistaWebUserLinkInternalClient;
     }
 
     @Override
@@ -71,8 +85,9 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
     }
 
     @Nullable
-    protected VoteDTO getVoteByUserIpAndWebsite(String userIp, VoteWebsite voteWebsite) {
-        final Optional<Vote> vote = this.getRepository().findFirstByPlayerIpAndVoteWebsiteOrderByCreatedAtDesc(userIp, voteWebsite);
+    protected VoteDTO getVoteByUserAndWebsite(VoteWebsite voteWebsite) {
+        final PacifistaWebUserLinkDTO currentUser = this.getCurrentLinkedUser();
+        final Optional<Vote> vote = this.getRepository().findFirstByUsernameAndVoteWebsiteOrderByCreatedAtDesc(currentUser.getMinecraftUsername().toLowerCase(), voteWebsite);
         final VoteDTO voteDTO = vote.map(this.getMapper()::toDto).orElse(null);
 
         if (voteDTO != null) {
@@ -121,6 +136,41 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
     private Pair<Integer, Integer> getActualMonthAndYear() {
         final LocalDateTime now = LocalDateTime.now();
         return new Pair<>(now.getMonthValue(), now.getYear());
+    }
+
+    @NonNull
+    protected PacifistaWebUserLinkDTO getCurrentLinkedUser() throws ApiException {
+        final UserDTO userSession = currentSession.getCurrentUser();
+        if (userSession == null) {
+            throw new ApiBadRequestException("Vous devez être connecté pour voter.");
+        }
+
+        try {
+            final List<PacifistaWebUserLinkDTO> searchPaged = this.pacifistaWebUserLinkInternalClient.getAll(
+                    "0",
+                    "1",
+                    String.format(
+                            "funixProdUserId:%s:%s",
+                            SearchOperation.EQUALS.getOperation(),
+                            userSession.getId()
+                    ),
+                    ""
+            ).getContent();
+
+            if (searchPaged.isEmpty()) {
+                throw new ApiBadRequestException("Vous devez lier votre compte Pacifista pour voter.");
+            } else {
+                final PacifistaWebUserLinkDTO pacifistaWebUserLinkDTO = searchPaged.getFirst();
+
+                if (Boolean.FALSE.equals(pacifistaWebUserLinkDTO.getLinked())) {
+                    throw new ApiBadRequestException("Vous devez valider votre compte Minecraft pour voter.");
+                } else {
+                    return pacifistaWebUserLinkDTO;
+                }
+            }
+        } catch (FeignException e) {
+            throw new ApiException("Erreur interne lors de la récupération de votre compte Minecraft lié.");
+        }
     }
 
 }

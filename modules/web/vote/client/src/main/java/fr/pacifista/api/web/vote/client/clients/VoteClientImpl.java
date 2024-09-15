@@ -81,7 +81,7 @@ public class VoteClientImpl implements VoteClient {
     }
 
     @Override
-    public VoteDTO vote(String voteWebsite, String username) {
+    public VoteDTO vote(String voteWebsite) {
         throw new ApiBadRequestException("Fonctionalité disponible sur pacifista.fr/vote");
     }
 }

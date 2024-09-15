@@ -46,7 +46,7 @@ public class VoteResource implements VoteClient {
     }
 
     @Override
-    public VoteDTO vote(String voteWebsite, String username) {
-        return service.vote(voteWebsite, username);
+    public VoteDTO vote(String voteWebsite) {
+        return service.vote(voteWebsite);
     }
 }
