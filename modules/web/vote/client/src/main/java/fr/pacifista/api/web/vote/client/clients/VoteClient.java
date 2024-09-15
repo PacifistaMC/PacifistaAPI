@@ -69,8 +69,6 @@ public interface VoteClient {
      * @return le vote
      */
     @PostMapping("user/{voteWebsite}")
-    VoteDTO vote(
-            @PathVariable("voteWebsite") String voteWebsite
-    );
+    VoteDTO vote(@PathVariable("voteWebsite") String voteWebsite);
 
 }
