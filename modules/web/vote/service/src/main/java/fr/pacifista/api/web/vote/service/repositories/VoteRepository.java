@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface VoteRepository extends ApiRepository<Vote> {
 
-    Optional<Vote> findFirstByPlayerIpAndVoteWebsiteOrderByCreatedAtDesc(String userIp, VoteWebsite voteWebsite);
+    Optional<Vote> findFirstByUsernameAndVoteWebsiteOrderByCreatedAtDesc(String username, VoteWebsite voteWebsite);
 
     @Query("SELECT v FROM pacifista_web_votes v WHERE v.voteValidationDate IS NULL AND COALESCE(v.updatedAt, v.createdAt) >= :cutoffDate")
     Iterable<Vote> findAllByVoteValidationDateIsNullAndCreatedAtAfter(@Param("cutoffDate") LocalDateTime cutoffDate);

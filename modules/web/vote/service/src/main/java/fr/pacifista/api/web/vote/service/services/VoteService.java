@@ -6,6 +6,7 @@ import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.funixproductions.core.tools.network.IPUtils;
 import com.google.common.base.Strings;
+import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import fr.pacifista.api.web.vote.client.clients.VoteClient;
 import fr.pacifista.api.web.vote.client.dtos.VoteDTO;
 import fr.pacifista.api.web.vote.client.dtos.VoteWebsiteDTO;
@@ -90,10 +91,7 @@ public class VoteService implements VoteClient {
 
     @Override
     public VoteDTO checkVote(String voteWebsite) {
-        final VoteDTO vote = this.crudService.getVoteByUserIpAndWebsite(
-                getClientIpAddress(),
-                parseVoteWebsiteType(voteWebsite)
-        );
+        final VoteDTO vote = this.crudService.getVoteByUserAndWebsite(parseVoteWebsiteType(voteWebsite));
 
         if (vote == null) {
             throw new ApiNotFoundException("Vous n'avez pas encore voté.");
@@ -104,18 +102,15 @@ public class VoteService implements VoteClient {
 
     @Override
     @Transactional
-    public VoteDTO vote(String voteWebsite, String username) {
+    public VoteDTO vote(String voteWebsite) {
+        final PacifistaWebUserLinkDTO user = this.crudService.getCurrentLinkedUser();
         final VoteWebsite website = parseVoteWebsiteType(voteWebsite);
-
-        final VoteDTO vote = this.crudService.getVoteByUserIpAndWebsite(
-                getClientIpAddress(),
-                website
-        );
+        final VoteDTO vote = this.crudService.getVoteByUserAndWebsite(website);
 
         if (vote == null || vote.getVoteValidationDate() != null) {
             return this.crudService.create(
                     new VoteDTO(
-                            username,
+                            user.getMinecraftUsername().toLowerCase(),
                             website,
                             null,
                             null

@@ -1,11 +1,15 @@
 package fr.pacifista.api.web.vote.service.resources;
 
 import com.funixproductions.api.encryption.client.clients.EncryptionClient;
+import com.funixproductions.api.user.client.clients.UserAuthClient;
+import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.test.beans.JsonHelper;
 import com.google.gson.reflect.TypeToken;
 import fr.pacifista.api.server.essentials.client.commands_sender.clients.CommandToSendInternalClient;
 import fr.pacifista.api.server.essentials.client.commands_sender.dtos.CommandToSendDTO;
+import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
+import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import fr.pacifista.api.web.vote.client.clients.VoteClientImpl;
 import fr.pacifista.api.web.vote.client.dtos.VoteDTO;
 import fr.pacifista.api.web.vote.client.dtos.VoteWebsiteDTO;
@@ -21,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,9 +36,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,6 +70,12 @@ class VoteResourceTest {
 
     @MockBean
     EncryptionClient encryptionClient;
+
+    @MockBean
+    UserAuthClient userAuthClient;
+
+    @MockBean
+    PacifistaWebUserLinkInternalClient pacifistaWebUserLinkInternalClient;
 
     @Autowired
     VoteCrudService voteCrudService;
@@ -113,8 +126,38 @@ class VoteResourceTest {
         when(encryptionClient.decrypt(ipAddress1)).thenReturn(ipAddress1);
         when(encryptionClient.decrypt(ipAddress2)).thenReturn(ipAddress2);
 
-        MvcResult mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name() + "?username=" + username)
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
+                        .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
+                .andExpect(status().isBadRequest());
+
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        when(userAuthClient.current(anyString())).thenReturn(userDTO);
+        this.setLinkPacifistaWeb(null);
+
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
+                        .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
+                        .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
+                .andExpect(status().isBadRequest());
+
+        final PacifistaWebUserLinkDTO userLinkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        userLinkDTO.setLinked(false);
+        userLinkDTO.setMinecraftUsername(username);
+        this.setLinkPacifistaWeb(userLinkDTO);
+
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
+                        .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
+                        .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
+                .andExpect(status().isBadRequest());
+
+        userLinkDTO.setLinked(true);
+        this.setLinkPacifistaWeb(userLinkDTO);
+
+        MvcResult mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
+                        .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                 .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -125,16 +168,21 @@ class VoteResourceTest {
         assertNull(voteDTO.getUpdatedAt());
         assertEquals(voteWebsite, voteDTO.getVoteWebsite());
 
-        mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name() + "?username=" + username)
+        mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                         .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
                 .andExpect(status().isOk())
                 .andReturn();
         VoteDTO voteDTO2 = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), VoteDTO.class);
         assertEquals(voteDTO.getId(), voteDTO2.getId());
 
-        mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name() + "?username=otherPlayer")
+        userLinkDTO.setMinecraftUsername("otherPlayer");
+        this.setLinkPacifistaWeb(userLinkDTO);
+
+        mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress2)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Forwarded-For", ipAddress2)
                 )
@@ -142,9 +190,14 @@ class VoteResourceTest {
                 .andReturn();
         voteDTO2 = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), VoteDTO.class);
         assertNotEquals(voteDTO.getId(), voteDTO2.getId());
+        assertEquals("otherPlayer".toLowerCase(), voteDTO2.getUsername());
 
-        mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + VoteWebsite.SERVEUR_PRIVE_NET.name() + "?username=" + username)
+        userLinkDTO.setMinecraftUsername(username);
+        this.setLinkPacifistaWeb(userLinkDTO);
+
+        mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + VoteWebsite.SERVEUR_PRIVE_NET.name())
                         .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                         .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -153,6 +206,7 @@ class VoteResourceTest {
 
         mvcResult = this.mockMvc.perform(get(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                 .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -170,6 +224,7 @@ class VoteResourceTest {
 
         mvcResult = this.mockMvc.perform(get(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                         .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -195,8 +250,9 @@ class VoteResourceTest {
         }
         assertTrue(found);
 
-        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name() + "?username=" + username)
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + username)
                         .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", ipAddress1))
                 .andExpect(status().isOk());
 
@@ -398,6 +454,18 @@ class VoteResourceTest {
         vote.setVoteWebsite(VoteWebsite.SERVEUR_MINECRAFT_ORG);
         vote.setPlayerIp("test");
         return this.voteRepository.saveAndFlush(vote);
+    }
+
+    private void setLinkPacifistaWeb(PacifistaWebUserLinkDTO linkPacifistaWeb) {
+        reset(pacifistaWebUserLinkInternalClient);
+
+        final List<PacifistaWebUserLinkDTO> linkDTOs = new ArrayList<>();
+        if (linkPacifistaWeb != null) {
+            linkDTOs.add(linkPacifistaWeb);
+        }
+
+        final PageDTO<PacifistaWebUserLinkDTO> pageDTO = new PageDTO<>(linkDTOs, 2, 0, 10l, 10);
+        when(pacifistaWebUserLinkInternalClient.getAll(anyString(), anyString(), anyString(), anyString())).thenReturn(pageDTO);
     }
 
 }

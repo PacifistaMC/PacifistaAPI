@@ -66,13 +66,9 @@ public interface VoteClient {
     /**
      * Utilisé pour voter sur un site de vote
      * @param voteWebsite le site de vote
-     * @param username le nom d'utilisateur
      * @return le vote
      */
     @PostMapping("user/{voteWebsite}")
-    VoteDTO vote(
-            @PathVariable("voteWebsite") String voteWebsite,
-            @RequestParam("username") String username
-    );
+    VoteDTO vote(@PathVariable("voteWebsite") String voteWebsite);
 
 }
