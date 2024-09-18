@@ -59,7 +59,7 @@ public abstract class ExternalVoteService {
             if (statusCode >= 200 && statusCode < 300) {
                 return response.body();
             } else {
-                throw new ApiException("Erreur lors de check vote sur l'api " + this.voteWebsite + " : HttpCode Error " + statusCode + ".");
+                throw new ApiException("Erreur lors de check vote sur l'api " + this.voteWebsite + " : HttpCode Error " + statusCode + ". Player IP: " + userIp);
             }
         } catch (IOException e) {
             throw new ApiException("Erreur IO lors de check vote sur l'api " + this.voteWebsite + " : " + e.getMessage() + ".", e);
