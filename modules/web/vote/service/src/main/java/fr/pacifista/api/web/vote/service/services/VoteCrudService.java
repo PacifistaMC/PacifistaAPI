@@ -142,7 +142,7 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
     protected PacifistaWebUserLinkDTO getCurrentLinkedUser() throws ApiException {
         final UserDTO userSession = currentSession.getCurrentUser();
         if (userSession == null) {
-            throw new ApiBadRequestException("Vous devez être connecté pour voter.");
+            throw new ApiBadRequestException("Vous devez être connecté à votre compte pour voter.");
         }
 
         try {
