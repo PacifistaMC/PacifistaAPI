@@ -39,7 +39,7 @@ public abstract class ExternalVoteService {
                 this.cache.put(userIp, hasVoted);
                 return hasVoted;
             } catch (Exception e) {
-                log.error("Error while checking vote : {}", e.getMessage(), e);
+                log.error("Error while checking vote on website {}, (userIP: {}) : {}", voteWebsite.name(), userIp, e.getMessage(), e);
                 return false;
             }
         }

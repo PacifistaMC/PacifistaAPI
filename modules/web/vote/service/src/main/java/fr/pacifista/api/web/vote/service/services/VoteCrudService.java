@@ -81,6 +81,10 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             if (vote.getUsername() != null) {
                 vote.setUsername(vote.getUsername().toLowerCase());
             }
+
+            if (vote.getId() == null) {
+                log.info("New vote from ip {} for website {}.", ip, vote.getVoteWebsite());
+            }
         }
     }
 
@@ -107,7 +111,7 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
         }
     }
 
-    @Scheduled(fixedRate = 10, initialDelay = 10, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = 5, initialDelay = 5, timeUnit = TimeUnit.SECONDS)
     public void checkPendingVotes() {
         final List<Vote> successVotes = new ArrayList<>();
 
