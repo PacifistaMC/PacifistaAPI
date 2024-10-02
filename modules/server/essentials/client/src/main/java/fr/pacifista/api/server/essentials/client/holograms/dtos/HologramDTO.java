@@ -83,7 +83,8 @@ public class HologramDTO extends LocationDTO {
     @NonNull
     public List<HologramDTO> getChildHolograms() {
         if (this.childHolograms == null) {
-            return new ArrayList<>();
+            this.childHolograms = new ArrayList<>();
+            return this.childHolograms;
         } else {
             return childHolograms.stream()
                     .sorted(Comparator.comparing(HologramDTO::getCreatedAt))
@@ -119,6 +120,6 @@ public class HologramDTO extends LocationDTO {
             parentY = parentHologram.getY();
         }
 
-        return parentY - 0.5;
+        return parentY - 0.28;
     }
 }
