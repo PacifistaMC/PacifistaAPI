@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.web.vote</groupId>
         <artifactId>pacifista-web-vote</artifactId>
-        <version>1.5.4.3</version>
+        <version>1.5.4.4</version>
     </parent>
 
     <groupId>fr.pacifista.api.web.vote.client</groupId>

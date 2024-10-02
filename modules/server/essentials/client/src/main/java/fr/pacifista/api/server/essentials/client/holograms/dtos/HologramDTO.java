@@ -9,10 +9,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -82,13 +80,14 @@ public class HologramDTO extends LocationDTO {
         this.parentHologram = parentHologram;
     }
 
+    @NonNull
     public List<HologramDTO> getChildHolograms() {
         if (this.childHolograms == null) {
-            return List.of();
+            return new ArrayList<>();
         } else {
             return childHolograms.stream()
                     .sorted(Comparator.comparing(HologramDTO::getCreatedAt))
-                    .toList();
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
     }
 
