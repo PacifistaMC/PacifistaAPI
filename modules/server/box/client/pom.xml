@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.server.box</groupId>
         <artifactId>pacifista-server-box</artifactId>
-        <version>1.5.4.2</version>
+        <version>1.5.4.3</version>
     </parent>
 
     <groupId>fr.pacifista.api.server.box.client</groupId>
