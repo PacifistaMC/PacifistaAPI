@@ -23,6 +23,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,6 +65,10 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
     @Override
     public void beforeSavingEntity(@NonNull Iterable<Vote> entity) {
         final String ip = ipUtils.getClientIp(servletRequest);
+        if (Boolean.FALSE.equals(isIPV4(ip))) {
+            throw new ApiBadRequestException("Votre IP n'est pas une adresse IPv4. Veuillez suivre les instructions pour voter sur pacifista.fr/vote (en bas de la page).");
+        }
+
         final Pair<Integer, Integer> monthAndYear = getActualMonthAndYear();
 
         for (final Vote vote : entity) {
@@ -174,6 +180,15 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             }
         } catch (FeignException e) {
             throw new ApiException("Erreur interne lors de la récupération de votre compte Minecraft lié.");
+        }
+    }
+
+    private boolean isIPV4(String ip) throws ApiBadRequestException {
+        try {
+            final InetAddress inetAddress = InetAddress.getByName(ip);
+            return inetAddress instanceof Inet4Address;
+        } catch (Exception e) {
+            throw new ApiBadRequestException("Votre IP n'est pas valide.");
         }
     }
 

@@ -84,6 +84,8 @@ class VoteResourceTest {
     void mockClients() {
         this.voteRepository.deleteAll();
 
+        reset(this.userAuthClient);
+
         when(commandToSendClient.create(any(CommandToSendDTO.class))).thenReturn(new CommandToSendDTO());
         when(commandToSendClient.create(anyList())).thenReturn(new ArrayList<>());
 
@@ -112,6 +114,39 @@ class VoteResourceTest {
     void testGetCheckVoteWithInvalidSiteName() throws Exception {
         this.mockMvc.perform(get(BASE_URL + "/user/dummyNameShouldFail"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateVoteWithWrongIp() throws Exception {
+        final VoteWebsite voteWebsite = VoteWebsite.SERVEUR_MINECRAFT_ORG;
+
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        final PacifistaWebUserLinkDTO userLinkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        userLinkDTO.setLinked(true);
+        userLinkDTO.setMinecraftUsername("funixmlsdfjsmldkf");
+        this.setLinkPacifistaWeb(userLinkDTO);
+
+        when(userAuthClient.current(anyString())).thenReturn(userDTO);
+
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
+                        .remoteAddress("1sdflkqfsfqsfsqdf")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dddd")
+                        .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", "1sdflkqfsfqsfsqdf"))
+                .andExpect(status().isBadRequest());
+
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
+                        .remoteAddress("1050:0000:0000:0000:0005:0600:300c:326b")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dddd")
+                        .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", "1050:0000:0000:0000:0005:0600:300c:326b"))
+                .andExpect(status().isBadRequest());
+
+        when(encryptionClient.encrypt("10.0.0.1")).thenReturn("10.0.0.1");
+
+        this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
+                        .remoteAddress("10.0.0.1")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dddd")
+                        .contentType(MediaType.APPLICATION_JSON).header("X-Forwarded-For", "10.0.0.1"))
+                .andExpect(status().isOk());
     }
 
     @Test
