@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -55,6 +54,7 @@ public class HologramDTO extends LocationDTO {
         super.setPitch(0.0f);
 
         this.textSerialized = textSerialized;
+        this.childHolograms = new ArrayList<>();
     }
 
     /**
@@ -78,18 +78,26 @@ public class HologramDTO extends LocationDTO {
 
         this.textSerialized = textSerialized;
         this.parentHologram = parentHologram;
+        this.childHolograms = new ArrayList<>();
     }
 
     @NonNull
     public List<HologramDTO> getChildHolograms() {
         if (this.childHolograms == null) {
             this.childHolograms = new ArrayList<>();
-            return this.childHolograms;
         } else {
-            return childHolograms.stream()
-                    .sorted(Comparator.comparing(HologramDTO::getCreatedAt))
-                    .collect(Collectors.toCollection(ArrayList::new));
+            this.childHolograms.sort(Comparator.comparing(HologramDTO::getCreatedAt));
         }
+
+        return this.childHolograms;
+    }
+
+    public void addChildHologram(final @NonNull HologramDTO childHologram) {
+        if (childHologram.getId() == null || childHologram.getCreatedAt() == null) {
+            throw new IllegalArgumentException("The child hologram must have an ID (created in the database api)");
+        }
+
+        this.childHolograms.add(childHologram);
     }
 
     @Override
