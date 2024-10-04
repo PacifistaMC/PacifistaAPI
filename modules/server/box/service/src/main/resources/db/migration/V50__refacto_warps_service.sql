@@ -1,0 +1,1 @@
+drop table if exists pacifista_warps;
