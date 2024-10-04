@@ -115,7 +115,6 @@ public class HologramDTO extends LocationDTO {
     public int hashCode() {
         return textSerialized.hashCode() +
                 (parentHologram == null ? 0 : parentHologram.hashCode()) +
-                childHolograms.hashCode() +
                 super.hashCode();
     }
 

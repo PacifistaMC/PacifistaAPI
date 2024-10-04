@@ -15,7 +15,7 @@ Lien du repository Maven : [Pacifista - Api package](https://mvn.funixproduction
 <parent>
     <groupId>fr.pacifista.api</groupId>
     <artifactId>pacifista-api</artifactId>
-    <version>1.5.4.6</version>
+    <version>1.5.4.7</version>
 </parent>
 ```
 
