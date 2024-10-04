@@ -15,20 +15,20 @@ import java.util.UUID;
 @Setter
 @Entity(name = "pacifista_warps")
 public class Warp extends Location {
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     private String name;
 
     @Column(nullable = false, name = "warp_item")
     private String warpItem;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "public_access")
     private Boolean publicAccess = true;
 
     @Column(nullable = false, name = "player_owner_uuid")
     private String playerOwnerUuid;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "type")
     private WarpType type;
 
     public void setPlayerOwnerUuid(UUID playerOwnerUuid) {
