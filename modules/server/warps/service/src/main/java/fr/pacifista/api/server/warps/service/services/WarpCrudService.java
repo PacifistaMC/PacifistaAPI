@@ -8,9 +8,9 @@ import fr.pacifista.api.server.warps.service.repositories.WarpRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WarpService extends ApiService<WarpDTO, Warp, WarpMapper, WarpRepository> {
-    public WarpService(WarpRepository repository,
-                       WarpMapper mapper) {
+public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpRepository> {
+    public WarpCrudService(WarpRepository repository,
+                           WarpMapper mapper) {
         super(repository, mapper);
     }
 }

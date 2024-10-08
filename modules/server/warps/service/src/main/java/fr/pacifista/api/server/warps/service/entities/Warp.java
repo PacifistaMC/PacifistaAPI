@@ -23,7 +23,6 @@ public class Warp extends Location {
     private String warpItem;
 
     @OneToOne(mappedBy = "warp")
-    @JoinColumn(nullable = false, name = "config_id")
     private WarpConfig config;
 
     @Column(nullable = false, name = "player_owner_uuid")

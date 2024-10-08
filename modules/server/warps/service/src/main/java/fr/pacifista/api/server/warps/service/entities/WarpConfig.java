@@ -48,4 +48,8 @@ public class WarpConfig extends ApiEntity {
         return super.hashCode();
     }
 
+    public Warp getWarp() {
+        this.warp.setConfig(null);
+        return this.warp;
+    }
 }

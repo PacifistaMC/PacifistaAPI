@@ -74,7 +74,7 @@ public class WarpPortalDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final WarpPortalDTO warpPortalDTO) {
-            return this.destinationWarp.equals(warpPortalDTO.destinationWarp) &&
+            return this.destinationWarp.getId().equals(warpPortalDTO.destinationWarp.getId()) &&
                     this.serverType.equals(warpPortalDTO.serverType) &&
                     this.worldId.equals(warpPortalDTO.worldId) &&
                     this.lesserBoundaryCornerX.equals(warpPortalDTO.lesserBoundaryCornerX) &&
@@ -91,7 +91,7 @@ public class WarpPortalDTO extends ApiDTO {
 
     @Override
     public int hashCode() {
-        return this.destinationWarp.hashCode() +
+        return this.destinationWarp.getId().hashCode() +
                 this.serverType.hashCode() +
                 this.worldId.hashCode() +
                 this.lesserBoundaryCornerX.hashCode() +

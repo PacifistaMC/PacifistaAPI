@@ -38,7 +38,8 @@ public class WarpPlayerInteractionDTO extends ApiDTO {
     public boolean equals(Object obj) {
         if (obj instanceof final WarpPlayerInteractionDTO other) {
             return playerId.equals(other.playerId) &&
-                    warp.equals(other.warp) &&
+                    warp.getId().equals(other.warp.getId()) &&
+                    interactionType.equals(other.interactionType) &&
                     super.equals(obj);
         } else {
             return false;
@@ -47,6 +48,9 @@ public class WarpPlayerInteractionDTO extends ApiDTO {
 
     @Override
     public int hashCode() {
-        return playerId.hashCode() + warp.hashCode() + super.hashCode();
+        return playerId.hashCode() +
+                warp.getId().hashCode() +
+                interactionType.hashCode() +
+                super.hashCode();
     }
 }

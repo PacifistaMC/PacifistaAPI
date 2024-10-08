@@ -46,7 +46,7 @@ public class WarpConfigDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final WarpConfigDTO other) {
-            return warp.equals(other.warp) &&
+            return warp.getId().equals(other.warp.getId()) &&
                     isVisibleInMenu.equals(other.isVisibleInMenu) &&
                     publicAccess.equals(other.publicAccess) &&
                     isFreeToUse.equals(other.isFreeToUse) &&
@@ -59,7 +59,7 @@ public class WarpConfigDTO extends ApiDTO {
 
     @Override
     public int hashCode() {
-        return warp.hashCode() +
+        return warp.getId().hashCode() +
                 isVisibleInMenu.hashCode() +
                 publicAccess.hashCode() +
                 isFreeToUse.hashCode() +
@@ -77,4 +77,8 @@ public class WarpConfigDTO extends ApiDTO {
         );
     }
 
+    public @NotNull WarpDTO getWarp() {
+        this.warp.setConfig(null);
+        return this.warp;
+    }
 }
