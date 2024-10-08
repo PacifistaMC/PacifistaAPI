@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -74,7 +74,7 @@ class WarpPortalResourceTest {
 
         final WarpPortalDTO warpPortalDTO = jsonHelper.fromJson(result.getResponse().getContentAsString(), WarpPortalDTO.class);
 
-        assertEquals(createPortalRequest.getDestinationWarp(), warpPortalDTO.getDestinationWarp());
+        assertEquals(createPortalRequest.getWarp(), warpPortalDTO.getWarp());
         assertEquals(createPortalRequest.getServerType(), warpPortalDTO.getServerType());
         assertEquals(createPortalRequest.getWorldId(), warpPortalDTO.getWorldId());
         assertEquals(createPortalRequest.getLesserBoundaryCornerX(), warpPortalDTO.getLesserBoundaryCornerX());
@@ -95,9 +95,9 @@ class WarpPortalResourceTest {
 
         final WarpPortalDTO updatedWarpPortalDTO = jsonHelper.fromJson(result.getResponse().getContentAsString(), WarpPortalDTO.class);
 
-        assertNotEquals(warpPortalDTO, updatedWarpPortalDTO);
-        assertNotEquals(warpPortalDTO.hashCode(), updatedWarpPortalDTO.hashCode());
-        assertEquals(warpPortalDTO.getDestinationWarp(), updatedWarpPortalDTO.getDestinationWarp());
+        assertEquals(warpPortalDTO, updatedWarpPortalDTO);
+        assertEquals(warpPortalDTO.hashCode(), updatedWarpPortalDTO.hashCode());
+        assertEquals(warpPortalDTO.getWarp(), updatedWarpPortalDTO.getWarp());
         assertEquals(warpPortalDTO.getServerType(), updatedWarpPortalDTO.getServerType());
 
         mockMvc.perform(delete("/" + WarpPortalClientImpl.PATH + "?id=" + updatedWarpPortalDTO.getId())
@@ -112,31 +112,33 @@ class WarpPortalResourceTest {
     @Test
     void checkPortalRemovedOnWarpDeletion() throws Exception {
         final WarpDTO warpDTO = this.createWarp();
-        final WarpPortalDTO createPortalRequest = new WarpPortalDTO(
-                warpDTO,
-                ServerType.HUB,
-                UUID.randomUUID(),
-                10,
-                11,
-                10,
-                20,
-                21,
-                23
-        );
 
         MvcResult result = mockMvc.perform(
                 post("/" + WarpPortalClientImpl.PATH)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonHelper.toJson(createPortalRequest))
+                        .content(jsonHelper.toJson(new WarpPortalDTO(
+                                warpDTO,
+                                ServerType.HUB,
+                                UUID.randomUUID(),
+                                10,
+                                11,
+                                10,
+                                20,
+                                21,
+                                23
+                        )))
         ).andExpect(status().isOk()).andReturn();
         final WarpPortalDTO warpPortalDTO = jsonHelper.fromJson(result.getResponse().getContentAsString(), WarpPortalDTO.class);
 
         mockMvc.perform(delete("/" + WarpClientImpl.PATH + "?id=" + warpDTO.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
         ).andExpect(status().isOk());
+        mockMvc.perform(delete("/" + WarpClientImpl.PATH + "?id=" + warpDTO.getId())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+        ).andExpect(status().isNotFound());
 
-        mockMvc.perform(get("/" + WarpPortalClientImpl.PATH + "?id=" + warpPortalDTO.getId())
+        mockMvc.perform(get("/" + WarpPortalClientImpl.PATH + "/" + warpPortalDTO.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
         ).andExpect(status().isNotFound());
     }

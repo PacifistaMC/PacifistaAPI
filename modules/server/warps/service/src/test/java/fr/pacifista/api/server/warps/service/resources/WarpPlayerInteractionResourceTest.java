@@ -203,7 +203,8 @@ class WarpPlayerInteractionResourceTest {
 
     private WarpDTO getWarp(final UUID id) throws Exception {
         final MvcResult result = mockMvc.perform(get("/" + WarpClientImpl.PATH + "/" + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                 .andExpect(status().isOk())
                 .andReturn();
 
