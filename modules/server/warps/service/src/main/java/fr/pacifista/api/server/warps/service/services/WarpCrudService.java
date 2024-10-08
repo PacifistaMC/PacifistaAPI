@@ -1,6 +1,8 @@
 package fr.pacifista.api.server.warps.service.services;
 
 import com.funixproductions.core.crud.services.ApiService;
+import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.server.warps.client.dtos.WarpConfigDTO;
 import fr.pacifista.api.server.warps.client.dtos.WarpDTO;
 import fr.pacifista.api.server.warps.service.entities.Warp;
@@ -12,10 +14,12 @@ import fr.pacifista.api.server.warps.service.repositories.WarpPlayerInteractionR
 import fr.pacifista.api.server.warps.service.repositories.WarpPortalRepository;
 import fr.pacifista.api.server.warps.service.repositories.WarpRepository;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpRepository> {
@@ -75,6 +79,19 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
         this.warpPortalRepository.deleteAllByWarpIn(entity);
         this.warpPlayerInteractionRepository.deleteAllByWarpIn(entity);
         this.warpConfigRepository.deleteAllByWarpIn(entity);
+    }
+
+    @NotNull
+    protected Warp getWarp(UUID warpId) {
+        if (warpId == null) {
+            throw new ApiBadRequestException("L'id du warp est requis");
+        }
+
+        final Warp warp = getRepository().findByUuid(warpId.toString()).orElse(null);
+        if (warp == null) {
+            throw new ApiNotFoundException("Le warp avec l'id " + warpId + " n'existe pas");
+        }
+        return warp;
     }
 
     private List<WarpConfig> findExistingConfigs(@NonNull Iterable<Warp> warps) {

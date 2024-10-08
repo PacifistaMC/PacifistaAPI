@@ -22,7 +22,7 @@ public class Warp extends Location {
     @Column(nullable = false, name = "warp_item")
     private String warpItem;
 
-    @OneToOne(mappedBy = "warp")
+    @OneToOne(mappedBy = "warp", cascade = CascadeType.ALL)
     private WarpConfig config;
 
     @Column(nullable = false, name = "player_owner_uuid")

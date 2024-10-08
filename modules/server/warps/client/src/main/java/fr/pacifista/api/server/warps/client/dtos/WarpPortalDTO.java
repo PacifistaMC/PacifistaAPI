@@ -2,7 +2,6 @@ package fr.pacifista.api.server.warps.client.dtos;
 
 import com.funixproductions.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.core.client.enums.ServerType;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,8 +19,8 @@ public class WarpPortalDTO extends ApiDTO {
     /**
      * La destination du portail de tp
      */
-    @NotBlank
-    private WarpDTO destinationWarp;
+    @NotNull
+    private WarpDTO warp;
 
     /**
      * Type de serveur
@@ -74,7 +73,7 @@ public class WarpPortalDTO extends ApiDTO {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final WarpPortalDTO warpPortalDTO) {
-            return this.destinationWarp.getId().equals(warpPortalDTO.destinationWarp.getId()) &&
+            return this.warp.getId().equals(warpPortalDTO.warp.getId()) &&
                     this.serverType.equals(warpPortalDTO.serverType) &&
                     this.worldId.equals(warpPortalDTO.worldId) &&
                     this.lesserBoundaryCornerX.equals(warpPortalDTO.lesserBoundaryCornerX) &&
@@ -91,7 +90,7 @@ public class WarpPortalDTO extends ApiDTO {
 
     @Override
     public int hashCode() {
-        return this.destinationWarp.getId().hashCode() +
+        return this.warp.getId().hashCode() +
                 this.serverType.hashCode() +
                 this.worldId.hashCode() +
                 this.lesserBoundaryCornerX.hashCode() +

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity(name = "pacifista_warps_config")
 public class WarpConfig extends ApiEntity {
 
-    @OneToOne(mappedBy = "config")
+    @OneToOne
     @JoinColumn(name = "warp_id", nullable = false)
     private Warp warp;
 
