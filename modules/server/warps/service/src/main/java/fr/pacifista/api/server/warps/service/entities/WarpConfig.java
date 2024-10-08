@@ -32,7 +32,7 @@ public class WarpConfig extends ApiEntity {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof final WarpConfig other) {
-            return warp.equals(other.warp) &&
+            return warp.getUuid().equals(other.warp.getUuid()) &&
                     isVisibleInMenu.equals(other.isVisibleInMenu) &&
                     publicAccess.equals(other.publicAccess) &&
                     isFreeToUse.equals(other.isFreeToUse) &&
@@ -45,7 +45,12 @@ public class WarpConfig extends ApiEntity {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return warp.getUuid().hashCode() +
+                isVisibleInMenu.hashCode() +
+                publicAccess.hashCode() +
+                isFreeToUse.hashCode() +
+                price.hashCode() +
+                super.hashCode();
     }
 
     public Warp getWarp() {
