@@ -5,6 +5,6 @@ import fr.pacifista.api.server.warps.client.dtos.WarpDTO;
 import fr.pacifista.api.server.warps.service.entities.Warp;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {WarpConfigMapper.class})
 public interface WarpMapper extends ApiMapper<Warp, WarpDTO> {
 }

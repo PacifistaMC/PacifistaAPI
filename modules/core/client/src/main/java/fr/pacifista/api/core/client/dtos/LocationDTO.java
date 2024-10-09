@@ -3,7 +3,9 @@ package fr.pacifista.api.core.client.dtos;
 import com.funixproductions.core.crud.dtos.ApiDTO;
 import fr.pacifista.api.core.client.enums.ServerType;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Random;
@@ -11,6 +13,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class LocationDTO extends ApiDTO {
     @NotNull
     private UUID worldUuid;
