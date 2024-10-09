@@ -78,7 +78,9 @@ public class WarpConfigDTO extends ApiDTO {
     }
 
     public @NotNull WarpDTO getWarp() {
-        this.warp.setConfig(null);
+        if (this.warp != null) {
+            this.warp.setConfig(null);
+        }
         return this.warp;
     }
 }

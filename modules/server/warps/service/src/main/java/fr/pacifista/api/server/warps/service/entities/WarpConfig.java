@@ -54,7 +54,9 @@ public class WarpConfig extends ApiEntity {
     }
 
     public Warp getWarp() {
-        this.warp.setConfig(null);
+        if (this.warp != null) {
+            this.warp.setConfig(null);
+        }
         return this.warp;
     }
 }

@@ -1,5 +1,7 @@
 package fr.pacifista.api.server.warps.service.services;
 
+import com.funixproductions.core.crud.dtos.PageDTO;
+import com.funixproductions.core.crud.enums.SearchOperation;
 import com.funixproductions.core.crud.services.ApiService;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
@@ -16,8 +18,7 @@ import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpRepository> {
@@ -37,8 +38,8 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
         this.warpPortalRepository = warpPortalRepository;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public @NonNull WarpDTO create(WarpDTO request) {
         final WarpDTO warpDTO = super.create(request);
 
@@ -48,8 +49,8 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
         return warpDTO;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public List<WarpDTO> create(List<@Valid WarpDTO> request) {
         final List<WarpDTO> res = super.create(request);
 
@@ -59,6 +60,31 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
             }
         }
 
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public List<WarpDTO> updatePut(List<@Valid WarpDTO> request) {
+        final List<WarpConfigDTO> warpConfigDTOs = this.getDTOSInWarpsIds(request.stream().map(WarpDTO::getId).toList());
+        final Map<UUID, UUID> warpsConfigsIds = new HashMap<>();
+
+        for (final WarpDTO warpDTO : request) {
+            warpsConfigsIds.put(warpDTO.getId(), warpDTO.getConfig().getId());
+            warpDTO.setConfig(null);
+        }
+
+        final List<WarpDTO> res = super.updatePut(request);
+
+        UUID configId;
+        for (final WarpDTO warpDTO : res) {
+            configId = warpsConfigsIds.get(warpDTO.getId());
+            if (configId != null) {
+                warpDTO.setConfig(
+                        this.warpConfigCrudService.getDTOFromIdInList(warpConfigDTOs, configId)
+                );
+            }
+        }
         return res;
     }
 
@@ -80,6 +106,25 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
             throw new ApiNotFoundException("Le warp avec l'id " + warpId + " n'existe pas");
         }
         return warp;
+    }
+
+    private List<WarpConfigDTO> getDTOSInWarpsIds(final List<UUID> warpsIds) {
+        final List<WarpConfigDTO> dtos = new ArrayList<>();
+        final String searchQuery = String.format(
+                "warp.uuid:%s:[%s]",
+                SearchOperation.EQUALS.getOperation(),
+                String.join("|", warpsIds.stream().map(UUID::toString).toArray(String[]::new))
+        );
+
+        PageDTO<WarpConfigDTO> page = new PageDTO<>(new ArrayList<>(), 2, 0, 10L, 10);
+
+        while (page.getActualPage() < page.getTotalPages()) {
+            page = this.warpConfigCrudService.getAll(Integer.toString(page.getActualPage()), "300", searchQuery, "");
+            dtos.addAll(page.getContent());
+            page.setActualPage(page.getActualPage() + 1);
+        }
+
+        return dtos;
     }
 
 }
