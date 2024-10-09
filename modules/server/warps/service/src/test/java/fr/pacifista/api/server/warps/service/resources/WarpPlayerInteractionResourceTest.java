@@ -11,6 +11,7 @@ import fr.pacifista.api.server.warps.client.dtos.WarpDTO;
 import fr.pacifista.api.server.warps.client.dtos.WarpPlayerInteractionDTO;
 import fr.pacifista.api.server.warps.client.enums.WarpInteractionType;
 import fr.pacifista.api.server.warps.client.enums.WarpType;
+import fr.pacifista.api.server.warps.service.repositories.WarpPlayerInteractionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ class WarpPlayerInteractionResourceTest {
     @Autowired
     private JsonHelper jsonHelper;
 
+    @Autowired
+    private WarpPlayerInteractionRepository warpPlayerInteractionRepository;
+
     @MockBean
     private UserAuthClient userAuthClient;
 
@@ -49,6 +53,8 @@ class WarpPlayerInteractionResourceTest {
         userDTO.setRole(UserRole.PACIFISTA_ADMIN);
 
         when(userAuthClient.current(anyString())).thenReturn(userDTO);
+
+        warpPlayerInteractionRepository.deleteAll();
     }
 
     @Test
@@ -86,11 +92,15 @@ class WarpPlayerInteractionResourceTest {
         assertEquals(1, warp.getLikes());
         assertEquals(0, warp.getUses());
 
-        final WarpPlayerInteractionDTO sameLike = this.like(warp, playerId);
-        warp = this.getWarp(warp.getId());
-        assertEquals(1, warp.getLikes());
-        assertEquals(0, warp.getUses());
-        assertEquals(like, sameLike);
+        mockMvc.perform(post("/" + WarpPlayerInteractionClientImpl.PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(new WarpPlayerInteractionDTO(
+                        warp,
+                        playerId,
+                        WarpInteractionType.LIKE
+                )))
+        ).andExpect(status().isBadRequest());
 
         this.like(warp, UUID.randomUUID());
         warp = this.getWarp(warp.getId());
@@ -116,15 +126,19 @@ class WarpPlayerInteractionResourceTest {
         assertEquals(1, warp.getLikes());
         assertEquals(1, warp.getUses());
 
-        final WarpPlayerInteractionDTO sameUse = this.use(warp, playerId);
-        warp = this.getWarp(warp.getId());
-        assertEquals(1, warp.getLikes());
-        assertEquals(1, warp.getUses());
-        assertEquals(use, sameUse);
+        mockMvc.perform(post("/" + WarpPlayerInteractionClientImpl.PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(new WarpPlayerInteractionDTO(
+                        warp,
+                        playerId,
+                        WarpInteractionType.USE
+                )))
+        ).andExpect(status().isBadRequest());
 
         this.use(warp, UUID.randomUUID());
         warp = this.getWarp(warp.getId());
-        assertEquals(2, warp.getLikes());
+        assertEquals(1, warp.getLikes());
         assertEquals(2, warp.getUses());
 
         mockMvc.perform(delete("/" + WarpPlayerInteractionClientImpl.PATH + "?id=" + use.getId())
@@ -148,11 +162,11 @@ class WarpPlayerInteractionResourceTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
         ).andExpect(status().isOk());
 
-        mockMvc.perform(get("/" + WarpPlayerInteractionClientImpl.PATH + "?id=" + like.getId())
+        mockMvc.perform(get("/" + WarpPlayerInteractionClientImpl.PATH + "/" + like.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
         ).andExpect(status().isNotFound());
 
-        mockMvc.perform(get("/" + WarpPlayerInteractionClientImpl.PATH + "?id=" + use.getId())
+        mockMvc.perform(get("/" + WarpPlayerInteractionClientImpl.PATH + "/" + use.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
         ).andExpect(status().isNotFound());
     }
