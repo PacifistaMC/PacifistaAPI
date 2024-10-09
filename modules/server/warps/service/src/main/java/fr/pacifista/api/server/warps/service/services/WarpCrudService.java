@@ -40,17 +40,6 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
 
     @Override
     @Transactional
-    public @NonNull WarpDTO create(WarpDTO request) {
-        final WarpDTO warpDTO = super.create(request);
-
-        if (warpDTO.getConfig() == null) {
-            warpDTO.setConfig(this.warpConfigCrudService.create(WarpConfigDTO.initWithDefaults(warpDTO)));
-        }
-        return warpDTO;
-    }
-
-    @Override
-    @Transactional
     public List<WarpDTO> create(List<@Valid WarpDTO> request) {
         final List<WarpDTO> res = super.create(request);
 

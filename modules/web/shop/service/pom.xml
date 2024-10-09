@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.pacifista.api.web.shop</groupId>
         <artifactId>pacifista-web-shop</artifactId>
-        <version>1.5.4.7</version>
+        <version>1.5.5.0</version>
     </parent>
 
     <groupId>fr.pacifista.api.web.shop.service</groupId>
