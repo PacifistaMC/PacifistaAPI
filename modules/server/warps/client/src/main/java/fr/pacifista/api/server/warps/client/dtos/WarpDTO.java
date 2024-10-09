@@ -84,7 +84,7 @@ public class WarpDTO extends LocationDTO {
             return name.equals(other.name) &&
                     jsonFormattedDescription.equals(other.jsonFormattedDescription) &&
                     warpItem.equals(other.warpItem) &&
-                    config.equals(other.config) &&
+                    config != null && config.equals(other.config) &&
                     playerOwnerUuid.equals(other.playerOwnerUuid) &&
                     type.equals(other.type) &&
                     super.equals(obj);
@@ -98,7 +98,7 @@ public class WarpDTO extends LocationDTO {
         return name.hashCode() +
                 jsonFormattedDescription.hashCode() +
                 warpItem.hashCode() +
-                config.hashCode() +
+                (config == null ? 0 : config.hashCode()) +
                 playerOwnerUuid.hashCode() +
                 type.hashCode() +
                 super.hashCode();

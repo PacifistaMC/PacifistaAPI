@@ -3,21 +3,20 @@ package fr.pacifista.api.server.warps.service.services;
 import com.funixproductions.core.crud.services.ApiService;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.server.warps.client.dtos.WarpConfigDTO;
 import fr.pacifista.api.server.warps.client.dtos.WarpDTO;
 import fr.pacifista.api.server.warps.service.entities.Warp;
-import fr.pacifista.api.server.warps.service.entities.WarpConfig;
 import fr.pacifista.api.server.warps.service.mappers.WarpConfigMapper;
 import fr.pacifista.api.server.warps.service.mappers.WarpMapper;
 import fr.pacifista.api.server.warps.service.repositories.WarpConfigRepository;
 import fr.pacifista.api.server.warps.service.repositories.WarpPlayerInteractionRepository;
 import fr.pacifista.api.server.warps.service.repositories.WarpPortalRepository;
 import fr.pacifista.api.server.warps.service.repositories.WarpRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,34 +43,20 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
     }
 
     @Override
-    public void afterSavingEntity(@NonNull Iterable<Warp> entity) {
-        List<WarpConfig> configs = this.findExistingConfigs(entity);
+    @Transactional
+    public @NonNull WarpDTO create(WarpDTO request) {
+        final WarpDTO warpDTO = super.create(request);
 
-        WarpDTO warpDTO;
-        WarpConfig warpConfig;
-        for (final Warp warp : entity) {
-            if (this.isWarpConfigExists(warp, configs)) {
-                continue;
-            }
-
-            warpDTO = this.getMapper().toDto(warp);
-            warpConfig = warpConfigMapper.toEntity(
-                    WarpConfigDTO.initWithDefaults(warpDTO)
-            );
-
-            warpConfig.setWarp(warp);
-            configs.add(warpConfig);
+        if(warpDTO.getConfig() == null) {
+            warpDTO.setConfig(this.warpC);
         }
+        return warpDTO;
+    }
 
-        configs = warpConfigRepository.saveAll(configs);
-        for (final Warp warp : entity) {
-            for (final WarpConfig warpConfigAfterSave : configs) {
-                if (warpConfigAfterSave.getWarp().getId().equals(warp.getId())) {
-                    warp.setConfig(warpConfigAfterSave);
-                    break;
-                }
-            }
-        }
+    @Override
+    @Transactional
+    public List<WarpDTO> create(List<@Valid WarpDTO> request) {
+        final List<WarpDTO> res = super.create(request);
     }
 
     @Override
@@ -94,23 +79,4 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
         return warp;
     }
 
-    private List<WarpConfig> findExistingConfigs(@NonNull Iterable<Warp> warps) {
-        final List<Long> warpsIds = new ArrayList<>();
-
-        for (final Warp warp : warps) {
-            warpsIds.add(warp.getId());
-        }
-
-        return warpConfigRepository.findAllById(warpsIds);
-    }
-
-    private boolean isWarpConfigExists(@NonNull Warp warp, final Iterable<WarpConfig> warpConfigs) {
-        for (final WarpConfig warpConfig : warpConfigs) {
-            if (warpConfig.getWarp().getId().equals(warp.getId())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
