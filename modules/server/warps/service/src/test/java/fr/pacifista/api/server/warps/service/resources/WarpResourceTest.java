@@ -109,12 +109,28 @@ class WarpResourceTest {
         ).andExpect(status().isOk()).andReturn();
 
         final WarpDTO updatedWarpDTO = jsonHelper.fromJson(result.getResponse().getContentAsString(), WarpDTO.class);
-
         assertEquals(warpDTO.getName(), updatedWarpDTO.getName());
         assertEquals(warpDTO.getJsonFormattedDescription(), updatedWarpDTO.getJsonFormattedDescription());
         assertEquals(warpDTO.getWarpItem(), updatedWarpDTO.getWarpItem());
 
         assertTrue(warpConfigRepository.findByUuid(updatedWarpDTO.getConfig().getId().toString()).isPresent());
+
+        final WarpDTO patchRequest = new WarpDTO();
+        patchRequest.setId(updatedWarpDTO.getId());
+        patchRequest.setName("PATCH-" + UUID.randomUUID());
+        result = mockMvc.perform(
+                patch("/" + WarpClientImpl.PATH)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonHelper.toJson(patchRequest))
+        ).andExpect(status().isOk()).andReturn();
+        final WarpDTO patchedWarpDTO = jsonHelper.fromJson(result.getResponse().getContentAsString(), WarpDTO.class);
+        assertEquals(updatedWarpDTO.getId(), patchedWarpDTO.getId());
+        assertNotEquals(updatedWarpDTO.getName(), patchedWarpDTO.getName());
+        assertEquals(patchRequest.getName(), patchedWarpDTO.getName());
+        assertNotNull(patchedWarpDTO.getUpdatedAt());
+        assertNotNull(patchedWarpDTO.getConfig());
+        assertEquals(updatedWarpDTO.getConfig(), patchedWarpDTO.getConfig());
 
         mockMvc.perform(delete("/" + WarpClientImpl.PATH + "?id=" + updatedWarpDTO.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token"))

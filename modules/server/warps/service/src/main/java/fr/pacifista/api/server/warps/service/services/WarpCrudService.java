@@ -78,6 +78,29 @@ public class WarpCrudService extends ApiService<WarpDTO, Warp, WarpMapper, WarpR
     }
 
     @Override
+    @Transactional
+    public List<WarpDTO> update(List<WarpDTO> request) {
+        for (final WarpDTO warpDTO : request) {
+            warpDTO.setConfig(null);
+        }
+
+        final List<WarpDTO> res = super.update(request);
+        final List<WarpConfigDTO> warpConfigDTOs = this.getDTOSInWarpsIds(request.stream().map(WarpDTO::getId).toList());
+
+        WarpConfigDTO warpConfigDTO;
+        for (final WarpDTO warpDTO : res) {
+            warpConfigDTO = this.warpConfigCrudService.getDTOFromIdInList(warpConfigDTOs, warpDTO.getId());
+
+            if (warpConfigDTO != null) {
+                warpDTO.setConfig(
+                        warpConfigDTO
+                );
+            }
+        }
+        return res;
+    }
+
+    @Override
     public void beforeDeletingEntity(@NonNull Iterable<Warp> entity) {
         this.warpPortalRepository.deleteAllByWarpIn(entity);
         this.warpPlayerInteractionRepository.deleteAllByWarpIn(entity);
