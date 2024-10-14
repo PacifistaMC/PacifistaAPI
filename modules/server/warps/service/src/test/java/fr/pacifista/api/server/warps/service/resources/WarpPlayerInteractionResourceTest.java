@@ -134,12 +134,12 @@ class WarpPlayerInteractionResourceTest {
                         playerId,
                         WarpInteractionType.USE
                 )))
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isOk());
 
         this.use(warp, UUID.randomUUID());
         warp = this.getWarp(warp.getId());
         assertEquals(1, warp.getLikes());
-        assertEquals(2, warp.getUses());
+        assertEquals(3, warp.getUses());
 
         mockMvc.perform(delete("/" + WarpPlayerInteractionClientImpl.PATH + "?id=" + use.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
@@ -147,7 +147,7 @@ class WarpPlayerInteractionResourceTest {
 
         warp = this.getWarp(warp.getId());
         assertEquals(1, warp.getLikes());
-        assertEquals(1, warp.getUses());
+        assertEquals(2, warp.getUses());
     }
 
     @Test
