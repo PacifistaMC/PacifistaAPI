@@ -34,7 +34,7 @@ public class WarpPlayerInteractionCrudService extends ApiService<WarpPlayerInter
     public void afterMapperCall(@NonNull WarpPlayerInteractionDTO dto, @NonNull WarpPlayerInteraction entity) {
         entity.setWarp(warpCrudService.getWarp(dto.getWarp().getId()));
 
-        if (getRepository().findByWarpAndPlayerIdAndInteractionType(entity.getWarp(), entity.getPlayerId().toString(), entity.getInteractionType()).isPresent()) {
+        if (getRepository().findByWarpAndPlayerIdAndInteractionType(entity.getWarp(), entity.getPlayerId().toString(), WarpInteractionType.LIKE).isPresent()) {
             throw new ApiBadRequestException("L'interaction existe déjà.");
         }
     }
