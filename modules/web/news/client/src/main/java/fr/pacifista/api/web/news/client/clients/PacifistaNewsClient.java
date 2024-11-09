@@ -68,7 +68,7 @@ public interface PacifistaNewsClient {
      * @param newsId l'id de la news
      */
     @DeleteMapping
-    void deleteNews(@RequestParam String newsId);
+    void deleteNews(@RequestParam(value = "id") String newsId);
 
     /**
      * Récupère la liste des likes sur une news

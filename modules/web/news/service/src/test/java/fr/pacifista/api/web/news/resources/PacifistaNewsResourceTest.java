@@ -1,8 +1,11 @@
 package fr.pacifista.api.web.news.resources;
 
 import com.funixproductions.api.user.client.clients.UserAuthClient;
+import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.test.beans.JsonHelper;
+import com.google.gson.reflect.TypeToken;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
+import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsLikeDTO;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import org.junit.jupiter.api.Test;
@@ -16,11 +19,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -61,7 +64,7 @@ public class PacifistaNewsResourceTest {
         return newsDTO;
     }
 
-    private PacifistaNewsDTO sendCreateRequest(final PacifistaNewsDTO request) throws Exception {
+    private PacifistaNewsDTO sendCreateRequest(final PacifistaNewsDTO request, boolean needToFail) throws Exception {
         final MockMultipartFile newsImage = new MockMultipartFile(
                 "image",
                 "testfile-from-photoshop.jpeg",
@@ -85,6 +88,17 @@ public class PacifistaNewsResourceTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 jsonHelper.toJson(request).getBytes(StandardCharsets.UTF_8));
 
+        if (needToFail) {
+            this.mockMvc.perform(multipart(BASE_ROUTE)
+                            .file(newsImage)
+                            .file(metadata)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    )
+                    .andExpect(status().is4xxClientError());
+            return null;
+        }
+
         MvcResult result = this.mockMvc.perform(multipart(BASE_ROUTE)
                         .file(newsImage)
                         .file(metadata)
@@ -97,7 +111,18 @@ public class PacifistaNewsResourceTest {
         return jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
     }
 
-    private PacifistaNewsDTO updateRequest(final PacifistaNewsDTO request) throws Exception {
+    private PacifistaNewsDTO updateRequest(final PacifistaNewsDTO request, boolean needToFail) throws Exception {
+        if (needToFail) {
+            this.mockMvc.perform(put(BASE_ROUTE)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(this.jsonHelper.toJson(request))
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    )
+                    .andExpect(status().is4xxClientError());
+            return null;
+        }
+
         MvcResult result = this.mockMvc.perform(put(BASE_ROUTE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.jsonHelper.toJson(request))
@@ -110,7 +135,7 @@ public class PacifistaNewsResourceTest {
         return jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
     }
 
-    private PacifistaNewsDTO updateRequestWithImage(final PacifistaNewsDTO request) throws Exception {
+    private PacifistaNewsDTO updateRequestWithImage(final PacifistaNewsDTO request, boolean needToFail) throws Exception {
         final MockMultipartFile newsImage = new MockMultipartFile(
                 "image",
                 "testfile-from-photoshop2.jpeg",
@@ -134,16 +159,125 @@ public class PacifistaNewsResourceTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 jsonHelper.toJson(request).getBytes(StandardCharsets.UTF_8));
 
-        MvcResult result = this.mockMvc.perform(multipart(BASE_ROUTE + "/file")
-                        .file(newsImage)
-                        .file(metadata)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
-                )
-                .andExpect(status().isOk())
-                .andReturn();
+        final MvcResult result;
+
+        if (needToFail) {
+            this.mockMvc.perform(multipart(BASE_ROUTE + "/file")
+                            .file(newsImage)
+                            .file(metadata)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    )
+                    .andExpect(status().is4xxClientError());
+            return null;
+        } else {
+            result = this.mockMvc.perform(multipart(BASE_ROUTE + "/file")
+                            .file(newsImage)
+                            .file(metadata)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    )
+                    .andExpect(status().isOk())
+                    .andReturn();
+        }
 
         return jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
+    }
+
+    private void deleteNews(final UUID newsId, boolean needToFail) throws Exception {
+        if (needToFail) {
+            this.mockMvc.perform(get(BASE_ROUTE + "?id=" + newsId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    .accept(MediaType.APPLICATION_JSON)
+            ).andExpect(status().is4xxClientError());
+            return;
+        }
+
+        this.mockMvc.perform(get(BASE_ROUTE + "?id=" + newsId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+
+        this.mockMvc.perform(delete(BASE_ROUTE + "?id=" + newsId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound());
+    }
+
+    private PageDTO<PacifistaNewsDTO> getAll(final int page) throws Exception {
+        final Type gsonType = new TypeToken<PageDTO<PacifistaNewsDTO>>() {}.getType();
+
+        MvcResult result = this.mockMvc.perform(get(BASE_ROUTE)
+                .param("page", Integer.toString(page))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), gsonType);
+    }
+
+    private PacifistaNewsDTO getNewsById(final UUID newsId, boolean needToFail) throws Exception {
+        if (needToFail) {
+            this.mockMvc.perform(get(BASE_ROUTE + "/" + newsId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    .accept(MediaType.APPLICATION_JSON)
+            ).andExpect(status().is4xxClientError());
+            return null;
+        }
+
+        MvcResult result = this.mockMvc.perform(get(BASE_ROUTE + "/" + newsId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
+    }
+
+    private void testGetImageSuccess(final UUID imageId, boolean needToFail) throws Exception {
+        if (needToFail) {
+            this.mockMvc.perform(get(BASE_ROUTE + "/file/" + imageId)).andExpect(status().is4xxClientError());
+        } else {
+            this.mockMvc.perform(get(BASE_ROUTE + "/file/" + imageId)).andExpect(status().isOk());
+        }
+    }
+
+    private PageDTO<PacifistaNewsLikeDTO> getLikes(final UUID newsId, final int page) throws Exception {
+        final Type gsonType = new TypeToken<PageDTO<PacifistaNewsLikeDTO>>() {}.getType();
+
+        MvcResult result = this.mockMvc.perform(get(LIKES_ROUTE + "/" + newsId)
+                .param("page", Integer.toString(page))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), gsonType);
+    }
+
+    private PacifistaNewsLikeDTO addLikeOnNews(final UUID newsId, boolean needToFail) throws Exception {
+        if (needToFail) {
+            this.mockMvc.perform(post(LIKE_ROUTE + "/" + newsId)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                    ).andExpect(status().is4xxClientError());
+            return null;
+        }
+
+        MvcResult result = this.mockMvc.perform(post(LIKE_ROUTE + "/" + newsId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+        ).andExpect(status().isOk()).andReturn();
+
+        return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsLikeDTO.class);
+    }
+
+    private void removeLikeOnNews(final UUID newsId, boolean needToFail) throws Exception {
+        if (needToFail) {
+            this.mockMvc.perform(delete(LIKE_ROUTE + "/" + newsId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+            ).andExpect(status().is4xxClientError());
+        } else {
+            this.mockMvc.perform(delete(LIKE_ROUTE + "/" + newsId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+            ).andExpect(status().isOk());
+        }
     }
 
 }
