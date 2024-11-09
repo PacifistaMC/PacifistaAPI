@@ -49,7 +49,7 @@ public class PacifistaNewsDTO extends ApiDTO {
     /**
      * Image id pour l'image en taille résuite pour l'affichage par liste
      */
-    private UUID articleImageUrlLowRes;
+    private UUID articleImageIdLowRes;
 
     /**
      * Le contenu HTML de l'article
@@ -61,7 +61,7 @@ public class PacifistaNewsDTO extends ApiDTO {
      * Le contenu MarkDown de l'article pour la modification
      */
     @NotBlank(message = "Il manque le contenu en markdown de l'article")
-    private String bodyMarkDown;
+    private String bodyMarkdown;
 
     /**
      * Si la news est publiée ou pas
@@ -72,12 +72,12 @@ public class PacifistaNewsDTO extends ApiDTO {
     /**
      * Nombre de likes
      */
-    private Integer likesAmount;
+    private Integer likes;
 
     /**
      * Nombre de commentaires
      */
-    private Integer commentsAmount;
+    private Integer comments;
 
     /**
      * Nombre de vues

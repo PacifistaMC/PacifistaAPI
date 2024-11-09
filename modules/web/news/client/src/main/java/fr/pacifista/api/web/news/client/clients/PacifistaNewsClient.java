@@ -2,8 +2,8 @@ package fr.pacifista.api.web.news.client.clients;
 
 import com.funixproductions.core.crud.dtos.PageDTO;
 import fr.pacifista.api.core.client.clients.FeignTokenInterceptor;
-import fr.pacifista.api.web.news.client.dtos.like.PacifistaNewsLikeDTO;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
+import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsLikeDTO;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;

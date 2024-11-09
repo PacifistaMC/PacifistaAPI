@@ -1,4 +1,4 @@
-package fr.pacifista.api.web.news.client.dtos.like;
+package fr.pacifista.api.web.news.client.dtos.news;
 
 import fr.pacifista.api.web.news.client.dtos.PacifistaNewsUserDataDTO;
 import lombok.AllArgsConstructor;

@@ -4,9 +4,9 @@ import com.funixproductions.api.user.client.dtos.UserSession;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.services.ApiService;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
-import fr.pacifista.api.web.news.service.entities.PacifistaNews;
-import fr.pacifista.api.web.news.service.mappers.PacifistaNewsMapper;
-import fr.pacifista.api.web.news.service.repositories.PacifistaNewsRepository;
+import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
+import fr.pacifista.api.web.news.service.mappers.news.PacifistaNewsMapper;
+import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 

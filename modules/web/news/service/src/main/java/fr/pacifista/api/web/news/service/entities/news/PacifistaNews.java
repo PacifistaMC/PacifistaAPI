@@ -1,4 +1,4 @@
-package fr.pacifista.api.web.news.service.entities;
+package fr.pacifista.api.web.news.service.entities.news;
 
 import com.funixproductions.core.crud.entities.ApiEntity;
 import jakarta.persistence.Column;
@@ -26,9 +26,21 @@ public class PacifistaNews extends ApiEntity {
     @Column(name = "subtitle", nullable = false)
     private String subtitle;
 
-    @Column(name = "article_image_url", nullable = false, length = 2000)
-    private String articleImageUrl;
+    @Column(name = "body_html", nullable = false, length = 200000)
+    private String bodyHtml;
 
-    @Column(name = "body", nullable = false, length = 20000)
-    private String body;
+    @Column(name = "body_markdown", nullable = false, length = 200000)
+    private String bodyMarkdown;
+
+    @Column(name = "draft", nullable = false)
+    private Boolean draft;
+
+    @Column(name = "likes", nullable = false)
+    private Integer likes;
+
+    @Column(name = "comments", nullable = false)
+    private Integer comments;
+
+    @Column(name = "views", nullable = false)
+    private Integer views;
 }
