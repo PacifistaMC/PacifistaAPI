@@ -60,7 +60,7 @@ public interface PacifistaNewsClient {
      * @param image image
      * @return la news mise à jour
      */
-    @PutMapping("/file")
+    @PostMapping("/file")
     PacifistaNewsDTO updateNews(@RequestPart("dto") @Valid PacifistaNewsDTO newsDTO, @RequestPart("image") MultipartFile image);
 
     /**

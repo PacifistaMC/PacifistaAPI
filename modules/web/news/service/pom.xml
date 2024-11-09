@@ -26,6 +26,12 @@
         </dependency>
 
         <dependency>
+            <groupId>fr.pacifista.api.web.user.client</groupId>
+            <artifactId>pacifista-web-user-client</artifactId>
+            <version>${fr.pacifista.api.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>fr.pacifista.api.core.service</groupId>
             <artifactId>pacifista-core-service</artifactId>
             <version>${fr.pacifista.api.version}</version>
