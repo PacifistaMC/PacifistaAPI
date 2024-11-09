@@ -3,7 +3,7 @@ package fr.pacifista.api.web.news.service.services;
 import com.funixproductions.api.user.client.dtos.UserSession;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.services.ApiService;
-import fr.pacifista.api.web.news.client.dtos.PacifistaNewsDTO;
+import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import fr.pacifista.api.web.news.service.entities.PacifistaNews;
 import fr.pacifista.api.web.news.service.mappers.PacifistaNewsMapper;
 import fr.pacifista.api.web.news.service.repositories.PacifistaNewsRepository;

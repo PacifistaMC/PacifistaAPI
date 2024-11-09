@@ -3,7 +3,7 @@ package fr.pacifista.api.web.news.service.services;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.dtos.UserSession;
 import com.funixproductions.api.user.client.security.CurrentSession;
-import fr.pacifista.api.web.news.client.dtos.PacifistaNewsDTO;
+import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
