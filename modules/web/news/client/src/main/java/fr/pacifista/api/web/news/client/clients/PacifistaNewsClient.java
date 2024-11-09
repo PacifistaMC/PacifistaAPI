@@ -75,7 +75,7 @@ public interface PacifistaNewsClient {
      * @param newsId la news
      * @return la liste des likes
      */
-    @GetMapping("/like/{newsId}")
+    @GetMapping("/likes/{newsId}")
     PageDTO<PacifistaNewsLikeDTO> getLikesOnNews(
             @PathVariable("newsId") String newsId,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page

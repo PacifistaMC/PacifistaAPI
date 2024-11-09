@@ -2,7 +2,7 @@ package fr.pacifista.api.web.news.client.dtos.comments;
 
 import fr.pacifista.api.web.news.client.dtos.PacifistaNewsUserDataDTO;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,19 +26,18 @@ public class PacifistaNewsCommentDTO extends PacifistaNewsUserDataDTO {
     /**
      * Contenu du commentaire en texte plein, pas de HTML
      */
-    @NotBlank
+    @NotBlank(message = "Le commentaire ne doit pas être vide")
+    @Size(message = "Le commentaire doit contenir entre 2 et 1500 caractrères.", min = 2, max = 1500)
     private String content;
 
     /**
      * Nombre de likes sur ce commentaire
      */
-    @NotNull
     private Integer likes;
 
     /**
      * Réponses à ce commentaire
      */
-    @NotNull
     private List<PacifistaNewsCommentDTO> answers;
 
 }
