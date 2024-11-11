@@ -12,6 +12,7 @@ import fr.pacifista.api.web.news.service.repositories.PacifistaNewsUserDataRepos
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsRepository;
 import fr.pacifista.api.web.user.client.components.PacifistaWebUserLinkComponent;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,5 +50,10 @@ abstract class PacifistaNewsUserService<DTO extends PacifistaNewsUserDataDTO, EN
             entity.setMinecraftUsername(minecraftAccount.getMinecraftUsername());
             entity.setFunixProdUserId(userDTO.getId());
         }
+    }
+
+    @Transactional
+    protected void deleteAllByNews(final PacifistaNews news) {
+        this.getRepository().deleteAllByNews(news);
     }
 }

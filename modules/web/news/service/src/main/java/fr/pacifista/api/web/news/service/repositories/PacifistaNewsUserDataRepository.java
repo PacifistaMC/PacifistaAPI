@@ -12,4 +12,6 @@ public interface PacifistaNewsUserDataRepository<T extends PacifistaNewsUserData
 
     List<T> findAllByNews(PacifistaNews news);
 
+    void deleteAllByNews(PacifistaNews news);
+
 }

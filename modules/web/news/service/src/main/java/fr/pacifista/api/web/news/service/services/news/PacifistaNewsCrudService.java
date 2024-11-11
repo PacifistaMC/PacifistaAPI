@@ -19,13 +19,20 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
     private final CurrentSession actualSession;
     private final PacifistaWebUserLinkComponent userLinkComponent;
 
+    private final PacifistaNewsImageCrudService imageCrudService;
+    private final PacifistaNewsLikeCrudService likeCrudService;
+
     public PacifistaNewsCrudService(PacifistaNewsRepository repository,
                                     PacifistaNewsMapper mapper,
                                     CurrentSession actualSession,
-                                    PacifistaWebUserLinkComponent userLinkComponent) {
+                                    PacifistaWebUserLinkComponent userLinkComponent,
+                                    PacifistaNewsLikeCrudService likeCrudService,
+                                    PacifistaNewsImageCrudService imageCrudService) {
         super(repository, mapper);
         this.actualSession = actualSession;
         this.userLinkComponent = userLinkComponent;
+        this.imageCrudService = imageCrudService;
+        this.likeCrudService = likeCrudService;
     }
 
     @Override
@@ -48,4 +55,11 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
         }
     }
 
+    @Override
+    public void beforeDeletingEntity(@NonNull Iterable<PacifistaNews> entities) {
+        for (final PacifistaNews news : entities) {
+            this.imageCrudService.deleteAllByNews(news);
+            this.likeCrudService.deleteAllByNews(news);
+        }
+    }
 }

@@ -4,7 +4,6 @@ import com.funixproductions.api.user.client.dtos.UserSession;
 import com.funixproductions.api.user.client.enums.UserRole;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.dtos.PageDTO;
-import com.funixproductions.core.crud.resources.ApiResource;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.funixproductions.core.tools.network.IPUtils;
 import com.google.common.cache.Cache;
@@ -14,6 +13,8 @@ import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsLikeDTO;
 import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
 import fr.pacifista.api.web.news.service.services.news.PacifistaNewsCrudService;
+import fr.pacifista.api.web.news.service.services.news.PacifistaNewsImageCrudService;
+import fr.pacifista.api.web.news.service.services.news.PacifistaNewsLikeCrudService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/web/news")
-public class PacifistaNewsResource extends ApiResource<PacifistaNewsDTO, PacifistaNewsCrudService> implements PacifistaNewsClient {
+public class PacifistaNewsResource implements PacifistaNewsClient {
 
     private final IPUtils ipUtils;
     private final CurrentSession actualSession;
@@ -34,11 +35,19 @@ public class PacifistaNewsResource extends ApiResource<PacifistaNewsDTO, Pacifis
             .expireAfterWrite(24, TimeUnit.HOURS)
             .build();
 
-    public PacifistaNewsResource(PacifistaNewsCrudService pacifistaNewsService,
+    private final PacifistaNewsCrudService newsService;
+    private final PacifistaNewsImageCrudService imageService;
+    private final PacifistaNewsLikeCrudService likeService;
+
+    public PacifistaNewsResource(PacifistaNewsCrudService newsService,
+                                 PacifistaNewsImageCrudService imageService,
+                                 PacifistaNewsLikeCrudService likeService,
                                  IPUtils ipUtils,
                                  CurrentSession actualSession,
                                  HttpServletRequest servletRequest) {
-        super(pacifistaNewsService);
+        this.newsService = newsService;
+        this.imageService = imageService;
+        this.likeService = likeService;
         this.ipUtils = ipUtils;
         this.servletRequest = servletRequest;
         this.actualSession = actualSession;
@@ -50,7 +59,7 @@ public class PacifistaNewsResource extends ApiResource<PacifistaNewsDTO, Pacifis
 
     @Override
     public PacifistaNewsDTO getNewsById(String newsId) {
-        final PacifistaNewsDTO pacifistaNewsDTO = super.getService().findById(newsId);
+        final PacifistaNewsDTO pacifistaNewsDTO = this.newsService.findById(newsId);
 
         if (Boolean.TRUE.equals(pacifistaNewsDTO.getDraft()) && !this.canActualUserSeeDrafts()) {
             throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
@@ -59,9 +68,9 @@ public class PacifistaNewsResource extends ApiResource<PacifistaNewsDTO, Pacifis
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
 
         if (!Boolean.TRUE.equals(viewIpCount.getIfPresent(ip))) {
-            PacifistaNews news = super.getService().getRepository().findByUuid(newsId).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
+            PacifistaNews news = this.newsService.getRepository().findByUuid(newsId).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
             news.setViews(news.getViews() + 1);
-            news = super.getService().getRepository().save(news);
+            news = this.newsService.getRepository().save(news);
 
             pacifistaNewsDTO.setViews(news.getViews());
             this.viewIpCount.put(ip, true);
@@ -72,6 +81,7 @@ public class PacifistaNewsResource extends ApiResource<PacifistaNewsDTO, Pacifis
 
     @Override
     public Resource getImageNews(String imageId) {
+        return this.imageService.loadAsResource(imageId);
     }
 
     @Override
@@ -88,6 +98,7 @@ public class PacifistaNewsResource extends ApiResource<PacifistaNewsDTO, Pacifis
 
     @Override
     public void deleteNews(String newsId) {
+        this.newsService.delete(newsId);
     }
 
     @Override
