@@ -31,6 +31,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -276,8 +277,8 @@ class PacifistaNewsResourceTest {
         news = this.getAll(0, false);
         assertEquals(0, news.getContent().size());
 
-        this.getNewsById(createdNews.getId(), true, false);
-        final PacifistaNewsDTO gotNews = this.getNewsById(createdNews.getId(), false, true);
+        this.getNewsById(createdNews.getId(), true, false, true);
+        final PacifistaNewsDTO gotNews = this.getNewsById(createdNews.getId(), false, true, true);
         assertNotNull(gotNews);
         assertEquals(createdNews.getId(), gotNews.getId());
 
@@ -288,11 +289,11 @@ class PacifistaNewsResourceTest {
         when(authClient.current(anyString())).thenReturn(mockUser);
         news = this.getAll(0, true);
         assertEquals(0, news.getContent().size());
-        this.getNewsById(createdNews.getId(), true, true);
+        this.getNewsById(createdNews.getId(), true, true, true);
 
         mockUser.setRole(UserRole.ADMIN);
         when(authClient.current(anyString())).thenReturn(mockUser);
-        this.getNewsById(createdNews.getId(), false, true);
+        this.getNewsById(createdNews.getId(), false, true, true);
 
         createdNews.setDraft(false);
         this.updateRequest(createdNews, false);
@@ -303,8 +304,8 @@ class PacifistaNewsResourceTest {
         news = this.getAll(0, true);
         assertEquals(1, news.getContent().size());
 
-        this.getNewsById(createdNews.getId(), false, true);
-        this.getNewsById(createdNews.getId(), false, false);
+        this.getNewsById(createdNews.getId(), false, true, true);
+        this.getNewsById(createdNews.getId(), false, false, true);
     }
 
     @Test
@@ -401,6 +402,44 @@ class PacifistaNewsResourceTest {
 
         likes = this.getLikes(createdNews.getId(), 0, false, false);
         assertEquals(2, likes.getContent().size());
+    }
+
+    @Test
+    void testAddViews() throws Exception {
+        UserDTO mockUser = UserDTO.generateFakeDataForTestingPurposes();
+        mockUser.setRole(UserRole.ADMIN);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+        final PacifistaNewsDTO createNewsRequest = this.createNewsDTORequest();
+        createNewsRequest.setDraft(false);
+
+        PacifistaWebUserLinkDTO mockUserMinecraftLink = new PacifistaWebUserLinkDTO(mockUser.getId(), UUID.randomUUID());
+        mockUserMinecraftLink.setMinecraftUsername("mockUser" + UUID.randomUUID());
+        mockUserMinecraftLink.setLinked(true);
+        mockUserMinecraftLink.setCreatedAt(new Date());
+        mockUserMinecraftLink.setId(UUID.randomUUID());
+
+        when(pacifistaLinkClient.getAll(anyString(), anyString(), anyString(), anyString())).thenReturn(new PageDTO<>(
+                List.of(mockUserMinecraftLink), 1, 0, 1L, 1
+        ));
+
+        final PacifistaNewsDTO createdNews = this.sendCreateRequest(createNewsRequest, false);
+        assertNotNull(createdNews);
+
+        PacifistaNewsDTO news = this.getNewsById(createdNews.getId(), false, false, true);
+        assertNotNull(news);
+        assertEquals(1, news.getViews());
+
+        news = this.getNewsById(createdNews.getId(), false, false, true);
+        assertNotNull(news);
+        assertEquals(2, news.getViews());
+
+        news = this.getNewsById(createdNews.getId(), false, false, false);
+        assertNotNull(news);
+        assertEquals(3, news.getViews());
+
+        news = this.getNewsById(createdNews.getId(), false, false, false);
+        assertNotNull(news);
+        assertEquals(3, news.getViews());
     }
 
     private PacifistaNewsDTO createNewsDTORequest() {
@@ -575,15 +614,24 @@ class PacifistaNewsResourceTest {
         return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), gsonType);
     }
 
-    private PacifistaNewsDTO getNewsById(final UUID newsId, boolean needToFail, boolean authed) throws Exception {
+    private PacifistaNewsDTO getNewsById(final UUID newsId, boolean needToFail, boolean authed, boolean randomIp) throws Exception {
+        final String ip;
+        if (randomIp) {
+            ip = this.generateRandomIpAddress();
+        } else {
+            ip = "10.0.0.1";
+        }
+
         if (needToFail) {
             if (authed) {
                 this.mockMvc.perform(get(BASE_ROUTE + "/" + newsId)
+                        .remoteAddress(ip)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().is4xxClientError());
             } else {
                 this.mockMvc.perform(get(BASE_ROUTE + "/" + newsId)
+                        .remoteAddress(ip)
                         .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().is4xxClientError());
             }
@@ -594,11 +642,13 @@ class PacifistaNewsResourceTest {
 
         if (authed) {
             result = this.mockMvc.perform(get(BASE_ROUTE + "/" + newsId)
+                    .remoteAddress(ip)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
                     .accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isOk()).andReturn();
         } else {
             result = this.mockMvc.perform(get(BASE_ROUTE + "/" + newsId)
+                    .remoteAddress(ip)
                     .accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isOk()).andReturn();
         }
@@ -674,6 +724,18 @@ class PacifistaNewsResourceTest {
                     .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
             ).andExpect(status().isOk());
         }
+    }
+
+    private String generateRandomIpAddress() {
+        final Random random = new Random();
+
+        return String.format(
+                "%d.%d.%d.%d",
+                random.nextInt(255),
+                random.nextInt(255),
+                random.nextInt(255),
+                random.nextInt(255)
+        );
     }
 
 }
