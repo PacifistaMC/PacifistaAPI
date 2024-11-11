@@ -15,7 +15,6 @@ public class PacifistaNewsDTO extends ApiDTO {
     /**
      * Nom d'utilisateur Minecraft du rédacteur d'origine
      */
-    @NotBlank(message = "Le pseudo Minecraft d'origine est demandé")
     private String originalWriter;
 
     /**
