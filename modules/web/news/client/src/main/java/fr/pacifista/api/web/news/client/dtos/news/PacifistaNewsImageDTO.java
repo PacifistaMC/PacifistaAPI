@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,7 @@ public class PacifistaNewsImageDTO extends ApiStorageFileDTO {
      * Image rattachée à la news
      */
     @NotNull
-    private PacifistaNewsDTO news;
+    private UUID newsUuid;
 
     /**
      * Image en basse résolution pour l'affichage par liste

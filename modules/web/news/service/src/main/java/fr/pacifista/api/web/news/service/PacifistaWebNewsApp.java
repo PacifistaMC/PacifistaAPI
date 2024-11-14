@@ -4,7 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableFeignClients(basePackages = {"com.funixproductions"})
+@EnableFeignClients(basePackages = {
+        "com.funixproductions",
+        "fr.pacifista.api.web.user.client.clients"
+})
 @SpringBootApplication(scanBasePackages = {
         "com.funixproductions",
         "fr.pacifista"

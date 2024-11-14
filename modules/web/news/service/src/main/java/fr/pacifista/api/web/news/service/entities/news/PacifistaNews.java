@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Entity(name = "pacifista_news")
@@ -26,6 +28,12 @@ public class PacifistaNews extends ApiEntity {
     @Column(name = "subtitle", nullable = false)
     private String subtitle;
 
+    @Column(name = "article_image_uuid")
+    private String articleImageId;
+
+    @Column(name = "article_image_low_res_uuid")
+    private String articleImageIdLowRes;
+
     @Column(name = "body_html", nullable = false, length = 200000)
     private String bodyHtml;
 
@@ -43,4 +51,36 @@ public class PacifistaNews extends ApiEntity {
 
     @Column(name = "views", nullable = false)
     private Integer views;
+
+    public UUID getArticleImageId() {
+        if (articleImageId == null) {
+            return null;
+        } else {
+            return UUID.fromString(articleImageId);
+        }
+    }
+
+    public UUID getArticleImageIdLowRes() {
+        if (articleImageIdLowRes == null) {
+            return null;
+        } else {
+            return UUID.fromString(articleImageIdLowRes);
+        }
+    }
+
+    public void setArticleImageId(UUID articleImageId) {
+        if (articleImageId == null) {
+            this.articleImageId = null;
+        } else {
+            this.articleImageId = articleImageId.toString();
+        }
+    }
+
+    public void setArticleImageIdLowRes(UUID articleImageIdLowRes) {
+        if (articleImageIdLowRes == null) {
+            this.articleImageIdLowRes = null;
+        } else {
+            this.articleImageIdLowRes = articleImageIdLowRes.toString();
+        }
+    }
 }

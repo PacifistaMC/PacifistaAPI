@@ -22,6 +22,7 @@ import fr.pacifista.api.web.news.service.services.news.PacifistaNewsCrudService;
 import fr.pacifista.api.web.news.service.services.news.PacifistaNewsImageCrudService;
 import fr.pacifista.api.web.news.service.services.news.PacifistaNewsLikeCrudService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.core.io.Resource;
@@ -31,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -108,19 +108,22 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     @Override
+    @Transactional
     public PacifistaNewsDTO createNews(PacifistaNewsDTO newsDTO, MultipartFile image) {
-        final PacifistaNewsDTO createdNews = this.newsService.create(newsDTO);
+        PacifistaNewsDTO createdNews = this.newsService.create(newsDTO);
 
         try {
-            final PacifistaNewsImageDTO imageDTO = this.imageService.store(new PacifistaNewsImageDTO(createdNews, false), image);
+            final PacifistaNewsImageDTO imageDTO = this.imageService.store(new PacifistaNewsImageDTO(createdNews.getId(), false), image);
             final PacifistaNewsImageDTO imageLowResDTO = this.imageService.store(
-                    new PacifistaNewsImageDTO(createdNews, true),
+                    new PacifistaNewsImageDTO(createdNews.getId(), true),
                     this.createLowerResolutionFile(image)
             );
 
             createdNews.setArticleImageId(imageDTO.getId());
             createdNews.setArticleImageIdLowRes(imageLowResDTO.getId());
-            return this.newsService.updatePut(createdNews);
+            createdNews = this.newsService.updatePut(createdNews);
+
+            return this.removeUpdateDataWhenCreateRequest(createdNews);
         } catch (Exception e) {
             this.newsService.delete(createdNews.getId().toString());
             throw e;
@@ -133,14 +136,15 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     @Override
+    @Transactional
     public PacifistaNewsDTO updateNews(PacifistaNewsDTO newsDTO, MultipartFile image) {
         final PacifistaNewsDTO oldNews = this.newsService.findById(newsDTO.getId().toString());
         final PacifistaNewsDTO updatedNews = this.newsService.updatePut(newsDTO);
 
         try {
-            final PacifistaNewsImageDTO imageDTO = this.imageService.store(new PacifistaNewsImageDTO(updatedNews, false), image);
+            final PacifistaNewsImageDTO imageDTO = this.imageService.store(new PacifistaNewsImageDTO(updatedNews.getId(), false), image);
             final PacifistaNewsImageDTO imageLowResDTO = this.imageService.store(
-                    new PacifistaNewsImageDTO(updatedNews, true),
+                    new PacifistaNewsImageDTO(updatedNews.getId(), true),
                     this.createLowerResolutionFile(image)
             );
 
@@ -164,6 +168,7 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     @Override
+    @Transactional
     public void deleteNews(String newsId) {
         this.newsService.delete(newsId);
     }
@@ -189,10 +194,15 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     @Override
+    @Transactional
     public PacifistaNewsLikeDTO likeNews(String newsId) {
         final UserDTO currentUser = this.actualSession.getCurrentUser();
         if (currentUser == null) {
             throw new ApiUnauthorizedException("Vous devez être connecté pour aimer une news.");
+        }
+        final PacifistaNewsDTO news = this.newsService.findById(newsId);
+        if (!this.canActualUserSeeDrafts() && Boolean.TRUE.equals(news.getDraft())) {
+            throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
         }
 
         final PacifistaNewsLikeDTO likedNews = this.getLikeForUserAndNews(currentUser, newsId);
@@ -200,8 +210,6 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
         if (likedNews != null) {
             throw new ApiBadRequestException("Vous avez déjà aimé cette news.");
         } else {
-            final PacifistaNewsDTO news = new PacifistaNewsDTO();
-            news.setId(UUID.fromString(newsId));
             final PacifistaNewsLikeDTO like = new PacifistaNewsLikeDTO();
             like.setNews(news);
 
@@ -210,10 +218,15 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     @Override
+    @Transactional
     public void removeLikeOnNews(String newsId) {
         final UserDTO currentUser = this.actualSession.getCurrentUser();
         if (currentUser == null) {
             throw new ApiUnauthorizedException("Vous devez être connecté pour aimer une news.");
+        }
+        final PacifistaNewsDTO news = this.newsService.findById(newsId);
+        if (!this.canActualUserSeeDrafts() && Boolean.TRUE.equals(news.getDraft())) {
+            throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
         }
 
         final PacifistaNewsLikeDTO likedNews = this.getLikeForUserAndNews(currentUser, newsId);
@@ -258,18 +271,18 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     private MultipartFile createLowerResolutionFile(MultipartFile original) {
-        final byte[] bytes = ApiStorageService.createThumbnailFromImage(original, 200);
+        final byte[] bytes = ApiStorageService.createThumbnailFromImage(original, 350);
 
         return new MultipartFile() {
             @NotNull
             @Override
             public String getName() {
-                return original.getName();
+                return "low-ver" + original.getName();
             }
 
             @Override
             public String getOriginalFilename() {
-                return original.getOriginalFilename();
+                return "low-ver" + original.getOriginalFilename();
             }
 
             @Override
@@ -306,6 +319,16 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
                 }
             }
         };
+    }
+
+    private PacifistaNewsDTO removeUpdateDataWhenCreateRequest(final PacifistaNewsDTO createdDto) {
+        final PacifistaNews news = this.newsService.getRepository().findByUuid(createdDto.getId().toString()).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
+        news.setUpdateWriter(null);
+        news.setUpdatedAt(null);
+
+        return this.newsService.getMapper().toDto(
+                this.newsService.getRepository().save(news)
+        );
     }
 
 }

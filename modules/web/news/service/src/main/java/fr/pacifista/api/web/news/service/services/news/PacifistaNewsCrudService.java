@@ -45,12 +45,14 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
 
         for (final PacifistaNews e : entity) {
             if (e.getId() == null) {
+                this.checkIfNewsAlreadyExistsWithThatName(e.getName());
+
                 e.setLikes(0);
                 e.setComments(0);
                 e.setViews(0);
                 e.setOriginalWriter(minecraftAccount.getMinecraftUsername());
             } else {
-                e.setUpdateWriter(minecraftAccount.getMinecraftUuid());
+                e.setUpdateWriter(minecraftAccount.getMinecraftUsername());
             }
         }
     }
@@ -60,6 +62,12 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
         for (final PacifistaNews news : entities) {
             this.imageCrudService.deleteAllByNews(news);
             this.likeCrudService.deleteAllByNews(news);
+        }
+    }
+
+    private void checkIfNewsAlreadyExistsWithThatName(final String name) {
+        if (super.getRepository().findByNameIgnoreCase(name).isPresent()) {
+            throw new ApiBadRequestException(String.format("Un article avec le nom %s existe déjà.", name));
         }
     }
 }

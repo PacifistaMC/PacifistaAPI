@@ -8,6 +8,7 @@ import com.funixproductions.core.test.beans.JsonHelper;
 import com.google.gson.reflect.TypeToken;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsLikeDTO;
+import fr.pacifista.api.web.news.service.PacifistaWebNewsApp;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentLikeRepository;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentRepository;
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsImageRepository;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = PacifistaWebNewsApp.class)
 @AutoConfigureMockMvc
 class PacifistaNewsResourceTest {
 
@@ -175,6 +176,10 @@ class PacifistaNewsResourceTest {
         createNewsRequest2.setName(createdNews.getName());
 
         this.sendCreateRequest(createNewsRequest2, true);
+        createNewsRequest2.setName(createNewsRequest2.getName().toUpperCase());
+        this.sendCreateRequest(createNewsRequest2, true);
+        createNewsRequest2.setName(createNewsRequest2.getName().toLowerCase());
+        this.sendCreateRequest(createNewsRequest2, true);
     }
 
     @Test
@@ -185,7 +190,7 @@ class PacifistaNewsResourceTest {
         final PacifistaNewsDTO createNewsRequest = this.createNewsDTORequest();
 
         final PacifistaWebUserLinkDTO mockUserMinecraftLink = new PacifistaWebUserLinkDTO(mockUser.getId(), UUID.randomUUID());
-        mockUserMinecraftLink.setMinecraftUsername("mockUser" + UUID.randomUUID());
+        mockUserMinecraftLink.setMinecraftUsername("mockUsername" + UUID.randomUUID());
         mockUserMinecraftLink.setLinked(true);
         mockUserMinecraftLink.setCreatedAt(new Date());
         mockUserMinecraftLink.setId(UUID.randomUUID());
@@ -197,6 +202,7 @@ class PacifistaNewsResourceTest {
         final PacifistaNewsDTO createdNews = this.sendCreateRequest(createNewsRequest, false);
         assertNotNull(createdNews);
         createdNews.setTitle(createdNews.getTitle() + UUID.randomUUID() + "oh !");
+        assertNull(createdNews.getUpdateWriter());
 
         final PacifistaNewsDTO updatedNews = this.updateRequest(createdNews, false);
         assertNotNull(updatedNews);
@@ -209,7 +215,7 @@ class PacifistaNewsResourceTest {
         this.getImageRequest(updatedNews.getArticleImageIdLowRes(), false);
 
         updatedNews.setTitle(createdNews.getTitle() + UUID.randomUUID() + "oh mais avec image !");
-        final PacifistaNewsDTO updatedNewsWithImageChange = this.updateRequestWithImage(createdNews, false);
+        final PacifistaNewsDTO updatedNewsWithImageChange = this.updateRequestWithImage(updatedNews, false);
         assertNotNull(updatedNewsWithImageChange);
         assertEquals(updatedNews.getTitle(), updatedNewsWithImageChange.getTitle());
         assertEquals(updatedNewsWithImageChange.getUpdateWriter(), mockUserMinecraftLink.getMinecraftUsername());
@@ -371,7 +377,7 @@ class PacifistaNewsResourceTest {
         mockUser.setRole(UserRole.USER);
         when(authClient.current(anyString())).thenReturn(mockUser);
 
-        this.addLikeOnNews(createdNews.getId(), true);
+        this.addLikeOnNews(createdNews.getId(), false);
         this.removeLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(0, likes.getContent().size());
@@ -559,14 +565,14 @@ class PacifistaNewsResourceTest {
 
     private void deleteNews(final UUID newsId, boolean needToFail) throws Exception {
         if (needToFail) {
-            this.mockMvc.perform(get(BASE_ROUTE + "?id=" + newsId)
+            this.mockMvc.perform(delete(BASE_ROUTE + "?id=" + newsId)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
                     .accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().is4xxClientError());
             return;
         }
 
-        this.mockMvc.perform(get(BASE_ROUTE + "?id=" + newsId)
+        this.mockMvc.perform(delete(BASE_ROUTE + "?id=" + newsId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
@@ -661,6 +667,8 @@ class PacifistaNewsResourceTest {
                         .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().is4xxClientError());
             }
+
+            return null;
         }
 
         final Type gsonType = new TypeToken<PageDTO<PacifistaNewsLikeDTO>>() {}.getType();
