@@ -22,9 +22,9 @@ public class PacifistaNewsBanDTO extends ApiDTO {
     private String reason;
 
     /**
-     * le pseudo minecraft de la personne bannie
+     * Le pseudo minecraft de la personne bannie
      */
-    @NotBlank(message = "Le pseudo Minecraft de l'utilisateur banni est manquant")
+    @NotBlank(message = "Le pseudo minecraft de l'utilisateur banni est manquant")
     private String minecraftUserNameBanned;
 
     /**
@@ -36,13 +36,25 @@ public class PacifistaNewsBanDTO extends ApiDTO {
     /**
      * Pseudo Minecraft de la personne qui sanctionne le joueur
      */
-    @NotNull(message = "Le pseudo du staff qui met le man est manquant")
     private String staffMinecraftUserName;
 
     /**
      * UUID funix prod account
      */
-    @NotNull(message = "UUID du staff manquant")
     private UUID staffFunixProdUserId;
+
+    public PacifistaNewsBanDTO(final UUID funixProdUserIdBanned,
+                               final String minecraftUserNameBanned) {
+        this.funixProdUserIdBanned = funixProdUserIdBanned;
+        this.minecraftUserNameBanned = minecraftUserNameBanned;
+    }
+
+    public PacifistaNewsBanDTO(final UUID funixProdUserIdBanned,
+                               final String minecraftUserNameBanned,
+                               final String reason) {
+        this.funixProdUserIdBanned = funixProdUserIdBanned;
+        this.minecraftUserNameBanned = minecraftUserNameBanned;
+        this.reason = reason;
+    }
 
 }

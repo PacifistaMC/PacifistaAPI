@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -48,6 +49,14 @@ public class PacifistaWebUserLinkComponent {
         } catch (NoSuchElementException e) {
             throw new ApiBadRequestException("Vous n'avez pas lié votre compte Minecraft.");
         }
+    }
+
+    @NonNull
+    public PacifistaWebUserLinkDTO getLink(final @Nullable UUID userId) throws ApiException {
+        final UserDTO userDTO = new UserDTO();
+
+        userDTO.setId(userId);
+        return this.getLink(userDTO);
     }
 
 }

@@ -20,6 +20,10 @@ public class WebSecurity extends ApiWebSecurity {
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/web/**").permitAll()
                 .requestMatchers("/web/news/like/**").authenticated()
+                .requestMatchers("/web/news/bans/**").hasAuthority(UserRole.PACIFISTA_MODERATOR.getRole())
+                .requestMatchers(HttpMethod.DELETE, "/web/news/comments/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/web/news/comments/**").authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/web/news/comments/**").authenticated()
                 .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
 }

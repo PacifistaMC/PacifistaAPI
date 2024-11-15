@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PacifistaNewsBanRepository extends ApiRepository<PacifistaNewsBan> {
+    boolean existsByMinecraftUserNameBannedIgnoreCaseOrFunixProdUserIdBanned(String minecraftUserNameBanned, String funixProdUserIdBanned);
 }
