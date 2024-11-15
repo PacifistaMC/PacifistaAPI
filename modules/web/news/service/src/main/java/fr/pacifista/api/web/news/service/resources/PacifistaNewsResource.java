@@ -210,10 +210,13 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
         if (likedNews != null) {
             throw new ApiBadRequestException("Vous avez déjà aimé cette news.");
         } else {
-            final PacifistaNewsLikeDTO like = new PacifistaNewsLikeDTO();
+            PacifistaNewsLikeDTO like = new PacifistaNewsLikeDTO();
             like.setNews(news);
+            like = this.likeService.create(like);
 
-            return this.likeService.create(like);
+            news.setLikes(news.getLikes() + 1);
+            this.newsService.updatePut(news);
+            return like;
         }
     }
 
@@ -233,6 +236,12 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
         if (likedNews != null) {
             this.likeService.delete(likedNews.getId().toString());
+
+            news.setLikes(news.getLikes() - 1);
+            if (news.getLikes() < 0) {
+                news.setLikes(0);
+            }
+            this.newsService.updatePut(news);
         } else {
             throw new ApiBadRequestException("Vous n'avez pas encore aimé cette news.");
         }

@@ -346,18 +346,28 @@ class PacifistaNewsResourceTest {
         this.addLikeOnNews(createdNews.getId(), false);
         PageDTO<PacifistaNewsLikeDTO> likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(1, likes.getContent().size());
+        PacifistaNewsDTO tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(1, tmp.getLikes());
 
         this.addLikeOnNews(createdNews.getId(), true);
         this.removeLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(0, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(0, tmp.getLikes());
+
         this.removeLikeOnNews(createdNews.getId(), true);
         this.addLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(1, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(1, tmp.getLikes());
+
         this.removeLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(0, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(0, tmp.getLikes());
 
         this.getLikes(UUID.randomUUID(), 0, true, true);
         this.getLikes(UUID.randomUUID(), 0, true, false);
@@ -381,13 +391,22 @@ class PacifistaNewsResourceTest {
         this.removeLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(0, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(0, tmp.getLikes());
+
         this.removeLikeOnNews(createdNews.getId(), true);
         this.addLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(1, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(1, tmp.getLikes());
+
         this.removeLikeOnNews(createdNews.getId(), false);
         likes = this.getLikes(createdNews.getId(), 0, false, true);
         assertEquals(0, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(0, tmp.getLikes());
+
 
         this.addLikeOnNews(createdNews.getId(), false);
 
@@ -409,6 +428,8 @@ class PacifistaNewsResourceTest {
 
         likes = this.getLikes(createdNews.getId(), 0, false, false);
         assertEquals(2, likes.getContent().size());
+        tmp = this.getNewsById(createdNews.getId(), false, true, true);
+        assertEquals(2, tmp.getLikes());
     }
 
     @Test
@@ -717,7 +738,7 @@ class PacifistaNewsResourceTest {
         }
     }
 
-    private String generateRandomIpAddress() {
+    protected static String generateRandomIpAddress() {
         final Random random = new Random();
 
         return String.format(

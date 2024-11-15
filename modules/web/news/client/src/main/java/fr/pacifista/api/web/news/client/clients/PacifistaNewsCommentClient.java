@@ -24,8 +24,14 @@ public interface PacifistaNewsCommentClient {
             @RequestParam(value = "page", defaultValue = "0", required = false) int page
     );
 
+    @GetMapping("replies")
+    PageDTO<PacifistaNewsCommentDTO> getCommentsRepliesOnNews(
+            @RequestParam(value = "commentId") String commentId,
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page
+    );
+
     @GetMapping("user")
-    PageDTO<PacifistaNewsCommentDTO> getCommentByUser(
+    PageDTO<PacifistaNewsCommentDTO> getCommentsByUser(
             @RequestParam(value = "minecraftUsername") String minecraftUsername,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page
     );

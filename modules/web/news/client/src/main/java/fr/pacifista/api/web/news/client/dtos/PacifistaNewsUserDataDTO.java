@@ -17,7 +17,7 @@ import java.util.UUID;
 public abstract class PacifistaNewsUserDataDTO extends ApiDTO {
 
     /**
-     * La news auquel ce commentaire répond
+     * La news à laquelle ce commentaire répond
      */
     @NotNull
     private PacifistaNewsDTO news;

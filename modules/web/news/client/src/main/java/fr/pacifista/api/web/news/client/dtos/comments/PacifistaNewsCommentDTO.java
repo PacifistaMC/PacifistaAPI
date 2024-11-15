@@ -1,6 +1,7 @@
 package fr.pacifista.api.web.news.client.dtos.comments;
 
 import fr.pacifista.api.web.news.client.dtos.PacifistaNewsUserDataDTO;
+import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -8,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -35,9 +34,17 @@ public class PacifistaNewsCommentDTO extends PacifistaNewsUserDataDTO {
      */
     private Integer likes;
 
-    /**
-     * Réponses à ce commentaire
-     */
-    private List<PacifistaNewsCommentDTO> answers;
+    public PacifistaNewsCommentDTO(final String content, final PacifistaNewsDTO newsDTO) {
+        this.content = content;
+        super.setNews(newsDTO);
+    }
+
+    public PacifistaNewsCommentDTO(final @Nullable PacifistaNewsCommentDTO parent,
+                                   final String content,
+                                   final PacifistaNewsDTO newsDTO) {
+        this.parent = parent;
+        this.content = content;
+        super.setNews(newsDTO);
+    }
 
 }
