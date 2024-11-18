@@ -226,6 +226,121 @@ class PacifistaNewsCommentResourceTest {
         assertEquals(linkDTO.getMinecraftUsername(), replyComment.getMinecraftUsername());
     }
 
+    @Test
+    void testCreateCommentOnNewsWithNoAccessOnDraft() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testCreateCommentWhenUserIsBannedShouldFail() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testLikeCommentSuccess() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testLikeCommentFailWhenNewsIsDraftAndDoesNotHaveAccess() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testLikeTwiceCommentShouldFail() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testRemoveLikeSuccess() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testRemoveLikeFailWhenNoLike() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testUpdateComment() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testUpdateCommentFailWhenNotOwner() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testUpdateCommentWhenNewsIsDraftAndDoesNotHaveAccessShouldFail() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testUpdateCommentFailWhenNoComment() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testUpdateCommentFailWhenCommentTooShort() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testCreateCommentFailWithCommentTooShort() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testDeleteSelfComment() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testDeleteOtherCommentFailWhenNoStaff() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testDeleteOtherCommentWhenStaff() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testGetLikes() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testGetLikesShouldFailOnDraftNews() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testGetCommentsAndAssertThatWeOnlyHaveParents() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testGetReplies() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testGetCommentsByUser() throws Exception {
+        //TODO
+    }
+
+    @Test
+    void testGetCommentsOnNews() throws Exception {
+
+    }
+
+    @Test
+    void testGetCommentsOnNewsShouldFailOnDraftNewsWhenNoAccess() throws Exception {
+
+    }
+
     private void setUserMock(final UserDTO userDTO) {
         when(authClient.current(anyString())).thenReturn(userDTO);
     }
