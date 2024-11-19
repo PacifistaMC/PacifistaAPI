@@ -1,6 +1,7 @@
 package fr.pacifista.api.web.news.service.services.news;
 
 import com.funixproductions.api.user.client.dtos.UserSession;
+import com.funixproductions.api.user.client.enums.UserRole;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.services.ApiService;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
@@ -72,6 +73,18 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
             this.likeCrudService.deleteAllByNews(news);
             this.commentCrudService.deleteAllByNews(news);
             this.commentLikeCrudService.deleteAllByNews(news);
+        }
+    }
+
+    public boolean isCurrentUserStaff() {
+        final UserSession currentSession = this.actualSession.getUserSession();
+
+        if (currentSession == null || currentSession.getUserDTO() == null) {
+            return false;
+        } else {
+            return currentSession.getUserDTO().getRole() == UserRole.ADMIN ||
+                    currentSession.getUserDTO().getRole() == UserRole.PACIFISTA_ADMIN ||
+                    currentSession.getUserDTO().getRole() == UserRole.PACIFISTA_MODERATOR;
         }
     }
 

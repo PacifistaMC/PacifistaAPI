@@ -1,12 +1,11 @@
 package fr.pacifista.api.web.news.service.resources;
 
 import com.funixproductions.api.user.client.dtos.UserDTO;
-import com.funixproductions.api.user.client.dtos.UserSession;
-import com.funixproductions.api.user.client.enums.UserRole;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.crud.enums.SearchOperation;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
+import com.funixproductions.core.exceptions.ApiForbiddenException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
 import com.funixproductions.core.files.services.ApiStorageService;
@@ -54,7 +53,7 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
     @Override
     public PageDTO<PacifistaNewsDTO> getAll(int page) {
-        final String search = this.canActualUserSeeDrafts() ? "" : String.format(
+        final String search = this.newsService.isCurrentUserStaff() ? "" : String.format(
                 "draft:%s:%s",
                 SearchOperation.IS_FALSE.getOperation(),
                 "false"
@@ -72,8 +71,8 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     public PacifistaNewsDTO getNewsById(String newsId) {
         final PacifistaNewsDTO pacifistaNewsDTO = this.newsService.findById(newsId);
 
-        if (Boolean.TRUE.equals(pacifistaNewsDTO.getDraft()) && !this.canActualUserSeeDrafts()) {
-            throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
+        if (Boolean.TRUE.equals(pacifistaNewsDTO.getDraft()) && !this.newsService.isCurrentUserStaff()) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
         }
 
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
@@ -165,8 +164,8 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     public PageDTO<PacifistaNewsLikeDTO> getLikesOnNews(String newsId, int page) {
         final PacifistaNewsDTO news = this.newsService.findById(newsId);
 
-        if (Boolean.TRUE.equals(news.getDraft()) && !this.canActualUserSeeDrafts()) {
-            throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
+        if (Boolean.TRUE.equals(news.getDraft()) && !this.newsService.isCurrentUserStaff()) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
         }
 
         return this.likeService.getAll(
@@ -189,8 +188,8 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
             throw new ApiUnauthorizedException("Vous devez être connecté pour aimer une news.");
         }
         final PacifistaNewsDTO news = this.newsService.findById(newsId);
-        if (!this.canActualUserSeeDrafts() && Boolean.TRUE.equals(news.getDraft())) {
-            throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
+        if (!this.newsService.isCurrentUserStaff() && Boolean.TRUE.equals(news.getDraft())) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
         }
 
         final PacifistaNewsLikeDTO likedNews = this.getLikeForUserAndNews(currentUser, newsId);
@@ -216,8 +215,8 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
             throw new ApiUnauthorizedException("Vous devez être connecté pour aimer une news.");
         }
         final PacifistaNewsDTO news = this.newsService.findById(newsId);
-        if (!this.canActualUserSeeDrafts() && Boolean.TRUE.equals(news.getDraft())) {
-            throw new ApiNotFoundException(String.format("L'entité id %s n'existe pas.", newsId));
+        if (!this.newsService.isCurrentUserStaff() && Boolean.TRUE.equals(news.getDraft())) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
         }
 
         final PacifistaNewsLikeDTO likedNews = this.getLikeForUserAndNews(currentUser, newsId);
@@ -235,17 +234,7 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
         }
     }
 
-    private boolean canActualUserSeeDrafts() {
-        final UserSession currentSession = this.actualSession.getUserSession();
 
-        if (currentSession == null || currentSession.getUserDTO() == null) {
-            return false;
-        } else {
-            return currentSession.getUserDTO().getRole() == UserRole.ADMIN ||
-                    currentSession.getUserDTO().getRole() == UserRole.PACIFISTA_ADMIN ||
-                    currentSession.getUserDTO().getRole() == UserRole.PACIFISTA_MODERATOR;
-        }
-    }
 
     @Nullable
     private PacifistaNewsLikeDTO getLikeForUserAndNews(final UserDTO user, final String newsId) {
