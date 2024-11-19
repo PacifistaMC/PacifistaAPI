@@ -15,6 +15,7 @@ import fr.pacifista.api.web.news.service.services.ban.PacifistaNewsBanCrudServic
 import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentCrudService;
 import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentLikeCrudService;
 import fr.pacifista.api.web.news.service.services.news.PacifistaNewsCrudService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -94,6 +95,9 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
 
     @Override
     public PacifistaNewsCommentDTO createComment(final PacifistaNewsCommentDTO commentDTO) {
+        if (Boolean.TRUE.equals(this.banService.isCurrentUserBanned())) {
+            throw new ApiForbiddenException("Vous avez été banni de l'espace commentaire et ne pouvez pas commenter.");
+        }
         if (commentDTO.getNews().getId() == null) {
             throw new ApiBadRequestException("Vous devez spécifier la news à laquelle vous répondez.");
         }
@@ -115,26 +119,38 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
 
     @Override
     public PacifistaNewsCommentDTO updateComment(String commentId, String comment) {
-        final PacifistaNewsCommentDTO commentDTO = this.service.findById(commentId);
-        final boolean canUserEdit = this.newsService.isCurrentUserStaff();
+        final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, true);
 
-        if (Boolean.TRUE.equals(commentDTO.getNews().getDraft()) && !canUserEdit) {
-            throw new ApiForbiddenException("Vous n'avez pas la permission de modifier les brouillons.");
-        } else {
-            commentDTO.setContent(comment);
-
-            return this.service.updatePut(commentDTO);
-        }
+        commentDTO.setContent(comment);
+        return this.service.updatePut(commentDTO);
     }
 
     @Override
     public void deleteComment(String commentId) {
+        this.checkFilterEditOrCreate(commentId, false);
 
+        this.service.delete(commentId);
     }
 
     @Override
     public PageDTO<PacifistaNewsCommentLikeDTO> getLikesOnComment(String commentId, int page) {
+        final PacifistaNewsCommentDTO commentDTO = this.service.findById(commentId);
+        final boolean canUserSeeDrafts = this.newsService.isCurrentUserStaff();
 
+        if (Boolean.TRUE.equals(commentDTO.getNews().getDraft()) && !canUserSeeDrafts) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
+        } else {
+            return this.likeService.getAll(
+                    Integer.toString(page),
+                    "20",
+                    String.format(
+                            "comment.uuid:%s:%s",
+                            SearchOperation.EQUALS.getOperation(),
+                            commentId
+                    ),
+                    "createdAt:desc"
+            );
+        }
     }
 
     @Override
@@ -199,5 +215,23 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
         } catch (NoSuchElementException e) {
             return null;
         }
+    }
+
+    private PacifistaNewsCommentDTO checkFilterEditOrCreate(@NonNull String commentId, boolean isEdit) {
+        if (Boolean.TRUE.equals(this.banService.isCurrentUserBanned())) {
+            throw new ApiForbiddenException("Vous avez été banni de l'espace commentaire et ne pouvez pas commenter.");
+        }
+        final UserDTO user = this.currentSession.getCurrentUser();
+        if (user == null) {
+            throw new ApiUnauthorizedException("Vous devez être connecté pour commenter.");
+        }
+
+        final PacifistaNewsCommentDTO commentDTO = this.service.findById(commentId);
+
+        if (!this.newsService.isCurrentUserStaff() && !user.getId().equals(commentDTO.getFunixProdUserId())) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de " + (isEdit ? "modifier" : "supprimer") + " ce commentaire.");
+        }
+
+        return commentDTO;
     }
 }

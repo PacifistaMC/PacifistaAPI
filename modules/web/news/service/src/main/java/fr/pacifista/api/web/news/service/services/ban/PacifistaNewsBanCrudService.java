@@ -58,4 +58,15 @@ public class PacifistaNewsBanCrudService extends ApiService<PacifistaNewsBanDTO,
             throw new ApiBadRequestException(String.format("Ce bannissement existe déjà pour le joueur %s.", ban.getMinecraftUserNameBanned()));
         }
     }
+
+    public boolean isCurrentUserBanned() {
+        final UserDTO user = this.actualSession.getCurrentUser();
+        final PacifistaWebUserLinkDTO userLink = this.userLinkComponent.getLink(user);
+        assert user != null;
+
+        return this.getRepository().existsByMinecraftUserNameBannedIgnoreCaseOrFunixProdUserIdBanned(
+                userLink.getMinecraftUsername(),
+                user.getId().toString()
+        );
+    }
 }
