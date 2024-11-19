@@ -23,6 +23,7 @@ import fr.pacifista.api.web.news.service.services.news.PacifistaNewsImageCrudSer
 import fr.pacifista.api.web.news.service.services.news.PacifistaNewsLikeCrudService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.core.io.Resource;
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/web/news")
+@RequiredArgsConstructor
 public class PacifistaNewsResource implements PacifistaNewsClient {
 
     private final IPUtils ipUtils;
@@ -49,20 +51,6 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     private final PacifistaNewsCrudService newsService;
     private final PacifistaNewsImageCrudService imageService;
     private final PacifistaNewsLikeCrudService likeService;
-
-    public PacifistaNewsResource(PacifistaNewsCrudService newsService,
-                                 PacifistaNewsImageCrudService imageService,
-                                 PacifistaNewsLikeCrudService likeService,
-                                 IPUtils ipUtils,
-                                 CurrentSession actualSession,
-                                 HttpServletRequest servletRequest) {
-        this.newsService = newsService;
-        this.imageService = imageService;
-        this.likeService = likeService;
-        this.ipUtils = ipUtils;
-        this.servletRequest = servletRequest;
-        this.actualSession = actualSession;
-    }
 
     @Override
     public PageDTO<PacifistaNewsDTO> getAll(int page) {

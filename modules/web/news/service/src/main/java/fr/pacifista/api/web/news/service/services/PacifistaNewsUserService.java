@@ -1,4 +1,4 @@
-package fr.pacifista.api.web.news.service.services.news;
+package fr.pacifista.api.web.news.service.services;
 
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.security.CurrentSession;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-abstract class PacifistaNewsUserService<DTO extends PacifistaNewsUserDataDTO, ENTITY extends PacifistaNewsUserData, MAPPER extends ApiMapper<ENTITY, DTO>, REPOSITORY extends PacifistaNewsUserDataRepository<ENTITY>> extends ApiService<DTO, ENTITY, MAPPER, REPOSITORY> {
+public abstract class PacifistaNewsUserService<DTO extends PacifistaNewsUserDataDTO, ENTITY extends PacifistaNewsUserData, MAPPER extends ApiMapper<ENTITY, DTO>, REPOSITORY extends PacifistaNewsUserDataRepository<ENTITY>> extends ApiService<DTO, ENTITY, MAPPER, REPOSITORY> {
 
     @Autowired
     private PacifistaNewsRepository newsRepository;
@@ -53,7 +53,7 @@ abstract class PacifistaNewsUserService<DTO extends PacifistaNewsUserDataDTO, EN
     }
 
     @Transactional
-    protected void deleteAllByNews(final PacifistaNews news) {
+    public void deleteAllByNews(final PacifistaNews news) {
         this.getRepository().deleteAllByNews(news);
     }
 }

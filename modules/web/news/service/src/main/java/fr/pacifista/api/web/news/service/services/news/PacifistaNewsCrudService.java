@@ -8,6 +8,8 @@ import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
 import fr.pacifista.api.web.news.service.mappers.news.PacifistaNewsMapper;
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsRepository;
+import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentCrudService;
+import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentLikeCrudService;
 import fr.pacifista.api.web.user.client.components.PacifistaWebUserLinkComponent;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import lombok.NonNull;
@@ -21,18 +23,24 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
 
     private final PacifistaNewsImageCrudService imageCrudService;
     private final PacifistaNewsLikeCrudService likeCrudService;
+    private final PacifistaNewsCommentCrudService commentCrudService;
+    private final PacifistaNewsCommentLikeCrudService commentLikeCrudService;
 
     public PacifistaNewsCrudService(PacifistaNewsRepository repository,
                                     PacifistaNewsMapper mapper,
                                     CurrentSession actualSession,
                                     PacifistaWebUserLinkComponent userLinkComponent,
                                     PacifistaNewsLikeCrudService likeCrudService,
-                                    PacifistaNewsImageCrudService imageCrudService) {
+                                    PacifistaNewsImageCrudService imageCrudService,
+                                    PacifistaNewsCommentCrudService commentCrudService,
+                                    PacifistaNewsCommentLikeCrudService commentLikeCrudService) {
         super(repository, mapper);
         this.actualSession = actualSession;
         this.userLinkComponent = userLinkComponent;
         this.imageCrudService = imageCrudService;
         this.likeCrudService = likeCrudService;
+        this.commentCrudService = commentCrudService;
+        this.commentLikeCrudService = commentLikeCrudService;
     }
 
     @Override
@@ -62,6 +70,8 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
         for (final PacifistaNews news : entities) {
             this.imageCrudService.deleteAllByNews(news);
             this.likeCrudService.deleteAllByNews(news);
+            this.commentCrudService.deleteAllByNews(news);
+            this.commentLikeCrudService.deleteAllByNews(news);
         }
     }
 
