@@ -11,6 +11,7 @@ import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentLikeDTO;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import fr.pacifista.api.web.news.service.PacifistaWebNewsApp;
+import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
 import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
 import fr.pacifista.api.web.news.service.mappers.news.PacifistaNewsMapper;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentLikeRepository;
@@ -89,7 +90,7 @@ class PacifistaNewsCommentResourceTest {
 
     @Test
     void testCreateCommentFailWhenNoUser() throws Exception {
-        this.createComment(new PacifistaNewsCommentDTO("dd", new PacifistaNewsDTO()), true);
+        this.createComment(new PacifistaNewsCommentDTO("dddsfsqdfqsdfqsdf", new PacifistaNewsDTO()), true);
     }
 
     @Test
@@ -97,7 +98,7 @@ class PacifistaNewsCommentResourceTest {
         final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
         setUserMock(userDTO);
 
-        this.createComment(new PacifistaNewsCommentDTO("dd", null), true);
+        this.createComment(new PacifistaNewsCommentDTO("ddsqdfsqdfsqdfsqdfqsdf", null), true);
     }
 
     @Test
@@ -112,7 +113,7 @@ class PacifistaNewsCommentResourceTest {
         linkDTO.setLinked(false);
         setPacifistaLinkMock(linkDTO);
 
-        this.createComment(new PacifistaNewsCommentDTO("dd", null), true);
+        this.createComment(new PacifistaNewsCommentDTO("dsqdfsqdfqsdfqsdfqsdfqsdfd", null), true);
     }
 
     @Test
@@ -228,117 +229,571 @@ class PacifistaNewsCommentResourceTest {
 
     @Test
     void testCreateCommentOnNewsWithNoAccessOnDraft() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        PacifistaNewsDTO newsDTO = createNews(true);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), true);
+
+        newsDTO = createNews(false);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
     }
 
     @Test
-    void testCreateCommentWhenUserIsBannedShouldFail() throws Exception {
-        //TODO
+    void testCreateCommentWhenUserFunixProdIsBannedShouldFail() throws Exception {
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final String comment = "dd" + UUID.randomUUID();
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), false);
+
+        this.addBan(new PacifistaNewsBanDTO(userDTO.getId(), UUID.randomUUID().toString()));
+
+        this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), true);
+    }
+
+    @Test
+    void testCreateCommentWhenUserMinecraftIsBannedShouldFail() throws Exception {
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final String comment = "dd" + UUID.randomUUID();
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), false);
+
+        this.addBan(new PacifistaNewsBanDTO(UUID.randomUUID(), linkDTO.getMinecraftUsername()));
+
+        this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), true);
     }
 
     @Test
     void testLikeCommentSuccess() throws Exception {
-        //TODO
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final String comment = "dd" + UUID.randomUUID();
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO createdComment = this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), false);
+        assertNotNull(createdComment);
+
+        this.likeComment(createdComment.getId().toString(), false);
+
+        PageDTO<PacifistaNewsCommentLikeDTO> likes = getLikesOnComment(createdComment.getId().toString(), 0, false);
+        assertEquals(1, likes.getContent().size());
+
+        PacifistaNewsComment commentEnt = this.commentRepository.findByUuid(createdComment.getId().toString()).orElse(null);
+        assertNotNull(commentEnt);
+        assertEquals(1, commentEnt.getLikes());
+
+        this.likeComment(createdComment.getId().toString(), true);
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        this.likeComment(createdComment.getId().toString(), false);
+
+        likes = getLikesOnComment(createdComment.getId().toString(), 0, false);
+        assertEquals(2, likes.getContent().size());
+        likes = getLikesOnComment(createdComment.getId().toString(), 0, true);
+        assertEquals(2, likes.getContent().size());
+
+        commentEnt = this.commentRepository.findByUuid(createdComment.getId().toString()).orElse(null);
+        assertNotNull(commentEnt);
+        assertEquals(2, commentEnt.getLikes());
     }
 
     @Test
     void testLikeCommentFailWhenNewsIsDraftAndDoesNotHaveAccess() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(true);
+
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), true);
     }
 
     @Test
     void testLikeTwiceCommentShouldFail() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO createdComment = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(createdComment);
+
+        this.likeComment(createdComment.getId().toString(), false);
+        this.likeComment(createdComment.getId().toString(), true);
     }
 
     @Test
     void testRemoveLikeSuccess() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO createdComment = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(createdComment);
+
+        this.likeComment(createdComment.getId().toString(), false);
+
+        PageDTO<PacifistaNewsCommentLikeDTO> likes = getLikesOnComment(createdComment.getId().toString(), 0, false);
+        assertEquals(1, likes.getContent().size());
+
+        this.removeLike(createdComment.getId().toString(), false);
+
+        likes = getLikesOnComment(createdComment.getId().toString(), 0, false);
+        assertEquals(0, likes.getContent().size());
+
+        this.removeLike(createdComment.getId().toString(), true);
     }
 
     @Test
     void testRemoveLikeFailWhenNoLike() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO createdComment = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(createdComment);
+
+        this.removeLike(createdComment.getId().toString(), true);
     }
 
     @Test
     void testUpdateComment() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final String initialComment = "dd" + UUID.randomUUID();
+        final PacifistaNewsCommentDTO createdComment = this.createComment(new PacifistaNewsCommentDTO(initialComment + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(createdComment);
+
+        final String updatedComment = "ddUpdated" + UUID.randomUUID();
+
+        final PacifistaNewsCommentDTO updated = this.updateComment(createdComment.getId().toString(), updatedComment, false);
+        assertNotNull(updated);
+        assertEquals(updatedComment, updated.getContent());
     }
 
     @Test
     void testUpdateCommentFailWhenNotOwner() throws Exception {
-        //TODO
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final String initialComment = "dd" + UUID.randomUUID();
+        final PacifistaNewsCommentDTO createdComment = this.createComment(new PacifistaNewsCommentDTO(initialComment + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(createdComment);
+
+        final String updatedComment = "ddUpdated" + UUID.randomUUID();
+
+        this.updateComment(createdComment.getId().toString(), updatedComment, true);
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        this.updateComment(createdComment.getId().toString(), updatedComment, true);
     }
 
     @Test
     void testUpdateCommentWhenNewsIsDraftAndDoesNotHaveAccessShouldFail() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        final PacifistaNews news = this.newsRepository.findByUuid(newsDTO.getId().toString()).orElse(null);
+        assertNotNull(news);
+        news.setDraft(true);
+        this.newsRepository.saveAndFlush(news);
+
+        this.updateComment(commentDTO.getId().toString(), "ddUpdated" + UUID.randomUUID(), true);
     }
 
     @Test
     void testUpdateCommentFailWhenNoComment() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        this.updateComment(UUID.randomUUID().toString(), "ddUpdated" + UUID.randomUUID(), true);
     }
 
     @Test
     void testUpdateCommentFailWhenCommentTooShort() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        this.updateComment(commentDTO.getId().toString(), "d", true);
     }
 
     @Test
     void testCreateCommentFailWithCommentTooShort() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+        this.createComment(new PacifistaNewsCommentDTO("d", newsDTO), true);
     }
 
     @Test
     void testDeleteSelfComment() throws Exception {
-        //TODO
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        PacifistaNews news = this.newsRepository.findByUuid(newsDTO.getId().toString()).orElse(null);
+        assertNotNull(news);
+        assertEquals(1, news.getComments());
+
+        this.deleteComment(commentDTO.getId().toString(), false);
+
+        news = this.newsRepository.findByUuid(newsDTO.getId().toString()).orElse(null);
+        assertNotNull(news);
+        assertEquals(0, news.getComments());
     }
 
     @Test
     void testDeleteOtherCommentFailWhenNoStaff() throws Exception {
-        //TODO
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        this.deleteComment(commentDTO.getId().toString(), true);
     }
 
     @Test
-    void testDeleteOtherCommentWhenStaff() throws Exception {
-        //TODO
+    void testDeleteOtherCommentWhenStaffModerator() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        userDTO.setRole(UserRole.PACIFISTA_MODERATOR);
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        this.deleteComment(commentDTO.getId().toString(), false);
     }
 
     @Test
-    void testGetLikes() throws Exception {
-        //TODO
+    void testDeleteOtherCommentWhenStaffAdmin() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        userDTO.setRole(UserRole.PACIFISTA_ADMIN);
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        this.deleteComment(commentDTO.getId().toString(), false);
     }
 
     @Test
-    void testGetLikesShouldFailOnDraftNews() throws Exception {
-        //TODO
+    void testDeleteOtherCommentWhenAdminGlobal() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        userDTO.setRole(UserRole.ADMIN);
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        this.deleteComment(commentDTO.getId().toString(), false);
     }
 
     @Test
     void testGetCommentsAndAssertThatWeOnlyHaveParents() throws Exception {
-        //TODO
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        this.createComment(new PacifistaNewsCommentDTO(commentDTO, "ddReply" + UUID.randomUUID(), newsDTO), false);
+
+        final PageDTO<PacifistaNewsCommentDTO> comments = getCommentsOnNews(newsDTO.getId(), 0, false);
+        assertEquals(1, comments.getContent().size());
     }
 
     @Test
     void testGetReplies() throws Exception {
-        //TODO
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        final PacifistaNewsCommentDTO comment2 = this.createComment(new PacifistaNewsCommentDTO("ddReply" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(comment2);
+
+        this.createComment(new PacifistaNewsCommentDTO(commentDTO, "ddReply" + UUID.randomUUID(), newsDTO), false);
+        this.createComment(new PacifistaNewsCommentDTO(commentDTO, "ddReply" + UUID.randomUUID(), newsDTO), false);
+
+        this.createComment(new PacifistaNewsCommentDTO(comment2, "ddReply" + UUID.randomUUID(), newsDTO), false);
+
+        PageDTO<PacifistaNewsCommentDTO> replies = getCommentsRepliesOnNews(commentDTO.getId(), 0, false);
+        assertEquals(2, replies.getContent().size());
+
+        replies = getCommentsRepliesOnNews(comment2.getId(), 0, false);
+        assertEquals(1, replies.getContent().size());
     }
 
     @Test
     void testGetCommentsByUser() throws Exception {
-        //TODO
-    }
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
 
-    @Test
-    void testGetCommentsOnNews() throws Exception {
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
 
-    }
+        final PacifistaNewsDTO newsDTO = createNews(false);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        final PacifistaNewsDTO newsDTO2 = createNews(false);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO2), false);
+        this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO2), false);
 
-    @Test
-    void testGetCommentsOnNewsShouldFailOnDraftNewsWhenNoAccess() throws Exception {
-
+        PageDTO<PacifistaNewsCommentDTO> comments = getCommentsByUser(linkDTO.getMinecraftUsername(), 0, false);
+        assertEquals(4, comments.getContent().size());
     }
 
     private void setUserMock(final UserDTO userDTO) {
