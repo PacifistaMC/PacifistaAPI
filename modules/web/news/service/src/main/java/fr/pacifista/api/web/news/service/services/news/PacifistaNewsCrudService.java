@@ -79,7 +79,7 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
     public boolean isCurrentUserStaff() {
         final UserSession currentSession = this.actualSession.getUserSession();
 
-        if (currentSession == null || currentSession.getUserDTO() == null) {
+        if (currentSession == null || currentSession.getUserDTO() == null || currentSession.getUserDTO().getRole() == null) {
             return false;
         } else {
             return currentSession.getUserDTO().getRole() == UserRole.ADMIN ||

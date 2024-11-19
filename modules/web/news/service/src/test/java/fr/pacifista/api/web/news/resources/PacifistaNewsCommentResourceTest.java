@@ -32,14 +32,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,23 +72,24 @@ class PacifistaNewsCommentResourceTest {
     @MockBean
     private PacifistaWebUserLinkInternalClient pacifistaLinkClient;
 
-    @MockBean
+    @Autowired
     private PacifistaNewsBanCrudService banCrudService;
-
-    private List<PacifistaNewsBanDTO> bans = new ArrayList<>();
 
     @BeforeEach
     void resetDb() {
         likeRepository.deleteAll();
         commentRepository.deleteAll();
         newsRepository.deleteAll();
-        reset(banCrudService);
-        bans.clear();
+        banCrudService.getRepository().deleteAll();
     }
 
     @Test
     void testCreateCommentFailWhenNoUser() throws Exception {
-        this.createComment(new PacifistaNewsCommentDTO("dddsfsqdfqsdfqsdf", new PacifistaNewsDTO()), true);
+        this.mockMvc.perform(post(BASE_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(new PacifistaNewsCommentDTO("dddsfsqdfqsdfqsdf", new PacifistaNewsDTO())))
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -263,7 +262,7 @@ class PacifistaNewsCommentResourceTest {
 
         this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), false);
 
-        this.addBan(new PacifistaNewsBanDTO(userDTO.getId(), UUID.randomUUID().toString()));
+        this.addBan(new PacifistaNewsBanDTO(userDTO.getId(), UUID.randomUUID().toString()), userDTO);
 
         this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), true);
     }
@@ -285,7 +284,7 @@ class PacifistaNewsCommentResourceTest {
 
         this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), false);
 
-        this.addBan(new PacifistaNewsBanDTO(UUID.randomUUID(), linkDTO.getMinecraftUsername()));
+        this.addBan(new PacifistaNewsBanDTO(UUID.randomUUID(), linkDTO.getMinecraftUsername()), userDTO);
 
         this.createComment(new PacifistaNewsCommentDTO(comment, newsDTO), true);
     }
@@ -474,7 +473,7 @@ class PacifistaNewsCommentResourceTest {
 
         final String updatedComment = "ddUpdated" + UUID.randomUUID();
 
-        this.updateComment(createdComment.getId().toString(), updatedComment, true);
+        this.updateComment(createdComment.getId().toString(), updatedComment, false);
 
         userDTO = UserDTO.generateFakeDataForTestingPurposes();
         setUserMock(userDTO);
@@ -509,7 +508,7 @@ class PacifistaNewsCommentResourceTest {
         final PacifistaNews news = this.newsRepository.findByUuid(newsDTO.getId().toString()).orElse(null);
         assertNotNull(news);
         news.setDraft(true);
-        this.newsRepository.saveAndFlush(news);
+        this.newsRepository.save(news);
 
         this.updateComment(commentDTO.getId().toString(), "ddUpdated" + UUID.randomUUID(), true);
     }
@@ -867,11 +866,21 @@ class PacifistaNewsCommentResourceTest {
 
     }
 
-    private void addBan(final PacifistaNewsBanDTO banDTO) {
-        bans.add(banDTO);
-        when(banCrudService.getAll(anyString(), anyString(), anyString(), anyString())).thenReturn(new PageDTO<>(
-                bans, 1, 0, (long) bans.size(), bans.size()
-        ));
+    private void addBan(final PacifistaNewsBanDTO banDTO, final UserDTO userDTO) throws Exception {
+        final UserRole role = userDTO.getRole();
+
+        userDTO.setRole(UserRole.ADMIN);
+        setUserMock(userDTO);
+
+        this.mockMvc.perform(post("/web/news/bans")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.jsonHelper.toJson(banDTO))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        userDTO.setRole(role);
+        setUserMock(userDTO);
     }
 
     private PageDTO<PacifistaNewsCommentDTO> getCommentsOnNews(final UUID newsId, final int page, final boolean authed) throws Exception {
@@ -971,7 +980,7 @@ class PacifistaNewsCommentResourceTest {
             ).andExpect(status().is4xxClientError());
             return null;
         } else {
-            final MvcResult result = this.mockMvc.perform(post(BASE_URL + "/" + commentId)
+            final MvcResult result = this.mockMvc.perform(patch(BASE_URL + "/" + commentId)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(comment)

@@ -1,7 +1,6 @@
 package fr.pacifista.api.web.news.service.services.comments;
 
 import com.funixproductions.core.exceptions.ApiNotFoundException;
-import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentLikeDTO;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsCommentLike;
@@ -37,12 +36,6 @@ public class PacifistaNewsCommentLikeCrudService extends PacifistaNewsUserServic
                 pacifistaNewsCommentLike.setComment(comment);
             }
         }
-    }
-
-    public void deleteByComment(final PacifistaNewsCommentDTO comment) {
-        this.getRepository().deleteAllByComment(
-                this.commentRepository.findByUuid(comment.getId().toString()).orElseThrow(() -> new ApiNotFoundException("Le commentaire n'existe pas"))
-        );
     }
 
 }

@@ -6,6 +6,7 @@ import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.crud.enums.SearchOperation;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiForbiddenException;
+import com.funixproductions.core.exceptions.ApiNotFoundException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
 import fr.pacifista.api.web.news.client.clients.PacifistaNewsCommentClient;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
@@ -15,6 +16,7 @@ import fr.pacifista.api.web.news.service.services.ban.PacifistaNewsBanCrudServic
 import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentCrudService;
 import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentLikeCrudService;
 import fr.pacifista.api.web.news.service.services.news.PacifistaNewsCrudService;
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,9 +48,10 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
                     Integer.toString(page),
                     "20",
                     String.format(
-                            "news.uuid:%s:%s",
+                            "news.uuid:%s:%s,parent:%s:null",
                             SearchOperation.EQUALS.getOperation(),
-                            newsId
+                            newsId,
+                            SearchOperation.IS_NULL.getOperation()
                     ),
                     "likes:desc"
             );
@@ -94,6 +97,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     }
 
     @Override
+    @Transactional
     public PacifistaNewsCommentDTO createComment(final PacifistaNewsCommentDTO commentDTO) {
         if (Boolean.TRUE.equals(this.banService.isCurrentUserBanned())) {
             throw new ApiForbiddenException("Vous avez été banni de l'espace commentaire et ne pouvez pas commenter.");
@@ -113,11 +117,17 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
         } else {
             commentDTO.setLikes(0);
 
-            return this.service.create(commentDTO);
+            final PacifistaNewsCommentDTO res = this.service.create(commentDTO);
+
+            news.setComments(news.getComments() + 1);
+            this.newsService.updatePut(news);
+
+            return res;
         }
     }
 
     @Override
+    @Transactional
     public PacifistaNewsCommentDTO updateComment(String commentId, String comment) {
         final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, true);
 
@@ -126,10 +136,18 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     }
 
     @Override
+    @Transactional
     public void deleteComment(String commentId) {
-        this.checkFilterEditOrCreate(commentId, false);
+        final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, false);
 
         this.service.delete(commentId);
+
+        final PacifistaNewsDTO news = this.newsService.findById(commentDTO.getNews().getId().toString());
+        news.setComments(news.getComments() - 1);
+        if (news.getComments() < 0) {
+            news.setComments(0);
+        }
+        this.newsService.updatePut(news);
     }
 
     @Override
@@ -154,6 +172,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     }
 
     @Override
+    @Transactional
     public PacifistaNewsCommentLikeDTO likeComment(String commentId) {
         final PacifistaNewsCommentDTO commentDTO = this.service.findById(commentId);
         final boolean canUserEdit = this.newsService.isCurrentUserStaff();
@@ -186,14 +205,24 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     }
 
     @Override
+    @Transactional
     public void removeLike(String commentId) {
         final PacifistaNewsCommentDTO commentDTO = this.service.findById(commentId);
         final boolean canUserEdit = this.newsService.isCurrentUserStaff();
+        final UserDTO user = this.currentSession.getCurrentUser();
+        if (user == null) {
+            throw new ApiUnauthorizedException("Vous devez être connecté pour liker un commentaire.");
+        }
 
         if (Boolean.TRUE.equals(commentDTO.getNews().getDraft()) && !canUserEdit) {
             throw new ApiUnauthorizedException("Vous n'avez pas la permission de modifier les brouillons.");
         } else {
-            this.likeService.delete(commentId);
+            final PacifistaNewsCommentLikeDTO likeDTO = this.findLikeDtoForComment(user, commentId);
+            if (likeDTO == null) {
+                throw new ApiNotFoundException("Vous n'avez pas liké ce commentaire.");
+            }
+
+            this.likeService.delete(likeDTO.getId().toString());
         }
     }
 
@@ -225,10 +254,14 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
         if (user == null) {
             throw new ApiUnauthorizedException("Vous devez être connecté pour commenter.");
         }
+        final boolean userIsStaff = this.newsService.isCurrentUserStaff();
 
         final PacifistaNewsCommentDTO commentDTO = this.service.findById(commentId);
 
-        if (!this.newsService.isCurrentUserStaff() && !user.getId().equals(commentDTO.getFunixProdUserId())) {
+        if (Boolean.TRUE.equals(commentDTO.getNews().getDraft()) && !userIsStaff) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de " + (isEdit ? "modifier" : "supprimer") + " les brouillons.");
+        }
+        if (!userIsStaff && !user.getId().equals(commentDTO.getFunixProdUserId())) {
             throw new ApiForbiddenException("Vous n'avez pas la permission de " + (isEdit ? "modifier" : "supprimer") + " ce commentaire.");
         }
 
