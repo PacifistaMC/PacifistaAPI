@@ -1,5 +1,6 @@
 package fr.pacifista.api.web.news.service.services.comments;
 
+import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
@@ -38,6 +39,10 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
 
             if (parent != null && parent.getUuid() != null) {
                 parent = this.getRepository().findByUuid(parent.getUuid().toString()).orElseThrow(() -> new ApiNotFoundException("Le commentaire parent n'existe pas"));
+                if (parent.getParent() != null) {
+                    throw new ApiBadRequestException("Les commentaires imbriqués ne sont pas autorisés (parent -> enfant -> petit-enfant)");
+                }
+
                 pacifistaNewsComment.setParent(parent);
             }
         }

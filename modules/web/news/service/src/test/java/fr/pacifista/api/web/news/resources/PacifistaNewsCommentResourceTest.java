@@ -829,6 +829,29 @@ class PacifistaNewsCommentResourceTest {
         assertEquals(4, comments.getContent().size());
     }
 
+    @Test
+    void testCreateReplyOnReplyCommentShouldFail() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        final PacifistaNewsCommentDTO reply = this.createComment(new PacifistaNewsCommentDTO(commentDTO, "ddReply" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(reply);
+
+        this.createComment(new PacifistaNewsCommentDTO(reply, "ddReply" + UUID.randomUUID(), newsDTO), true);
+    }
+
     private void setUserMock(final UserDTO userDTO) {
         when(authClient.current(anyString())).thenReturn(userDTO);
     }
