@@ -22,8 +22,6 @@ import fr.pacifista.api.web.vote.service.services.VoteCrudService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -46,8 +44,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+
 class VoteResourceTest {
 
     private final String BASE_URL = "/" + VoteClientImpl.PATH;
@@ -149,7 +146,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk());
     }
 
-    //@Test
+    @Test
     void testCreateAndCheckVote() throws Exception {
         final String username = "funixLeGaming";
         final String ipAddress1 = "10.10.2.1";
