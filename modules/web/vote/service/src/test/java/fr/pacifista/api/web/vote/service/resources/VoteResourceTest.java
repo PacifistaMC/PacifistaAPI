@@ -22,6 +22,8 @@ import fr.pacifista.api.web.vote.service.services.VoteCrudService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -44,7 +46,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@SpringBootTest
+@AutoConfigureMockMvc
 class VoteResourceTest {
 
     private final String BASE_URL = "/" + VoteClientImpl.PATH;
@@ -200,7 +203,7 @@ class VoteResourceTest {
         assertNull(voteDTO.getUpdatedAt());
         assertEquals(voteWebsite, voteDTO.getVoteWebsite());
 
-        //Thread.sleep(300);
+        Thread.sleep(300);
 
         mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
