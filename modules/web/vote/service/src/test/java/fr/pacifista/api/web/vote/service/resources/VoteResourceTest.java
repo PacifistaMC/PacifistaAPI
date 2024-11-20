@@ -203,7 +203,7 @@ class VoteResourceTest {
         assertNull(voteDTO.getUpdatedAt());
         assertEquals(voteWebsite, voteDTO.getVoteWebsite());
 
-        Thread.sleep(300);
+        Thread.sleep(1000);
 
         mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
