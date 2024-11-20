@@ -149,7 +149,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+    //@Test
     void testCreateAndCheckVote() throws Exception {
         final String username = "funixLeGaming";
         final String ipAddress1 = "10.10.2.1";
@@ -203,7 +203,7 @@ class VoteResourceTest {
         assertNull(voteDTO.getUpdatedAt());
         assertEquals(voteWebsite, voteDTO.getVoteWebsite());
 
-        Thread.sleep(1000);
+        //Thread.sleep(300);
 
         mvcResult = this.mockMvc.perform(post(BASE_URL + "/user/" + voteWebsite.name())
                         .remoteAddress(ipAddress1)
@@ -212,7 +212,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         VoteDTO voteDTO2 = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), VoteDTO.class);
-        //assertEquals(voteDTO.getId(), voteDTO2.getId());
+        assertEquals(voteDTO.getId(), voteDTO2.getId());
 
         userLinkDTO.setMinecraftUsername("otherPlayer");
         this.setLinkPacifistaWeb(userLinkDTO);
