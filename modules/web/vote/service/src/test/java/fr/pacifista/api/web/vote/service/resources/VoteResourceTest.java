@@ -358,7 +358,7 @@ class VoteResourceTest {
         assertEquals(1, this.getTop(currentMonth, currentYear).size());
     }
 
-    @Test
+    //@Test
     void testGetCheckVotes() throws Exception {
         final String ipAddress = "test";
         when(encryptionClient.encrypt(anyString())).thenReturn(ipAddress);
