@@ -159,8 +159,12 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
             try {
                 final PacifistaNewsDTO newOne = this.newsService.updatePut(updatedNews);
-                this.imageService.delete(oldNews.getArticleImageId().toString());
-                this.imageService.delete(oldNews.getArticleImageIdLowRes().toString());
+                if (oldNews.getArticleImageId() != null) {
+                    this.imageService.delete(oldNews.getArticleImageId().toString());
+                }
+                if (oldNews.getArticleImageIdLowRes() != null) {
+                    this.imageService.delete(oldNews.getArticleImageIdLowRes().toString());
+                }
                 return newOne;
             } catch (Exception e) {
                 this.imageService.delete(imageDTO.getId().toString());
