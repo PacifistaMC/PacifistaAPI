@@ -90,6 +90,25 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     }
 
     @Override
+    @Transactional
+    public PacifistaNewsDTO getNewsByName(String newsName) {
+        PacifistaNews news = this.newsService.getRepository().findByNameIgnoreCase(newsName).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
+        if (Boolean.TRUE.equals(news.getDraft()) && !this.newsService.isCurrentUserStaff()) {
+            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
+        }
+
+        final String ip = this.ipUtils.getClientIp(this.servletRequest);
+
+        if (!Boolean.TRUE.equals(viewIpCount.getIfPresent(ip))) {
+            news.setViews(news.getViews() + 1);
+            news = this.newsService.getRepository().save(news);
+            this.viewIpCount.put(ip, true);
+        }
+
+        return this.newsService.getMapper().toDto(news);
+    }
+
+    @Override
     public Resource getImageNews(String imageId) {
         return this.imageService.loadAsResource(imageId);
     }

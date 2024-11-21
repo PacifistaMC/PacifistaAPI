@@ -34,6 +34,9 @@ public interface PacifistaNewsClient {
     @GetMapping("{newsId}")
     PacifistaNewsDTO getNewsById(@PathVariable("newsId") String newsId);
 
+    @GetMapping("/named/{newsName}")
+    PacifistaNewsDTO getNewsByName(@PathVariable("newsName") String newsName);
+
     @GetMapping("/file/{imageId}")
     Resource getImageNews(@PathVariable("imageId") String imageId);
 

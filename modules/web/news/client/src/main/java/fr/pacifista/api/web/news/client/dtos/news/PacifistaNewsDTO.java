@@ -3,6 +3,7 @@ package fr.pacifista.api.web.news.client.dtos.news;
 import com.funixproductions.core.crud.dtos.ApiDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,7 @@ public class PacifistaNewsDTO extends ApiDTO {
      * Nom de l'article présent dans l'url
      */
     @NotBlank(message = "Le nom unique de l'article est requis")
+    @Pattern(regexp = "^[A-Za-z0-9-]+$", message = "Le nom unique de l'article ne peut contenir que des lettres, des chiffres et des tirets")
     private String name;
 
     /**

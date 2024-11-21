@@ -16,6 +16,7 @@ import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsLikeRepo
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsRepository;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -468,6 +469,61 @@ class PacifistaNewsResourceTest {
         news = this.getNewsById(createdNews.getId(), false, false, false);
         assertNotNull(news);
         assertEquals(3, news.getViews());
+
+        news = this.getNewsByName(createdNews.getName(), false, false, true);
+        assertNotNull(news);
+        assertEquals(4, news.getViews());
+
+        news = this.getNewsByName(createdNews.getName(), false, false, false);
+        assertNotNull(news);
+        assertEquals(4, news.getViews());
+    }
+
+    @Test
+    void testGetNewsByNameSuccess() throws Exception {
+        final UserDTO mockUser = UserDTO.generateFakeDataForTestingPurposes();
+        mockUser.setRole(UserRole.ADMIN);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+        final PacifistaNewsDTO createNewsRequest = this.createNewsDTORequest();
+
+        final PacifistaWebUserLinkDTO mockUserMinecraftLink = new PacifistaWebUserLinkDTO(mockUser.getId(), UUID.randomUUID());
+        mockUserMinecraftLink.setMinecraftUsername("mockUser" + UUID.randomUUID());
+        mockUserMinecraftLink.setLinked(true);
+        mockUserMinecraftLink.setCreatedAt(new Date());
+        mockUserMinecraftLink.setId(UUID.randomUUID());
+
+        when(pacifistaLinkClient.getAll(anyString(), anyString(), anyString(), anyString())).thenReturn(new PageDTO<>(
+                List.of(mockUserMinecraftLink), 1, 0, 1L, 1
+        ));
+
+        final PacifistaNewsDTO createdNews = this.sendCreateRequest(createNewsRequest, false);
+        assertNotNull(createdNews);
+
+        final PacifistaNewsDTO gotNews = this.getNewsByName(createdNews.getName(), false, true, true);
+        assertNotNull(gotNews);
+        assertEquals(createdNews.getId(), gotNews.getId());
+
+        this.getNewsByName(createdNews.getName().toUpperCase(), false, true, true);
+        this.getNewsByName(createdNews.getName().toLowerCase(), false, true, true);
+
+        this.getNewsByName(createdNews.getName(), true, false, true);
+
+        mockUser.setRole(UserRole.USER);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+
+        this.getNewsByName(createdNews.getName(), true, true, true);
+
+        mockUser.setRole(UserRole.ADMIN);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+
+        createdNews.setDraft(false);
+        this.updateRequest(createdNews, false);
+
+        mockUser.setRole(UserRole.USER);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+
+        this.getNewsByName(createdNews.getName(), false, true, true);
+        this.getNewsByName(createdNews.getName(), false, false, true);
     }
 
     private PacifistaNewsDTO createNewsDTORequest() {
@@ -627,7 +683,7 @@ class PacifistaNewsResourceTest {
     private PacifistaNewsDTO getNewsById(final UUID newsId, boolean needToFail, boolean authed, boolean randomIp) throws Exception {
         final String ip;
         if (randomIp) {
-            ip = this.generateRandomIpAddress();
+            ip = PacifistaNewsResourceTest.generateRandomIpAddress();
         } else {
             ip = "10.0.0.1";
         }
@@ -664,6 +720,49 @@ class PacifistaNewsResourceTest {
         }
 
         return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
+    }
+
+    @Nullable
+    private PacifistaNewsDTO getNewsByName(final String name, final boolean needToFail, final boolean authed, boolean randomIp) throws Exception {
+        final String ip;
+        if (randomIp) {
+            ip = PacifistaNewsResourceTest.generateRandomIpAddress();
+        } else {
+            ip = "10.0.0.1";
+        }
+
+        if (needToFail) {
+            if (authed) {
+                this.mockMvc.perform(get(BASE_ROUTE + "/named/" + name)
+                        .remoteAddress(ip)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().is4xxClientError());
+            } else {
+                this.mockMvc.perform(get(BASE_ROUTE + "/named/" + name)
+                        .remoteAddress(ip)
+                        .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().is4xxClientError());
+            }
+            return null;
+        } else {
+            final MvcResult result;
+
+            if (authed) {
+                result = this.mockMvc.perform(get(BASE_ROUTE + "/named/" + name)
+                        .remoteAddress(ip)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk()).andReturn();
+            } else {
+                result = this.mockMvc.perform(get(BASE_ROUTE + "/named/" + name)
+                        .remoteAddress(ip)
+                        .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk()).andReturn();
+            }
+
+            return this.jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
+        }
     }
 
     private void getImageRequest(final UUID imageId, boolean needToFail) throws Exception {
