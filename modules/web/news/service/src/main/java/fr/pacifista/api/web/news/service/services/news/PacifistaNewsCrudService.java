@@ -82,9 +82,11 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
         if (currentSession == null || currentSession.getUserDTO() == null || currentSession.getUserDTO().getRole() == null) {
             return false;
         } else {
-            return currentSession.getUserDTO().getRole() == UserRole.ADMIN ||
-                    currentSession.getUserDTO().getRole() == UserRole.PACIFISTA_ADMIN ||
-                    currentSession.getUserDTO().getRole() == UserRole.PACIFISTA_MODERATOR;
+            final UserRole role = currentSession.getUserDTO().getRole();
+
+            return role == UserRole.ADMIN ||
+                    role == UserRole.PACIFISTA_ADMIN ||
+                    role == UserRole.PACIFISTA_MODERATOR;
         }
     }
 
