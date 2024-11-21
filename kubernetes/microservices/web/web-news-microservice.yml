@@ -26,6 +26,9 @@ spec:
       containers:
         - name: springboot-web-news
           image: ghcr.io/pacifistamc/pacifista-api-web-news:latest
+          volumeMounts:
+            - mountPath: /container/app/
+              name: pacifista-news-storage
           ports:
             - containerPort: 80
           resources:
@@ -71,6 +74,10 @@ spec:
                 secretKeyRef:
                   name: sentry-secret-pacifista
                   key: sentry-pacifista-api-key
+      volumes:
+        - name: pacifista-news-storage
+          hostPath:
+            path: /root/k3s/data/funixproductions/
 
 ---
 
