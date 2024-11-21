@@ -47,7 +47,7 @@ CREATE TABLE pacifista_news_likes (
                                       updated_at TIMESTAMP,
                                       uuid VARCHAR(255) NOT NULL constraint uk_pacifista_news_likes_public_id UNIQUE,
                                       news_id BIGINT NOT NULL constraint fk_pacifista_news_likes_news_id references pacifista_news,
-                                      minecraft_username VARCHAR(255) NOT NULL
+                                      minecraft_username VARCHAR(255) NOT NULL,
                                       funixprod_user_id VARCHAR(255) NOT NULL
 );
 
