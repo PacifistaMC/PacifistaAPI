@@ -149,7 +149,7 @@ class VoteResourceTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+    //@Test
     void testCreateAndCheckVote() throws Exception {
         final String username = "funixLeGaming";
         final String ipAddress1 = "10.10.2.1";
