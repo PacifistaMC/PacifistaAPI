@@ -43,7 +43,7 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     private final CurrentSession actualSession;
     private final HttpServletRequest servletRequest;
 
-    private final Cache<String, Boolean> viewIpCount = CacheBuilder.newBuilder()
+    private final Cache<String, String> viewIpCount = CacheBuilder.newBuilder()
             .expireAfterWrite(24, TimeUnit.HOURS)
             .build();
 
@@ -77,13 +77,13 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
 
-        if (!Boolean.TRUE.equals(viewIpCount.getIfPresent(ip))) {
+        if (!newsId.equals(viewIpCount.getIfPresent(ip))) {
             PacifistaNews news = this.newsService.getRepository().findByUuid(newsId).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
             news.setViews(news.getViews() + 1);
             news = this.newsService.getRepository().save(news);
 
             pacifistaNewsDTO.setViews(news.getViews());
-            this.viewIpCount.put(ip, true);
+            this.viewIpCount.put(ip, newsId);
         }
 
         return pacifistaNewsDTO;
@@ -99,10 +99,10 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
 
-        if (!Boolean.TRUE.equals(viewIpCount.getIfPresent(ip))) {
+        if (!news.getUuid().toString().equals(viewIpCount.getIfPresent(ip))) {
             news.setViews(news.getViews() + 1);
             news = this.newsService.getRepository().save(news);
-            this.viewIpCount.put(ip, true);
+            this.viewIpCount.put(ip, news.getUuid().toString());
         }
 
         return this.newsService.getMapper().toDto(news);
