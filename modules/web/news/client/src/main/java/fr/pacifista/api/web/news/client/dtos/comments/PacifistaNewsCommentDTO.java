@@ -34,6 +34,11 @@ public class PacifistaNewsCommentDTO extends PacifistaNewsUserDataDTO {
      */
     private Integer likes;
 
+    /**
+     * Indique si l'utilisateur a aimé ce commentaire, false si pas de bearer
+     */
+    private Boolean liked;
+
     public PacifistaNewsCommentDTO(final String content, final PacifistaNewsDTO newsDTO) {
         this.content = content;
         super.setNews(newsDTO);

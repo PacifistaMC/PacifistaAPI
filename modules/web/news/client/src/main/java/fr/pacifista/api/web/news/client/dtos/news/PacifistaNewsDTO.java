@@ -85,4 +85,9 @@ public class PacifistaNewsDTO extends ApiDTO {
      */
     private Integer views;
 
+    /**
+     * Si l'utilisateur actuel a aimé l'article, si pas de bearer token, alors false
+     */
+    private Boolean liked;
+
 }

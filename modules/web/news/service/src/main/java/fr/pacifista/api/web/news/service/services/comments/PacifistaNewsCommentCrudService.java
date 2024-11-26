@@ -1,14 +1,19 @@
 package fr.pacifista.api.web.news.service.services.comments;
 
+import com.funixproductions.api.user.client.dtos.UserDTO;
+import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
 import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
 import fr.pacifista.api.web.news.service.mappers.comments.PacifistaNewsCommentMapper;
+import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentLikeRepository;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentRepository;
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsRepository;
 import fr.pacifista.api.web.news.service.services.PacifistaNewsUserService;
+import fr.pacifista.api.web.user.client.components.PacifistaWebUserLinkComponent;
+import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +23,38 @@ import java.util.*;
 public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<PacifistaNewsCommentDTO, PacifistaNewsComment, PacifistaNewsCommentMapper, PacifistaNewsCommentRepository> {
 
     private final PacifistaNewsRepository newsRepository;
+    private final PacifistaNewsCommentLikeRepository commentLikeRepository;
+
+    private final CurrentSession currentSession;
+    private final PacifistaWebUserLinkComponent webUserLinkComponent;
 
     public PacifistaNewsCommentCrudService(PacifistaNewsCommentRepository repository,
                                            PacifistaNewsCommentMapper mapper,
-                                           PacifistaNewsRepository newsRepository) {
+                                           PacifistaNewsRepository newsRepository,
+                                           CurrentSession currentSession,
+                                           PacifistaWebUserLinkComponent webUserLinkComponent,
+                                           PacifistaNewsCommentLikeRepository commentLikeRepository) {
         super(repository, mapper);
         this.newsRepository = newsRepository;
+        this.currentSession = currentSession;
+        this.webUserLinkComponent = webUserLinkComponent;
+        this.commentLikeRepository = commentLikeRepository;
+    }
+
+    @Override
+    public void beforeSendingDTO(@NonNull Iterable<PacifistaNewsCommentDTO> dtos) {
+        final UserDTO currentUser = this.currentSession.getCurrentUser();
+        if (currentUser == null) return;
+        try {
+            final PacifistaWebUserLinkDTO link = this.webUserLinkComponent.getLink(currentUser);
+
+            final Set<String> commentIdsLIst = new HashSet<>();
+
+            for (PacifistaNewsCommentDTO commentDTO : dtos) {
+                commentIdsLIst.add(commentDTO.getId().toString());
+            }
+        } catch (ApiBadRequestException ignored) {
+        }
     }
 
     @Override
