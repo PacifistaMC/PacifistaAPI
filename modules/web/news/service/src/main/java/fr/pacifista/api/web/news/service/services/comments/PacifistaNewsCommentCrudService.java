@@ -12,10 +12,7 @@ import fr.pacifista.api.web.news.service.services.PacifistaNewsUserService;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<PacifistaNewsCommentDTO, PacifistaNewsComment, PacifistaNewsCommentMapper, PacifistaNewsCommentRepository> {
@@ -78,5 +75,20 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         }
 
         this.newsRepository.saveAll(newsToSave);
+    }
+
+    public void setCommentLikes(final UUID newsId, final int likes) {
+        final Optional<PacifistaNewsComment> search = this.getRepository().findByUuid(newsId.toString());
+
+        if (search.isPresent()) {
+            final PacifistaNewsComment comment = search.get();
+
+            comment.setLikes(likes);
+            if (likes < 0) {
+                comment.setLikes(0);
+            }
+
+            this.getRepository().save(comment);
+        }
     }
 }

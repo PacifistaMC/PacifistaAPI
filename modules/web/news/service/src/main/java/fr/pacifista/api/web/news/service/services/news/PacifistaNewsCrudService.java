@@ -16,6 +16,9 @@ import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, PacifistaNews, PacifistaNewsMapper, PacifistaNewsRepository> {
 
@@ -73,6 +76,51 @@ public class PacifistaNewsCrudService extends ApiService<PacifistaNewsDTO, Pacif
             this.likeCrudService.deleteAllByNews(news);
             this.commentCrudService.deleteAllByNews(news);
             this.commentLikeCrudService.deleteAllByNews(news);
+        }
+    }
+
+    public void setNewsLikeAmount(final UUID newsId, final int amount) {
+        final Optional<PacifistaNews> searchedNews = super.getRepository().findByUuid(newsId.toString());
+
+        if (searchedNews.isPresent()) {
+            final PacifistaNews news = searchedNews.get();
+            news.setLikes(amount);
+
+            if (news.getLikes() < 0) {
+                news.setLikes(0);
+            }
+
+            super.getRepository().save(news);
+        }
+    }
+
+    public void setNewsViewsAmount(final UUID newsId, final int amount) {
+        final Optional<PacifistaNews> searchedNews = super.getRepository().findByUuid(newsId.toString());
+
+        if (searchedNews.isPresent()) {
+            final PacifistaNews news = searchedNews.get();
+            news.setViews(amount);
+
+            if (news.getViews() < 0) {
+                news.setViews(0);
+            }
+
+            super.getRepository().save(news);
+        }
+    }
+
+    public void setNewsCommentsAmount(final UUID newsId, final int amount) {
+        final Optional<PacifistaNews> searchedNews = super.getRepository().findByUuid(newsId.toString());
+
+        if (searchedNews.isPresent()) {
+            final PacifistaNews news = searchedNews.get();
+            news.setComments(amount);
+
+            if (news.getComments() < 0) {
+                news.setComments(0);
+            }
+
+            super.getRepository().save(news);
         }
     }
 

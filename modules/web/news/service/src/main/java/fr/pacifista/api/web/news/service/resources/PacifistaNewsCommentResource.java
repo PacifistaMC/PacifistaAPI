@@ -118,10 +118,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
             commentDTO.setLikes(0);
 
             final PacifistaNewsCommentDTO res = this.service.create(commentDTO);
-
-            news.setComments(news.getComments() + 1);
-            this.newsService.updatePut(news);
-
+            this.newsService.setNewsCommentsAmount(news.getId(), news.getComments() + 1);
             return res;
         }
     }
@@ -141,13 +138,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
         final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, false);
 
         this.service.delete(commentId);
-
-        final PacifistaNewsDTO news = this.newsService.findById(commentDTO.getNews().getId().toString());
-        news.setComments(news.getComments() - 1);
-        if (news.getComments() < 0) {
-            news.setComments(0);
-        }
-        this.newsService.updatePut(news);
+        this.newsService.setNewsCommentsAmount(commentDTO.getNews().getId(), commentDTO.getNews().getComments() - 1);
     }
 
     @Override
@@ -193,10 +184,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
                 newLikeDTO.setNews(commentDTO.getNews());
 
                 final PacifistaNewsCommentLikeDTO result = this.likeService.create(newLikeDTO);
-
-                commentDTO.setLikes(commentDTO.getLikes() + 1);
-                this.service.updatePut(commentDTO);
-
+                this.service.setCommentLikes(commentDTO.getId(), commentDTO.getLikes() + 1);
                 return result;
             } else {
                 throw new ApiBadRequestException("Vous avez déjà liké ce commentaire.");
@@ -223,11 +211,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
             }
 
             this.likeService.delete(likeDTO.getId().toString());
-
-            commentDTO.setLikes(commentDTO.getLikes() - 1);
-            if (commentDTO.getLikes() < 0) {
-                commentDTO.setLikes(0);
-            }
+            this.service.setCommentLikes(commentDTO.getId(), commentDTO.getLikes() - 1);
             this.service.updatePut(commentDTO);
         }
     }
