@@ -223,6 +223,12 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
             }
 
             this.likeService.delete(likeDTO.getId().toString());
+
+            commentDTO.setLikes(commentDTO.getLikes() - 1);
+            if (commentDTO.getLikes() < 0) {
+                commentDTO.setLikes(0);
+            }
+            this.service.updatePut(commentDTO);
         }
     }
 
