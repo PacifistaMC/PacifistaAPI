@@ -20,6 +20,7 @@ import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsReposito
 import fr.pacifista.api.web.news.service.services.ban.PacifistaNewsBanCrudService;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -852,6 +853,60 @@ class PacifistaNewsCommentResourceTest {
         this.createComment(new PacifistaNewsCommentDTO(reply, "ddReply" + UUID.randomUUID(), newsDTO), true);
     }
 
+    @Test
+    void testLikeStatusOnComment() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        PacifistaNewsCommentDTO gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), true);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), false);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        this.likeComment(commentDTO.getId().toString(), false);
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), true);
+        assertNotNull(gotComment);
+        assertTrue(gotComment.getLiked());
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), false);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), true);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), false);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+    }
+
     private void setUserMock(final UserDTO userDTO) {
         when(authClient.current(anyString())).thenReturn(userDTO);
     }
@@ -1101,5 +1156,18 @@ class PacifistaNewsCommentResourceTest {
                     .accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isNotFound());
         }
+    }
+
+    @Nullable
+    private PacifistaNewsCommentDTO getCommentByNewsIdAndCommentId(final UUID newsId, final UUID commentId, final boolean authed) throws Exception {
+        final Iterable<PacifistaNewsCommentDTO> comments = this.getCommentsOnNews(newsId, 0, authed).getContent();
+
+        for (final PacifistaNewsCommentDTO comment : comments) {
+            if (comment.getId().equals(commentId)) {
+                return comment;
+            }
+        }
+
+        return null;
     }
 }

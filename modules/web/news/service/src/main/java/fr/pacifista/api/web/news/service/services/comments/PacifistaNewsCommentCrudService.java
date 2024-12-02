@@ -6,6 +6,7 @@ import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
+import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsCommentLike;
 import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
 import fr.pacifista.api.web.news.service.mappers.comments.PacifistaNewsCommentMapper;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentLikeRepository;
@@ -45,13 +46,21 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
     public void beforeSendingDTO(@NonNull Iterable<PacifistaNewsCommentDTO> dtos) {
         final UserDTO currentUser = this.currentSession.getCurrentUser();
         if (currentUser == null) return;
+
         try {
             final PacifistaWebUserLinkDTO link = this.webUserLinkComponent.getLink(currentUser);
-
             final Set<String> commentIdsLIst = new HashSet<>();
 
             for (PacifistaNewsCommentDTO commentDTO : dtos) {
                 commentIdsLIst.add(commentDTO.getId().toString());
+            }
+            final Iterable<PacifistaNewsComment> allComments = this.getRepository().findAllByUuidIn(commentIdsLIst);
+            final Iterable<PacifistaNewsCommentLike> allLikes = this.commentLikeRepository.findAllByCommentInAndMinecraftUsernameIgnoreCaseAndFunixProdUserId(allComments, link.getMinecraftUsername(), link.getFunixProdUserId());
+
+            for (PacifistaNewsCommentDTO commentDTO : dtos) {
+                commentDTO.setLiked(
+                        this.checkIfLikeInCommentListFound(commentDTO, allLikes)
+                );
             }
         } catch (ApiBadRequestException ignored) {
         }
@@ -121,5 +130,15 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
 
             this.getRepository().save(comment);
         }
+    }
+
+    private boolean checkIfLikeInCommentListFound(final PacifistaNewsCommentDTO commentDTO, final Iterable<PacifistaNewsCommentLike> likes) {
+        for (final PacifistaNewsCommentLike like : likes) {
+            if (like.getComment().getUuid().equals(commentDTO.getId())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

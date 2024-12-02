@@ -12,7 +12,7 @@ public interface PacifistaNewsCommentMapper extends ApiMapper<PacifistaNewsComme
 
     @Override
     @Mapping(target = "id", source = "uuid")
-    @Mapping(target = "liked", ignore = true)
+    @Mapping(target = "liked", constant = "false")
     PacifistaNewsCommentDTO toDto(PacifistaNewsComment entity);
 
 }

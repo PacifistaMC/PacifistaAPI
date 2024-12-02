@@ -11,7 +11,7 @@ public interface PacifistaNewsMapper extends ApiMapper<PacifistaNews, PacifistaN
 
     @Override
     @Mapping(target = "id", source = "uuid")
-    @Mapping(target = "liked", ignore = true)
+    @Mapping(target = "liked", constant = "false")
     PacifistaNewsDTO toDto(PacifistaNews entity);
 
 }
