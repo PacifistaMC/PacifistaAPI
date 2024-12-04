@@ -88,23 +88,31 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
     @Override
     public void beforeDeletingEntity(@NonNull Iterable<PacifistaNewsComment> entities) {
         final List<PacifistaNewsComment> comments = new ArrayList<>();
-        final Map<PacifistaNews, Integer> removeLikesFromNews = new HashMap<>();
-
+        final Map<PacifistaNews, Integer> removeCommentsFromNews = new HashMap<>();
         PacifistaNews news;
-        for (PacifistaNewsComment pacifistaNewsComment : entities) {
+
+        for (final PacifistaNewsComment pacifistaNewsComment : entities) {
             news = pacifistaNewsComment.getNews();
 
             comments.add(pacifistaNewsComment);
 
             if (news != null) {
-                removeLikesFromNews.put(news, removeLikesFromNews.getOrDefault(news, 0) + 1);
+                removeCommentsFromNews.put(news, removeCommentsFromNews.getOrDefault(news, 0) + 1);
             }
         }
-        super.getRepository().deleteAllByParentIsIn(comments);
+
+        final Iterable<PacifistaNewsComment> parentComments = super.getRepository().getAllByParentIsIn(comments);
+        for (final PacifistaNewsComment parentComment : parentComments) {
+            news = parentComment.getNews();
+
+            if (news != null) {
+                removeCommentsFromNews.put(news, removeCommentsFromNews.getOrDefault(news, 0) + 1);
+            }
+        }
+        this.getRepository().deleteAll(parentComments);
 
         final List<PacifistaNews> newsToSave = new ArrayList<>();
-
-        for (final Map.Entry<PacifistaNews, Integer> entry : removeLikesFromNews.entrySet()) {
+        for (final Map.Entry<PacifistaNews, Integer> entry : removeCommentsFromNews.entrySet()) {
             news = entry.getKey();
             news.setComments(news.getComments() - entry.getValue());
             if (news.getComments() < 0) {
@@ -113,7 +121,6 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
 
             newsToSave.add(news);
         }
-
         this.newsRepository.saveAll(newsToSave);
     }
 

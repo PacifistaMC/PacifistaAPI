@@ -2,7 +2,6 @@ package fr.pacifista.api.web.news.service.repositories;
 
 import com.funixproductions.core.crud.repositories.ApiRepository;
 import fr.pacifista.api.web.news.service.entities.PacifistaNewsUserData;
-import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsCommentLike;
 import fr.pacifista.api.web.news.service.entities.news.PacifistaNews;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -18,6 +17,6 @@ public interface PacifistaNewsUserDataRepository<T extends PacifistaNewsUserData
 
     void deleteAllByNews(PacifistaNews news);
 
-    Collection<PacifistaNewsCommentLike> findAllByNewsInAndMinecraftUsernameIgnoreCaseAndFunixProdUserId(Iterable<PacifistaNews> news, String minecraftUsername, String funixProdUserId);
+    Collection<T> findAllByNewsInAndMinecraftUsernameIgnoreCaseAndFunixProdUserId(Iterable<PacifistaNews> news, String minecraftUsername, String funixProdUserId);
 
 }

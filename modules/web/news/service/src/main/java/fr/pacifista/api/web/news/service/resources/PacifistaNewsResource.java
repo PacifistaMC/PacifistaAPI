@@ -78,8 +78,9 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
 
         if (!newsId.equals(viewIpCount.getIfPresent(ip))) {
-            this.newsService.setNewsViewsAmount(pacifistaNewsDTO.getId(), pacifistaNewsDTO.getViews() + 1);
             pacifistaNewsDTO.setViews(pacifistaNewsDTO.getViews() + 1);
+
+            this.newsService.setNewsViewsAmount(pacifistaNewsDTO.getId(), pacifistaNewsDTO.getViews());
             this.viewIpCount.put(ip, newsId);
         }
 
@@ -97,8 +98,9 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
 
         if (!news.getUuid().toString().equals(viewIpCount.getIfPresent(ip))) {
-            this.newsService.setNewsViewsAmount(news.getUuid(), news.getViews() + 1);
             news.setViews(news.getViews() + 1);
+
+            this.newsService.setNewsViewsAmount(news.getUuid(), news.getViews());
             this.viewIpCount.put(ip, news.getUuid().toString());
         }
 
