@@ -135,10 +135,8 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     @Override
     @Transactional
     public void deleteComment(String commentId) {
-        final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, false);
-
+        this.checkFilterEditOrCreate(commentId, false);
         this.service.delete(commentId);
-        this.newsService.setNewsCommentsAmount(commentDTO.getNews().getId(), commentDTO.getNews().getComments() - 1);
     }
 
     @Override

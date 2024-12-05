@@ -557,6 +557,10 @@ class PacifistaNewsCommentResourceTest {
 
         this.deleteComment(parentComment.getId().toString(), false);
 
+        assertNull(
+                this.commentRepository.findByUuid(childComment.getId().toString()).orElse(null)
+        );
+
         news = this.newsRepository.findByUuid(newsDTO.getId().toString()).orElse(null);
         assertNotNull(news);
         assertEquals(0, news.getComments());

@@ -87,7 +87,7 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
 
     @Override
     public void beforeDeletingEntity(@NonNull Iterable<PacifistaNewsComment> entities) {
-        final List<PacifistaNewsComment> comments = new ArrayList<>();
+        final Set<PacifistaNewsComment> comments = new HashSet<>();
         final Map<PacifistaNews, Integer> removeCommentsFromNews = new HashMap<>();
         PacifistaNews news;
 
@@ -101,19 +101,20 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
             }
         }
 
-        final Iterable<PacifistaNewsComment> parentComments = super.getRepository().getAllByParentIsIn(comments);
-        for (final PacifistaNewsComment parentComment : parentComments) {
-            news = parentComment.getNews();
+        final Iterable<PacifistaNewsComment> childs = this.getRepository().getAllByParentIsIn(comments);
+        for (final PacifistaNewsComment child : childs) {
+            news = child.getNews();
 
             if (news != null) {
                 removeCommentsFromNews.put(news, removeCommentsFromNews.getOrDefault(news, 0) + 1);
             }
         }
-        this.getRepository().deleteAll(parentComments);
+        super.getRepository().deleteAll(childs);
 
-        final List<PacifistaNews> newsToSave = new ArrayList<>();
+        final Set<PacifistaNews> newsToSave = new HashSet<>();
         for (final Map.Entry<PacifistaNews, Integer> entry : removeCommentsFromNews.entrySet()) {
             news = entry.getKey();
+
             news.setComments(news.getComments() - entry.getValue());
             if (news.getComments() < 0) {
                 news.setComments(0);
