@@ -4,6 +4,8 @@ import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
+import fr.pacifista.api.core.service.tools.discord.dtos.DiscordSendMessageWebHookDTO;
+import fr.pacifista.api.core.service.tools.discord.services.DiscordMessagesService;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsCommentLike;
@@ -28,18 +30,21 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
 
     private final CurrentSession currentSession;
     private final PacifistaWebUserLinkComponent webUserLinkComponent;
+    private final DiscordMessagesService discordMessagesService;
 
     public PacifistaNewsCommentCrudService(PacifistaNewsCommentRepository repository,
                                            PacifistaNewsCommentMapper mapper,
                                            PacifistaNewsRepository newsRepository,
                                            CurrentSession currentSession,
                                            PacifistaWebUserLinkComponent webUserLinkComponent,
-                                           PacifistaNewsCommentLikeRepository commentLikeRepository) {
+                                           PacifistaNewsCommentLikeRepository commentLikeRepository,
+                                           DiscordMessagesService discordMessagesService) {
         super(repository, mapper);
         this.newsRepository = newsRepository;
         this.currentSession = currentSession;
         this.webUserLinkComponent = webUserLinkComponent;
         this.commentLikeRepository = commentLikeRepository;
+        this.discordMessagesService = discordMessagesService;
     }
 
     @Override
@@ -81,6 +86,17 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
                 }
 
                 pacifistaNewsComment.setParent(parent);
+            }
+        }
+    }
+
+    @Override
+    public void afterSavingEntity(@NonNull Iterable<PacifistaNewsComment> entity) {
+        for (PacifistaNewsComment comment : entity) {
+            if (comment.getUpdatedAt() != null) {
+                this.alertDiscordWhenCommentUpdated(comment);
+            } else {
+                this.alertDiscordWhenCommentAdded(comment);
             }
         }
     }
@@ -142,6 +158,10 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
             commentsToSave.add(parentComment);
         }
         this.getRepository().saveAll(commentsToSave);
+
+        for (final PacifistaNewsComment comment : entities) {
+            this.alertDiscordWhenCommentDeleted(comment);
+        }
     }
 
     public void setCommentLikes(final UUID commentId, final int likes) {
@@ -182,5 +202,50 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         }
 
         return false;
+    }
+
+    private void alertDiscordWhenCommentAdded(final PacifistaNewsComment comment) {
+        final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
+
+        message.setContent(String.format(
+                "Nouveau commentaire de %s sur l'article %s : %s. Lien de l'article : %s",
+                comment.getMinecraftUsername(),
+                comment.getNews().getTitle(),
+                comment.getContent(),
+                String.format("https://pacifista.fr/news/%s", comment.getNews().getName())
+        ));
+        message.setUsername("Pacifista News");
+
+        this.discordMessagesService.sendAlertMessage(message);
+    }
+
+    private void alertDiscordWhenCommentUpdated(final PacifistaNewsComment comment) {
+        final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
+
+        message.setContent(String.format(
+                "Commentaire mis à jour par %s sur l'article %s : %s. Lien de l'article : %s",
+                comment.getMinecraftUsername(),
+                comment.getNews().getTitle(),
+                comment.getContent(),
+                String.format("https://pacifista.fr/news/%s", comment.getNews().getName())
+        ));
+        message.setUsername("Pacifista News");
+
+        this.discordMessagesService.sendAlertMessage(message);
+    }
+
+    private void alertDiscordWhenCommentDeleted(final PacifistaNewsComment comment) {
+        final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
+
+        message.setContent(String.format(
+                "Commentaire supprimé de %s sur l'article %s : %s. Lien de l'article : %s",
+                comment.getMinecraftUsername(),
+                comment.getNews().getTitle(),
+                comment.getContent(),
+                String.format("https://pacifista.fr/news/%s", comment.getNews().getName())
+        ));
+        message.setUsername("Pacifista News");
+
+        this.discordMessagesService.sendAlertMessage(message);
     }
 }

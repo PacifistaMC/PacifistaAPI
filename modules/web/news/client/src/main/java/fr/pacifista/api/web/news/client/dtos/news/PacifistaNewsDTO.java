@@ -5,12 +5,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PacifistaNewsDTO extends ApiDTO {
 
     /**
@@ -90,4 +92,17 @@ public class PacifistaNewsDTO extends ApiDTO {
      */
     private Boolean liked;
 
+    public PacifistaNewsDTO(String name,
+                            String title,
+                            String subtitle,
+                            String bodyHtml,
+                            String bodyMarkdown,
+                            boolean draft) {
+        this.name = name;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.bodyHtml = bodyHtml;
+        this.bodyMarkdown = bodyMarkdown;
+        this.draft = draft;
+    }
 }

@@ -1,6 +1,7 @@
 package fr.pacifista.api.web.user.service;
 
 import com.funixproductions.api.user.client.clients.UserAuthClient;
+import fr.pacifista.api.core.service.tools.discord.clients.DiscordWebhookClient;
 import fr.pacifista.api.server.players.data.client.clients.PacifistaPlayerDataInternalClient;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.components.PacifistaWebLegalComponent;
@@ -13,7 +14,8 @@ import org.springframework.context.annotation.FilterType;
 @EnableFeignClients(clients = {
         UserAuthClient.class,
         PacifistaWebUserLinkInternalClient.class,
-        PacifistaPlayerDataInternalClient.class
+        PacifistaPlayerDataInternalClient.class,
+        DiscordWebhookClient.class
 })
 @SpringBootApplication(scanBasePackages = {
         "com.funixproductions",
