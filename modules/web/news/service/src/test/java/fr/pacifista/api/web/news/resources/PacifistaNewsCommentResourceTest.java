@@ -570,6 +570,42 @@ class PacifistaNewsCommentResourceTest {
     }
 
     @Test
+    void testCommentReplies() throws Exception {
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO parentComment = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(parentComment);
+        this.createComment(new PacifistaNewsCommentDTO(parentComment, "dd" + UUID.randomUUID(), newsDTO), false);
+
+        PacifistaNewsComment comment = this.commentRepository.findByUuid(parentComment.getId().toString()).orElse(null);
+        assertNotNull(comment);
+        assertEquals(1, comment.getReplies());
+
+        PacifistaNewsCommentDTO childComment = this.createComment(new PacifistaNewsCommentDTO(parentComment, "dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(childComment);
+
+        comment = this.commentRepository.findByUuid(parentComment.getId().toString()).orElse(null);
+        assertNotNull(comment);
+        assertEquals(2, comment.getReplies());
+
+        this.deleteComment(childComment.getId().toString(), false);
+
+        comment = this.commentRepository.findByUuid(parentComment.getId().toString()).orElse(null);
+        assertNotNull(comment);
+        assertEquals(1, comment.getReplies());
+    }
+
+    @Test
     void testUpdateCommentFailWhenCommentTooShort() throws Exception {
         final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
         setUserMock(userDTO);

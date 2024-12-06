@@ -27,4 +27,7 @@ public class PacifistaNewsComment extends PacifistaNewsUserData {
     @Column(name = "likes", nullable = false)
     private Integer likes;
 
+    @Column(name = "replies", nullable = false)
+    private Integer replies;
+
 }

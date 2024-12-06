@@ -116,9 +116,15 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
             throw new ApiForbiddenException("Vous n'avez pas la permission de commenter les brouillons.");
         } else {
             commentDTO.setLikes(0);
+            commentDTO.setReplies(0);
 
             final PacifistaNewsCommentDTO res = this.service.create(commentDTO);
             this.newsService.setNewsCommentsAmount(news.getId(), news.getComments() + 1);
+
+            if (res.getParent() != null) {
+                final PacifistaNewsCommentDTO parent = res.getParent();
+                this.service.setCommentReplies(parent.getId(), parent.getReplies() + 1);
+            }
             return res;
         }
     }

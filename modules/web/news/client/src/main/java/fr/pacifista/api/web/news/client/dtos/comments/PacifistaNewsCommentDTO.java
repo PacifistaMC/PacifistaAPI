@@ -35,6 +35,11 @@ public class PacifistaNewsCommentDTO extends PacifistaNewsUserDataDTO {
     private Integer likes;
 
     /**
+     * Nombre de réponses à ce commentaire
+     */
+    private Integer replies;
+
+    /**
      * Indique si l'utilisateur a aimé ce commentaire, false si pas de bearer
      */
     private Boolean liked;

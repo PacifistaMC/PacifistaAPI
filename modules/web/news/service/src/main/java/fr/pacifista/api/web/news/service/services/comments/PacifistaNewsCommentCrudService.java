@@ -125,8 +125,8 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         this.newsRepository.saveAll(newsToSave);
     }
 
-    public void setCommentLikes(final UUID newsId, final int likes) {
-        final Optional<PacifistaNewsComment> search = this.getRepository().findByUuid(newsId.toString());
+    public void setCommentLikes(final UUID commentId, final int likes) {
+        final Optional<PacifistaNewsComment> search = this.getRepository().findByUuid(commentId.toString());
 
         if (search.isPresent()) {
             final PacifistaNewsComment comment = search.get();
@@ -134,6 +134,21 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
             comment.setLikes(likes);
             if (likes < 0) {
                 comment.setLikes(0);
+            }
+
+            this.getRepository().save(comment);
+        }
+    }
+
+    public void setCommentReplies(final UUID commentId, final int replies) {
+        final Optional<PacifistaNewsComment> search = this.getRepository().findByUuid(commentId.toString());
+
+        if (search.isPresent()) {
+            final PacifistaNewsComment comment = search.get();
+
+            comment.setReplies(replies);
+            if (replies < 0) {
+                comment.setReplies(0);
             }
 
             this.getRepository().save(comment);
