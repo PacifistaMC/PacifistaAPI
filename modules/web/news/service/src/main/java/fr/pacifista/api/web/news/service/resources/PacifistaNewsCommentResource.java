@@ -137,7 +137,11 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
         final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, true);
 
         commentDTO.setContent(comment);
-        return this.service.updatePut(commentDTO);
+
+        final PacifistaNewsCommentDTO res = this.service.updatePut(commentDTO);
+        this.service.alertDiscordWhenCommentUpdated(res);
+
+        return res;
     }
 
     @Override
@@ -218,7 +222,6 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
 
             this.likeService.delete(likeDTO.getId().toString());
             this.service.setCommentLikes(commentDTO.getId(), commentDTO.getLikes() - 1);
-            this.service.updatePut(commentDTO);
         }
     }
 

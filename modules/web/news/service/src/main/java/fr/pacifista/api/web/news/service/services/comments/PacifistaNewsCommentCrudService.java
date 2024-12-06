@@ -93,9 +93,7 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
     @Override
     public void afterSavingEntity(@NonNull Iterable<PacifistaNewsComment> entity) {
         for (PacifistaNewsComment comment : entity) {
-            if (comment.getUpdatedAt() != null) {
-                this.alertDiscordWhenCommentUpdated(comment);
-            } else {
+            if (comment.getUpdatedAt() == null) {
                 this.alertDiscordWhenCommentAdded(comment);
             }
         }
@@ -208,7 +206,7 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "Nouveau commentaire de %s sur l'article %s : %s. Lien de l'article : %s",
+                "Nouveau commentaire de %s sur l'article %s : %s.\nLien de l'article : %s",
                 comment.getMinecraftUsername(),
                 comment.getNews().getTitle(),
                 comment.getContent(),
@@ -219,11 +217,11 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         this.discordMessagesService.sendAlertMessage(message);
     }
 
-    private void alertDiscordWhenCommentUpdated(final PacifistaNewsComment comment) {
+    public void alertDiscordWhenCommentUpdated(final PacifistaNewsCommentDTO comment) {
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "Commentaire mis à jour par %s sur l'article %s : %s. Lien de l'article : %s",
+                "Commentaire mis à jour par %s sur l'article %s : **%s**.\nLien de l'article : %s",
                 comment.getMinecraftUsername(),
                 comment.getNews().getTitle(),
                 comment.getContent(),
@@ -238,7 +236,7 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "Commentaire supprimé de %s sur l'article %s : %s. Lien de l'article : %s",
+                "Commentaire supprimé de %s sur l'article %s : **%s**.\nLien de l'article : %s",
                 comment.getMinecraftUsername(),
                 comment.getNews().getTitle(),
                 comment.getContent(),
