@@ -6,8 +6,12 @@ import com.funixproductions.api.user.client.enums.UserRole;
 import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.test.beans.JsonHelper;
 import fr.pacifista.api.web.news.client.dtos.ban.PacifistaNewsBanDTO;
+import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
+import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
 import fr.pacifista.api.web.news.service.PacifistaWebNewsApp;
 import fr.pacifista.api.web.news.service.repositories.ban.PacifistaNewsBanRepository;
+import fr.pacifista.api.web.news.service.resources.PacifistaNewsCommentResource;
+import fr.pacifista.api.web.news.service.resources.PacifistaNewsResource;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,11 +19,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -45,10 +53,16 @@ class PacifistaNewsBanResourceTest {
     @Autowired
     private PacifistaNewsBanRepository repository;
 
-    @MockBean
+    @Autowired
+    private PacifistaNewsCommentResource commentResource;
+
+    @Autowired
+    private PacifistaNewsResource newsResource;
+
+    @MockitoBean
     private UserAuthClient authClient;
 
-    @MockBean
+    @MockitoBean
     private PacifistaWebUserLinkInternalClient pacifistaLinkClient;
 
     @BeforeEach
@@ -152,6 +166,79 @@ class PacifistaNewsBanResourceTest {
         final PacifistaNewsBanDTO response = createRequest(new PacifistaNewsBanDTO(mockUser.getId(), UUID.randomUUID().toString(), null), false);
         assertNotNull(response);
         assertNull(response.getReason());
+    }
+
+    @Test
+    void testBanUserAndCheckIfTheirCommentsAreDeleted() throws Exception {
+        final UserDTO mockUser = generateUserDtoMock(UserRole.ADMIN);
+        final PacifistaWebUserLinkDTO mockUserMinecraftLink = generatePacifistaLinkMock(mockUser);
+
+        this.setUserDtoMock(mockUser);
+        this.setPacifistaLinkMock(mockUserMinecraftLink);
+
+        InputStream imageStream = getClass().getResourceAsStream("/test-image.jpeg");
+        MockMultipartFile newsImage = new MockMultipartFile(
+                "image",
+                "test-image.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                imageStream
+        );
+        final PacifistaNewsDTO newsDTO = this.createNews(new PacifistaNewsDTO(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                false
+        ), newsImage);
+
+        mockUser.setRole(UserRole.USER);
+        this.setUserDtoMock(mockUser);
+
+        assertTrue(
+                this.commentResource.getCommentsOnNews(newsDTO.getId().toString(), 0).getContent().isEmpty()
+        );
+
+        this.createComment(new PacifistaNewsCommentDTO(
+                UUID.randomUUID().toString(),
+                newsDTO
+        ));
+
+        assertFalse(
+                this.commentResource.getCommentsOnNews(newsDTO.getId().toString(), 0).getContent().isEmpty()
+        );
+
+        mockUser.setRole(UserRole.PACIFISTA_MODERATOR);
+        this.setUserDtoMock(mockUser);
+
+        this.createRequest(new PacifistaNewsBanDTO(
+                mockUser.getId(),
+                mockUserMinecraftLink.getMinecraftUsername(),
+                "test" + UUID.randomUUID()
+        ), false);
+
+        assertTrue(
+                this.commentResource.getCommentsOnNews(newsDTO.getId().toString(), 0).getContent().isEmpty()
+        );
+    }
+
+    private PacifistaNewsDTO createNews(PacifistaNewsDTO request, MockMultipartFile newsImage) throws Exception {
+        final MockMultipartFile metadata = new MockMultipartFile(
+                "dto",
+                "dto",
+                MediaType.APPLICATION_JSON_VALUE,
+                jsonHelper.toJson(request).getBytes(StandardCharsets.UTF_8));
+
+        final MvcResult result = this.mockMvc.perform(multipart("/web/news")
+                        .file(newsImage)
+                        .file(metadata)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return jsonHelper.fromJson(result.getResponse().getContentAsString(), PacifistaNewsDTO.class);
     }
 
     private UserDTO generateUserDtoMock(final UserRole role) {
@@ -274,6 +361,15 @@ class PacifistaNewsBanResourceTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    private void createComment(final PacifistaNewsCommentDTO request) throws Exception {
+        this.mockMvc.perform(post("/web/news/comments")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer dd" + UUID.randomUUID())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonHelper.toJson(request))
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
     }
 
 }

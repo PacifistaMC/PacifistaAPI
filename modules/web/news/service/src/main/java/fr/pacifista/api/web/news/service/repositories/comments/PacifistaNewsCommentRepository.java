@@ -8,5 +8,5 @@ import java.util.Collection;
 
 @Repository
 public interface PacifistaNewsCommentRepository extends PacifistaNewsUserDataRepository<PacifistaNewsComment> {
-    void deleteAllByParentIsIn(Collection<PacifistaNewsComment> parent);
+    Collection<PacifistaNewsComment> getAllByParentIsIn(Collection<PacifistaNewsComment> parent);
 }

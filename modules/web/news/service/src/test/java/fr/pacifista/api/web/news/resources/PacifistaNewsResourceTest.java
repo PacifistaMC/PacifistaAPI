@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -72,10 +72,10 @@ class PacifistaNewsResourceTest {
     @Autowired
     private PacifistaNewsCommentLikeRepository commentLikeRepository;
 
-    @MockBean
+    @MockitoBean
     private UserAuthClient authClient;
 
-    @MockBean
+    @MockitoBean
     private PacifistaWebUserLinkInternalClient pacifistaLinkClient;
 
     @BeforeEach
@@ -524,6 +524,64 @@ class PacifistaNewsResourceTest {
 
         this.getNewsByName(createdNews.getName(), false, true, true);
         this.getNewsByName(createdNews.getName(), false, false, true);
+    }
+
+    @Test
+    void testLikeStatusOnNews() throws Exception {
+        UserDTO mockUser = UserDTO.generateFakeDataForTestingPurposes();
+        mockUser.setRole(UserRole.ADMIN);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+        final PacifistaNewsDTO createNewsRequest = this.createNewsDTORequest();
+        createNewsRequest.setDraft(false);
+
+        PacifistaWebUserLinkDTO mockUserMinecraftLink = new PacifistaWebUserLinkDTO(mockUser.getId(), UUID.randomUUID());
+        mockUserMinecraftLink.setMinecraftUsername("mockUser" + UUID.randomUUID());
+        mockUserMinecraftLink.setLinked(true);
+        mockUserMinecraftLink.setCreatedAt(new Date());
+        mockUserMinecraftLink.setId(UUID.randomUUID());
+
+        when(pacifistaLinkClient.getAll(anyString(), anyString(), anyString(), anyString())).thenReturn(new PageDTO<>(
+                List.of(mockUserMinecraftLink), 1, 0, 1L, 1
+        ));
+
+        final PacifistaNewsDTO createdNews = this.sendCreateRequest(createNewsRequest, false);
+        assertNotNull(createdNews);
+
+        PacifistaNewsDTO gotNews = this.getNewsById(createdNews.getId(), false, true, true);
+        assertNotNull(gotNews);
+        assertFalse(gotNews.getLiked());
+
+        gotNews = this.getNewsById(createdNews.getId(), false, false, true);
+        assertNotNull(gotNews);
+        assertFalse(gotNews.getLiked());
+
+        this.addLikeOnNews(createdNews.getId(), false);
+
+        gotNews = this.getNewsById(createdNews.getId(), false, false, true);
+        assertNotNull(gotNews);
+        assertFalse(gotNews.getLiked());
+
+        gotNews = this.getNewsById(createdNews.getId(), false, true, true);
+        assertNotNull(gotNews);
+        assertTrue(gotNews.getLiked());
+
+        mockUser = UserDTO.generateFakeDataForTestingPurposes();
+        mockUser.setRole(UserRole.ADMIN);
+        when(authClient.current(anyString())).thenReturn(mockUser);
+
+        mockUserMinecraftLink = new PacifistaWebUserLinkDTO(mockUser.getId(), UUID.randomUUID());
+        mockUserMinecraftLink.setMinecraftUsername("mockUser" + UUID.randomUUID());
+        mockUserMinecraftLink.setLinked(true);
+        mockUserMinecraftLink.setCreatedAt(new Date());
+        mockUserMinecraftLink.setId(UUID.randomUUID());
+
+        when(pacifistaLinkClient.getAll(anyString(), anyString(), anyString(), anyString())).thenReturn(new PageDTO<>(
+                List.of(mockUserMinecraftLink), 1, 0, 1L, 1
+        ));
+
+        gotNews = this.getNewsById(createdNews.getId(), false, true, true);
+        assertNotNull(gotNews);
+        assertFalse(gotNews.getLiked());
     }
 
     private PacifistaNewsDTO createNewsDTORequest() {

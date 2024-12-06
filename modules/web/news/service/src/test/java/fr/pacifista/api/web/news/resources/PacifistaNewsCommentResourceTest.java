@@ -20,14 +20,15 @@ import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsReposito
 import fr.pacifista.api.web.news.service.services.ban.PacifistaNewsBanCrudService;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -66,10 +67,10 @@ class PacifistaNewsCommentResourceTest {
     @Autowired
     private PacifistaNewsMapper newsMapper;
 
-    @MockBean
+    @MockitoBean
     private UserAuthClient authClient;
 
-    @MockBean
+    @MockitoBean
     private PacifistaWebUserLinkInternalClient pacifistaLinkClient;
 
     @Autowired
@@ -556,12 +557,52 @@ class PacifistaNewsCommentResourceTest {
 
         this.deleteComment(parentComment.getId().toString(), false);
 
+        assertNull(
+                this.commentRepository.findByUuid(childComment.getId().toString()).orElse(null)
+        );
+
         news = this.newsRepository.findByUuid(newsDTO.getId().toString()).orElse(null);
         assertNotNull(news);
         assertEquals(0, news.getComments());
 
         this.commentRepository.findByUuid(childComment.getId().toString()).ifPresent(comment -> fail("Child comment should have been deleted"));
         this.commentRepository.findByUuid(parentComment.getId().toString()).ifPresent(comment -> fail("Parent comment should have been deleted"));
+    }
+
+    @Test
+    void testCommentReplies() throws Exception {
+        final UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        final PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO parentComment = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(parentComment);
+        this.createComment(new PacifistaNewsCommentDTO(parentComment, "dd" + UUID.randomUUID(), newsDTO), false);
+
+        PacifistaNewsComment comment = this.commentRepository.findByUuid(parentComment.getId().toString()).orElse(null);
+        assertNotNull(comment);
+        assertEquals(1, comment.getReplies());
+
+        PacifistaNewsCommentDTO childComment = this.createComment(new PacifistaNewsCommentDTO(parentComment, "dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(childComment);
+
+        comment = this.commentRepository.findByUuid(parentComment.getId().toString()).orElse(null);
+        assertNotNull(comment);
+        assertEquals(2, comment.getReplies());
+
+        this.deleteComment(childComment.getId().toString(), false);
+
+        comment = this.commentRepository.findByUuid(parentComment.getId().toString()).orElse(null);
+        assertNotNull(comment);
+        assertEquals(1, comment.getReplies());
     }
 
     @Test
@@ -852,6 +893,60 @@ class PacifistaNewsCommentResourceTest {
         this.createComment(new PacifistaNewsCommentDTO(reply, "ddReply" + UUID.randomUUID(), newsDTO), true);
     }
 
+    @Test
+    void testLikeStatusOnComment() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO commentDTO = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(commentDTO);
+
+        PacifistaNewsCommentDTO gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), true);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), false);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        this.likeComment(commentDTO.getId().toString(), false);
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), true);
+        assertNotNull(gotComment);
+        assertTrue(gotComment.getLiked());
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), false);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), true);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+
+        gotComment = this.getCommentByNewsIdAndCommentId(newsDTO.getId(), commentDTO.getId(), false);
+        assertNotNull(gotComment);
+        assertFalse(gotComment.getLiked());
+    }
+
     private void setUserMock(final UserDTO userDTO) {
         when(authClient.current(anyString())).thenReturn(userDTO);
     }
@@ -1101,5 +1196,18 @@ class PacifistaNewsCommentResourceTest {
                     .accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isNotFound());
         }
+    }
+
+    @Nullable
+    private PacifistaNewsCommentDTO getCommentByNewsIdAndCommentId(final UUID newsId, final UUID commentId, final boolean authed) throws Exception {
+        final Iterable<PacifistaNewsCommentDTO> comments = this.getCommentsOnNews(newsId, 0, authed).getContent();
+
+        for (final PacifistaNewsCommentDTO comment : comments) {
+            if (comment.getId().equals(commentId)) {
+                return comment;
+            }
+        }
+
+        return null;
     }
 }

@@ -3,7 +3,8 @@ package fr.pacifista.api.server.box.service.mappers;
 import com.funixproductions.core.crud.mappers.ApiMapper;
 import fr.pacifista.api.server.box.client.dtos.BoxRewardDTO;
 import fr.pacifista.api.server.box.service.entities.BoxReward;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface BoxRewardMapper extends ApiMapper<BoxReward, BoxRewardDTO> {

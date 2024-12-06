@@ -78,11 +78,9 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
         final String ip = this.ipUtils.getClientIp(this.servletRequest);
 
         if (!newsId.equals(viewIpCount.getIfPresent(ip))) {
-            PacifistaNews news = this.newsService.getRepository().findByUuid(newsId).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
-            news.setViews(news.getViews() + 1);
-            news = this.newsService.getRepository().save(news);
+            pacifistaNewsDTO.setViews(pacifistaNewsDTO.getViews() + 1);
 
-            pacifistaNewsDTO.setViews(news.getViews());
+            this.newsService.setNewsViewsAmount(pacifistaNewsDTO.getId(), pacifistaNewsDTO.getViews());
             this.viewIpCount.put(ip, newsId);
         }
 
@@ -101,7 +99,8 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
         if (!news.getUuid().toString().equals(viewIpCount.getIfPresent(ip))) {
             news.setViews(news.getViews() + 1);
-            news = this.newsService.getRepository().save(news);
+
+            this.newsService.setNewsViewsAmount(news.getUuid(), news.getViews());
             this.viewIpCount.put(ip, news.getUuid().toString());
         }
 
@@ -224,8 +223,7 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
             like.setNews(news);
             like = this.likeService.create(like);
 
-            news.setLikes(news.getLikes() + 1);
-            this.newsService.updatePut(news);
+            this.newsService.setNewsLikeAmount(news.getId(), news.getLikes() + 1);
             return like;
         }
     }
@@ -246,18 +244,11 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
 
         if (likedNews != null) {
             this.likeService.delete(likedNews.getId().toString());
-
-            news.setLikes(news.getLikes() - 1);
-            if (news.getLikes() < 0) {
-                news.setLikes(0);
-            }
-            this.newsService.updatePut(news);
+            this.newsService.setNewsLikeAmount(news.getId(), news.getLikes() - 1);
         } else {
             throw new ApiBadRequestException("Vous n'avez pas encore aimé cette news.");
         }
     }
-
-
 
     @Nullable
     private PacifistaNewsLikeDTO getLikeForUserAndNews(final UserDTO user, final String newsId) {

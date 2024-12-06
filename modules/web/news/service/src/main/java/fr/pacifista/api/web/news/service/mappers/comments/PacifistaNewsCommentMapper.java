@@ -5,7 +5,14 @@ import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.service.entities.comments.PacifistaNewsComment;
 import fr.pacifista.api.web.news.service.mappers.news.PacifistaNewsMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {PacifistaNewsMapper.class})
 public interface PacifistaNewsCommentMapper extends ApiMapper<PacifistaNewsComment, PacifistaNewsCommentDTO> {
+
+    @Override
+    @Mapping(target = "id", source = "uuid")
+    @Mapping(target = "liked", constant = "false")
+    PacifistaNewsCommentDTO toDto(PacifistaNewsComment entity);
+
 }

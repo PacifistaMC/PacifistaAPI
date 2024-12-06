@@ -10,11 +10,13 @@ import fr.pacifista.api.server.jobs.client.dtos.JobPlayerTaskDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RunWith(MockitoJUnitRunner.class)
 class JobPlayerTaskResourceTest {
 
     @Autowired
@@ -36,7 +39,7 @@ class JobPlayerTaskResourceTest {
     @Autowired
     private JsonHelper jsonHelper;
 
-    @MockBean
+    @MockitoBean
     private UserAuthClient userAuthClient;
 
     @BeforeEach

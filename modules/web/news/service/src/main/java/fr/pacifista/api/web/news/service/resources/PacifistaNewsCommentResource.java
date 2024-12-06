@@ -116,12 +116,17 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
             throw new ApiForbiddenException("Vous n'avez pas la permission de commenter les brouillons.");
         } else {
             commentDTO.setLikes(0);
+            commentDTO.setReplies(0);
 
             final PacifistaNewsCommentDTO res = this.service.create(commentDTO);
+            this.newsService.setNewsCommentsAmount(news.getId(), news.getComments() + 1);
 
-            news.setComments(news.getComments() + 1);
-            this.newsService.updatePut(news);
+            if (res.getParent() != null) {
+                final PacifistaNewsCommentDTO parent = res.getParent();
 
+                parent.setReplies(parent.getReplies() + 1);
+                this.service.setCommentReplies(parent.getId(), parent.getReplies());
+            }
             return res;
         }
     }
@@ -138,16 +143,8 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     @Override
     @Transactional
     public void deleteComment(String commentId) {
-        final PacifistaNewsCommentDTO commentDTO = this.checkFilterEditOrCreate(commentId, false);
-
+        this.checkFilterEditOrCreate(commentId, false);
         this.service.delete(commentId);
-
-        final PacifistaNewsDTO news = this.newsService.findById(commentDTO.getNews().getId().toString());
-        news.setComments(news.getComments() - 1);
-        if (news.getComments() < 0) {
-            news.setComments(0);
-        }
-        this.newsService.updatePut(news);
     }
 
     @Override
@@ -193,10 +190,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
                 newLikeDTO.setNews(commentDTO.getNews());
 
                 final PacifistaNewsCommentLikeDTO result = this.likeService.create(newLikeDTO);
-
-                commentDTO.setLikes(commentDTO.getLikes() + 1);
-                this.service.updatePut(commentDTO);
-
+                this.service.setCommentLikes(commentDTO.getId(), commentDTO.getLikes() + 1);
                 return result;
             } else {
                 throw new ApiBadRequestException("Vous avez déjà liké ce commentaire.");
@@ -223,6 +217,8 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
             }
 
             this.likeService.delete(likeDTO.getId().toString());
+            this.service.setCommentLikes(commentDTO.getId(), commentDTO.getLikes() - 1);
+            this.service.updatePut(commentDTO);
         }
     }
 

@@ -6,7 +6,8 @@ import fr.pacifista.api.server.warps.client.dtos.WarpConfigDTO;
 import fr.pacifista.api.server.warps.client.dtos.WarpDTO;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(
         name = "WarpClient",

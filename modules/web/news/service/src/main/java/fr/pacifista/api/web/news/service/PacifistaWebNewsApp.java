@@ -6,7 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients(basePackages = {
         "com.funixproductions",
-        "fr.pacifista.api.web.user.client.clients"
+        "fr.pacifista.api.web.user.client.clients",
+        "fr.pacifista.api.core.service.tools.discord"
 })
 @SpringBootApplication(scanBasePackages = {
         "com.funixproductions",

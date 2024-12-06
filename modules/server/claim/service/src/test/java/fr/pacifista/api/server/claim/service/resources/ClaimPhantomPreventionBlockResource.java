@@ -9,12 +9,12 @@ import fr.pacifista.api.server.claim.client.clients.ClaimPhantomPreventionBlockC
 import fr.pacifista.api.server.claim.client.dtos.ClaimPhantomPreventionBlockDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -34,7 +34,7 @@ class ClaimPhantomPreventionBlockResource {
     @Autowired
     private JsonHelper jsonHelper;
 
-    @Mock
+    @MockitoBean
     private UserAuthClient userAuthClient;
 
     @BeforeEach
