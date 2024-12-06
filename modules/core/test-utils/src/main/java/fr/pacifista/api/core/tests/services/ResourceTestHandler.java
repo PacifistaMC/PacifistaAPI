@@ -3,7 +3,7 @@ package fr.pacifista.api.core.tests.services;
 import com.funixproductions.api.user.client.clients.UserAuthClient;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.enums.UserRole;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Date;
 import java.util.UUID;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
  */
 public abstract class ResourceTestHandler {
 
-    @MockBean
+    @MockitoBean
     UserAuthClient authClient;
 
     public UserDTO setupPacifistaAdmin() {

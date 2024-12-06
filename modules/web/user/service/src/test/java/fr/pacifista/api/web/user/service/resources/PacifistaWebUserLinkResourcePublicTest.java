@@ -11,12 +11,14 @@ import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkClientImpl;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import fr.pacifista.api.web.user.service.services.PacifistaWebUserLinkService;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RunWith(MockitoJUnitRunner.class)
 class PacifistaWebUserLinkResourcePublicTest {
 
     private static final String ROUTE = "/" + PacifistaWebUserLinkClientImpl.PATH + "/public";
@@ -46,10 +49,10 @@ class PacifistaWebUserLinkResourcePublicTest {
     @Autowired
     private PacifistaWebUserLinkService service;
 
-    @MockBean
+    @MockitoBean
     private UserAuthClient userAuthClient;
 
-    @MockBean
+    @MockitoBean
     private PacifistaPlayerDataInternalClient pacifistaPlayerDataInternalClient;
 
     @Test

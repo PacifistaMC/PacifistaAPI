@@ -5,6 +5,8 @@ import fr.pacifista.api.core.tests.services.ResourceTestHandler;
 import fr.pacifista.api.server.players.data.client.dtos.PacifistaPlayerDataDTO;
 import fr.pacifista.api.server.players.data.client.dtos.PacifistaPlayerSessionDTO;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RunWith(MockitoJUnitRunner.class)
 class PacifistaPlayerSessionResourceTest extends ResourceTestHandler {
 
     @Autowired

@@ -3,13 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>fr.pacifista.api.serverplayers.data</groupId>
+        <groupId>fr.pacifista.api.server.players.data</groupId>
         <artifactId>pacifista-server-players-data</artifactId>
-        <version>1.5.5.0</version>
+        <version>1.5.6.0</version>
     </parent>
 
-    <groupId>fr.pacifista.api.serverplayers.data.service</groupId>
+    <groupId>fr.pacifista.api.server.players.data.service</groupId>
     <artifactId>pacifista-server-players-data-service</artifactId>
 
     <properties>
@@ -20,7 +21,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>fr.pacifista.api.serverplayers.data.client</groupId>
+            <groupId>fr.pacifista.api.server.players.data.client</groupId>
             <artifactId>pacifista-server-players-data-client</artifactId>
             <version>${fr.pacifista.api.version}</version>
         </dependency>

@@ -5,9 +5,11 @@ import fr.pacifista.api.server.sanctions.client.dtos.SanctionDTO;
 import fr.pacifista.api.server.sanctions.client.enums.SanctionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.UUID;
 
@@ -17,12 +19,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 class SanctionServiceTest {
 
     @Autowired
     SanctionService sanctionService;
 
-    @MockBean
+    @MockitoBean
     EncryptionClient encryptionClient;
 
     @BeforeEach

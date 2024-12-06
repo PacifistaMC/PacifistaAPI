@@ -17,10 +17,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 class ShopArticleResourceTest extends ResourceTestHandler {
 
-    @MockBean
+    @MockitoBean
     ShopArticleService articleService;
 
     @Autowired
@@ -50,7 +50,7 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     @Autowired
     JsonHelper jsonHelper;
 
-    @MockBean
+    @MockitoBean
     CurrentSession currentSession;
 
     private final String route = "/web/shop/articles";

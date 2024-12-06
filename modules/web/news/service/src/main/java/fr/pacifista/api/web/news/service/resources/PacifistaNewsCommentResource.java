@@ -123,7 +123,9 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
 
             if (res.getParent() != null) {
                 final PacifistaNewsCommentDTO parent = res.getParent();
-                this.service.setCommentReplies(parent.getId(), parent.getReplies() + 1);
+
+                parent.setReplies(parent.getReplies() + 1);
+                this.service.setCommentReplies(parent.getId(), parent.getReplies());
             }
             return res;
         }

@@ -89,15 +89,21 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
     public void beforeDeletingEntity(@NonNull Iterable<PacifistaNewsComment> entities) {
         final Set<PacifistaNewsComment> comments = new HashSet<>();
         final Map<PacifistaNews, Integer> removeCommentsFromNews = new HashMap<>();
+        final Map<PacifistaNewsComment, Integer> removeRepliesFromComments = new HashMap<>();
         PacifistaNews news;
+        PacifistaNewsComment parentComment;
 
         for (final PacifistaNewsComment pacifistaNewsComment : entities) {
             news = pacifistaNewsComment.getNews();
+            parentComment = pacifistaNewsComment.getParent();
 
             comments.add(pacifistaNewsComment);
 
             if (news != null) {
                 removeCommentsFromNews.put(news, removeCommentsFromNews.getOrDefault(news, 0) + 1);
+            }
+            if (parentComment != null) {
+                removeRepliesFromComments.put(parentComment, removeRepliesFromComments.getOrDefault(parentComment, 0) + 1);
             }
         }
 
@@ -123,6 +129,19 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
             newsToSave.add(news);
         }
         this.newsRepository.saveAll(newsToSave);
+
+        final Set<PacifistaNewsComment> commentsToSave = new HashSet<>();
+        for (final Map.Entry<PacifistaNewsComment, Integer> entry : removeRepliesFromComments.entrySet()) {
+            parentComment = entry.getKey();
+
+            parentComment.setReplies(parentComment.getReplies() - entry.getValue());
+            if (parentComment.getReplies() < 0) {
+                parentComment.setReplies(0);
+            }
+
+            commentsToSave.add(parentComment);
+        }
+        this.getRepository().saveAll(commentsToSave);
     }
 
     public void setCommentLikes(final UUID commentId, final int likes) {
