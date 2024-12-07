@@ -24,6 +24,13 @@ public class DiscordMessagesService {
         }
 
         try {
+            message.setContent(message.getContent()
+                    .replaceAll("@everyone", "")
+                    .replaceAll("@here", "")
+                    .replaceAll("<", "")
+                    .replaceAll(">", "")
+            );
+
             this.webhookClient.sendMessage(
                     this.webhookConfig.getWebhookAlertId(),
                     this.webhookConfig.getWebhookAlertToken(),
