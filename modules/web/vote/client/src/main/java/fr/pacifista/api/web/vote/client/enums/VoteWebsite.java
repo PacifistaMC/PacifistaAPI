@@ -19,7 +19,7 @@ public enum VoteWebsite {
             "https://serveur-minecraft.com/api/1/vote/4031/{playerIp}",
             "Serveur-Minecraft.com",
             3 * 60,
-            false
+            true
     ),
 
     TOP_SERVEURS_NET(

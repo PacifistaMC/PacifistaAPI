@@ -4,7 +4,6 @@ import com.funixproductions.core.crud.dtos.PageDTO;
 import com.funixproductions.core.crud.enums.SearchOperation;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiNotFoundException;
-import com.funixproductions.core.tools.network.IPUtils;
 import com.google.common.base.Strings;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import fr.pacifista.api.web.vote.client.clients.VoteClient;
@@ -12,12 +11,10 @@ import fr.pacifista.api.web.vote.client.dtos.VoteDTO;
 import fr.pacifista.api.web.vote.client.dtos.VoteWebsiteDTO;
 import fr.pacifista.api.web.vote.client.dtos.VotesCountDTO;
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +32,6 @@ public class VoteService implements VoteClient {
 
     private final VoteCrudService crudService;
     private final TopVotesService topVotesService;
-
-    private final IPUtils ipUtils;
-    private final HttpServletRequest request;
 
     @Override
     public PageDTO<VoteDTO> getAll(String page, @Nullable String username, @Nullable String month, @Nullable String year) {
@@ -132,11 +126,6 @@ public class VoteService implements VoteClient {
         }
 
         return websites;
-    }
-
-    @NotNull
-    private String getClientIpAddress() {
-        return this.ipUtils.getClientIp(this.request);
     }
 
     private static VoteWebsite parseVoteWebsiteType(String voteWebsite) {

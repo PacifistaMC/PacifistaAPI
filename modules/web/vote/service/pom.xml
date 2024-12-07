@@ -56,12 +56,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.funixproductions.api.encryption.client</groupId>
-            <artifactId>funixproductions-encryption-client</artifactId>
-            <version>${com.funixproductions.api.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>fr.pacifista.api.core.tests</groupId>
             <artifactId>pacifista-core-test-utils</artifactId>
             <version>${fr.pacifista.api.version}</version>
