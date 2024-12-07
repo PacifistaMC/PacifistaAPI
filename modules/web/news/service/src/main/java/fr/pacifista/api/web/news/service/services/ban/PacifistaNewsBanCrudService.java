@@ -136,7 +136,7 @@ public class PacifistaNewsBanCrudService extends ApiService<PacifistaNewsBanDTO,
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "L'utilisateur %s a été banni de l'espace commentaire pour la raison suivante : %s. Par %s",
+                ":warning: L'utilisateur %s a été banni de l'espace commentaire pour la raison suivante : %s.\nPar %s",
                 ban.getMinecraftUserNameBanned(),
                 ban.getReason(),
                 ban.getStaffMinecraftUserName()
@@ -150,7 +150,7 @@ public class PacifistaNewsBanCrudService extends ApiService<PacifistaNewsBanDTO,
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "L'utilisateur %s a été unban de l'espace commentaire. Raison initiale : %s. Banni par %s",
+                ":warning: L'utilisateur %s a été unban de l'espace commentaire. Raison initiale : %s.\nBanni par %s",
                 ban.getMinecraftUserNameBanned(),
                 ban.getReason(),
                 ban.getStaffMinecraftUserName()

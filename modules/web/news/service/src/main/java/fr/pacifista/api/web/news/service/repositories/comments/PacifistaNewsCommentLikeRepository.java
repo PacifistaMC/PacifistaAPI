@@ -9,7 +9,6 @@ import java.util.Collection;
 
 @Repository
 public interface PacifistaNewsCommentLikeRepository extends PacifistaNewsUserDataRepository<PacifistaNewsCommentLike> {
-
     Collection<PacifistaNewsCommentLike> findAllByCommentInAndMinecraftUsernameIgnoreCaseAndFunixProdUserId(Iterable<PacifistaNewsComment> comments, String minecraftUsername, String funixProdUserId);
-
+    void deleteAllByCommentIn(Iterable<PacifistaNewsComment> comments);
 }

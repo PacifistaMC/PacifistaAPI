@@ -947,6 +947,31 @@ class PacifistaNewsCommentResourceTest {
         assertFalse(gotComment.getLiked());
     }
 
+    @Test
+    void testDeleteCommentThatHaveRepliesAndLikes() throws Exception {
+        UserDTO userDTO = UserDTO.generateFakeDataForTestingPurposes();
+        setUserMock(userDTO);
+
+        PacifistaWebUserLinkDTO linkDTO = new PacifistaWebUserLinkDTO(userDTO.getId(), UUID.randomUUID());
+        linkDTO.setCreatedAt(new Date());
+        linkDTO.setId(UUID.randomUUID());
+        linkDTO.setMinecraftUsername("McUser" + UUID.randomUUID());
+        linkDTO.setLinked(true);
+        setPacifistaLinkMock(linkDTO);
+
+        final PacifistaNewsDTO newsDTO = createNews(false);
+
+        final PacifistaNewsCommentDTO toDelete = this.createComment(new PacifistaNewsCommentDTO("dd" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(toDelete);
+
+        this.createComment(new PacifistaNewsCommentDTO(toDelete, "ddReply" + UUID.randomUUID(), newsDTO), false);
+        final PacifistaNewsCommentDTO reply = this.createComment(new PacifistaNewsCommentDTO(toDelete, "ddReply" + UUID.randomUUID(), newsDTO), false);
+        assertNotNull(reply);
+        this.likeComment(reply.getId().toString(), false);
+
+        this.deleteComment(toDelete.getId().toString(), false);
+    }
+
     private void setUserMock(final UserDTO userDTO) {
         when(authClient.current(anyString())).thenReturn(userDTO);
     }

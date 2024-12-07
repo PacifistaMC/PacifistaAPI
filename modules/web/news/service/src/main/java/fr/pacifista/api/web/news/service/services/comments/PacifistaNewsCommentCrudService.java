@@ -129,6 +129,7 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
                 removeCommentsFromNews.put(news, removeCommentsFromNews.getOrDefault(news, 0) + 1);
             }
         }
+        this.commentLikeRepository.deleteAllByCommentIn(childs);
         super.getRepository().deleteAll(childs);
 
         final Set<PacifistaNews> newsToSave = new HashSet<>();
@@ -160,6 +161,8 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         for (final PacifistaNewsComment comment : entities) {
             this.alertDiscordWhenCommentDeleted(comment);
         }
+
+        this.commentLikeRepository.deleteAllByCommentIn(entities);
     }
 
     public void setCommentLikes(final UUID commentId, final int likes) {
@@ -206,11 +209,11 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "Nouveau commentaire de %s sur l'article %s : %s.\nLien de l'article : %s",
+                ":warning: Nouveau commentaire de %s sur l'article %s : %s.\nLien de l'article : %s",
                 comment.getMinecraftUsername(),
                 comment.getNews().getTitle(),
                 comment.getContent(),
-                String.format("https://pacifista.fr/news/%s", comment.getNews().getName())
+                String.format("<https://pacifista.fr/news/%s>", comment.getNews().getName())
         ));
         message.setUsername("Pacifista News");
 
@@ -221,11 +224,11 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "Commentaire mis à jour par %s sur l'article %s : **%s**.\nLien de l'article : %s",
+                ":warning: Commentaire mis à jour par %s sur l'article %s : **%s**.\nLien de l'article : %s",
                 comment.getMinecraftUsername(),
                 comment.getNews().getTitle(),
                 comment.getContent(),
-                String.format("https://pacifista.fr/news/%s", comment.getNews().getName())
+                String.format("<https://pacifista.fr/news/%s>", comment.getNews().getName())
         ));
         message.setUsername("Pacifista News");
 
@@ -236,11 +239,11 @@ public class PacifistaNewsCommentCrudService extends PacifistaNewsUserService<Pa
         final DiscordSendMessageWebHookDTO message = new DiscordSendMessageWebHookDTO();
 
         message.setContent(String.format(
-                "Commentaire supprimé de %s sur l'article %s : **%s**.\nLien de l'article : %s",
+                ":warning: Commentaire supprimé de %s sur l'article %s : **%s**.\nLien de l'article : %s",
                 comment.getMinecraftUsername(),
                 comment.getNews().getTitle(),
                 comment.getContent(),
-                String.format("https://pacifista.fr/news/%s", comment.getNews().getName())
+                String.format("<https://pacifista.fr/news/%s>", comment.getNews().getName())
         ));
         message.setUsername("Pacifista News");
 
