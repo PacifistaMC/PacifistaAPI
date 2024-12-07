@@ -68,13 +68,13 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
         } else {
             return this.service.getAll(
                     Integer.toString(page),
-                    "20",
+                    "10",
                     String.format(
                             "parent.uuid:%s:%s",
                             SearchOperation.EQUALS.getOperation(),
                             commentId
                     ),
-                    "likes:desc"
+                    "createdAt:desc"
             );
         }
     }
@@ -92,7 +92,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
                         minecraftUsername,
                         canUserSeeDrafts ? "" : String.format(",news.draft:%s:false", SearchOperation.IS_FALSE.getOperation())
                 ),
-                "likes:desc"
+                "createdAt:desc"
         );
     }
 
