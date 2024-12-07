@@ -16,6 +16,7 @@ import fr.pacifista.api.web.vote.client.dtos.VotesCountDTO;
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
 import fr.pacifista.api.web.vote.service.entities.Vote;
 import fr.pacifista.api.web.vote.service.repositories.VoteRepository;
+import fr.pacifista.api.web.vote.service.services.GoogleCaptchaServiceChecker;
 import fr.pacifista.api.web.vote.service.services.VoteCheckerService;
 import fr.pacifista.api.web.vote.service.services.VoteCrudService;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +40,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,6 +60,9 @@ class VoteResourceTest {
 
     @Autowired
     VoteRepository voteRepository;
+
+    @MockitoBean
+    GoogleCaptchaServiceChecker googleCaptchaServiceChecker;
 
     @MockitoBean
     VoteCheckerService voteCheckerService;
@@ -85,6 +88,7 @@ class VoteResourceTest {
         when(commandToSendClient.create(any(CommandToSendDTO.class))).thenReturn(new CommandToSendDTO());
         when(commandToSendClient.create(anyList())).thenReturn(new ArrayList<>());
         when(voteCheckerService.hasVoted(any(), any())).thenReturn(true);
+        doNothing().when(googleCaptchaServiceChecker).checkCaptcha();
     }
 
     @Test

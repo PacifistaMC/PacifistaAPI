@@ -51,6 +51,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.funixproductions.api.google.recaptcha.client</groupId>
+            <artifactId>funixproductions-google-recaptcha-client</artifactId>
+            <version>${com.funixproductions.api.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>

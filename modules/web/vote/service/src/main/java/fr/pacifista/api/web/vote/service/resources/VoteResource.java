@@ -6,6 +6,7 @@ import fr.pacifista.api.web.vote.client.clients.VoteClientImpl;
 import fr.pacifista.api.web.vote.client.dtos.VoteDTO;
 import fr.pacifista.api.web.vote.client.dtos.VoteWebsiteDTO;
 import fr.pacifista.api.web.vote.client.dtos.VotesCountDTO;
+import fr.pacifista.api.web.vote.service.services.GoogleCaptchaServiceChecker;
 import fr.pacifista.api.web.vote.service.services.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import java.util.List;
 public class VoteResource implements VoteClient {
 
     private final VoteService service;
+    private final GoogleCaptchaServiceChecker recaptchaService;
 
     @Override
     public PageDTO<VoteDTO> getAll(String page, String username, String month, String year) {
@@ -47,6 +49,7 @@ public class VoteResource implements VoteClient {
 
     @Override
     public VoteDTO vote(String voteWebsite) {
+        this.recaptchaService.checkCaptcha();
         return service.vote(voteWebsite);
     }
 }

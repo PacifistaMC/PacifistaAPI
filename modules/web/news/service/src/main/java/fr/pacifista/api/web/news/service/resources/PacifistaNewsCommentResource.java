@@ -12,6 +12,7 @@ import fr.pacifista.api.web.news.client.clients.PacifistaNewsCommentClient;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentDTO;
 import fr.pacifista.api.web.news.client.dtos.comments.PacifistaNewsCommentLikeDTO;
 import fr.pacifista.api.web.news.client.dtos.news.PacifistaNewsDTO;
+import fr.pacifista.api.web.news.service.services.GoogleCaptchaServiceChecker;
 import fr.pacifista.api.web.news.service.services.ban.PacifistaNewsBanCrudService;
 import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentCrudService;
 import fr.pacifista.api.web.news.service.services.comments.PacifistaNewsCommentLikeCrudService;
@@ -35,6 +36,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     private final PacifistaNewsCrudService newsService;
     private final PacifistaNewsBanCrudService banService;
     private final CurrentSession currentSession;
+    private final GoogleCaptchaServiceChecker recaptchaService;
 
     @Override
     public PageDTO<PacifistaNewsCommentDTO> getCommentsOnNews(String newsId, int page) {
@@ -99,6 +101,8 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
     @Override
     @Transactional
     public PacifistaNewsCommentDTO createComment(final PacifistaNewsCommentDTO commentDTO) {
+        this.recaptchaService.checkCaptcha();
+
         if (Boolean.TRUE.equals(this.banService.isCurrentUserBanned())) {
             throw new ApiForbiddenException("Vous avez été banni de l'espace commentaire et ne pouvez pas commenter.");
         }
