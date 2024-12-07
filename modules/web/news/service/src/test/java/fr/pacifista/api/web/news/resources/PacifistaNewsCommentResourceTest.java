@@ -17,6 +17,7 @@ import fr.pacifista.api.web.news.service.mappers.news.PacifistaNewsMapper;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentLikeRepository;
 import fr.pacifista.api.web.news.service.repositories.comments.PacifistaNewsCommentRepository;
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsRepository;
+import fr.pacifista.api.web.news.service.services.GoogleCaptchaServiceChecker;
 import fr.pacifista.api.web.news.service.services.ban.PacifistaNewsBanCrudService;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
@@ -39,6 +40,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,6 +75,9 @@ class PacifistaNewsCommentResourceTest {
     @MockitoBean
     private PacifistaWebUserLinkInternalClient pacifistaLinkClient;
 
+    @MockitoBean
+    private GoogleCaptchaServiceChecker recaptchaClient;
+
     @Autowired
     private PacifistaNewsBanCrudService banCrudService;
 
@@ -82,6 +87,8 @@ class PacifistaNewsCommentResourceTest {
         commentRepository.deleteAll();
         newsRepository.deleteAll();
         banCrudService.getRepository().deleteAll();
+
+        doNothing().when(recaptchaClient).checkCaptcha();
     }
 
     @Test

@@ -12,6 +12,7 @@ import fr.pacifista.api.web.news.service.PacifistaWebNewsApp;
 import fr.pacifista.api.web.news.service.repositories.ban.PacifistaNewsBanRepository;
 import fr.pacifista.api.web.news.service.resources.PacifistaNewsCommentResource;
 import fr.pacifista.api.web.news.service.resources.PacifistaNewsResource;
+import fr.pacifista.api.web.news.service.services.GoogleCaptchaServiceChecker;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,9 +67,13 @@ class PacifistaNewsBanResourceTest {
     @MockitoBean
     private PacifistaWebUserLinkInternalClient pacifistaLinkClient;
 
+    @MockitoBean
+    private GoogleCaptchaServiceChecker recaptchaClient;
+
     @BeforeEach
     void resetDatabase() {
         this.repository.deleteAll();
+        doNothing().when(recaptchaClient).checkCaptcha();
     }
 
     @Test
