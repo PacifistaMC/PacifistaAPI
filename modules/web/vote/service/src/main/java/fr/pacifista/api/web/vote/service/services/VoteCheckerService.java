@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit;
 public class VoteCheckerService {
 
     public boolean hasVoted(@NonNull VoteWebsite voteWebsite, @NonNull Instant createdAt) {
-        return voteWebsite.isEnabled() && createdAt.plus(10, ChronoUnit.SECONDS).isBefore(Instant.now());
+        return voteWebsite.isEnabled() && createdAt.plus(20, ChronoUnit.SECONDS).isBefore(Instant.now());
     }
 
 }
