@@ -53,7 +53,7 @@ public class PacifistaNewsCommentResource implements PacifistaNewsCommentClient 
                             newsId,
                             SearchOperation.IS_NULL.getOperation()
                     ),
-                    "likes:desc"
+                    "likes:desc,createdAt:desc"
             );
         }
     }
