@@ -1,43 +1,17 @@
 package fr.pacifista.api.web.vote.service.services;
 
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
-import fr.pacifista.api.web.vote.service.services.external.ExternalVoteService;
-import fr.pacifista.api.web.vote.service.services.external.com.minecraft.serveur.ServeurMinecraftComVoteService;
-import fr.pacifista.api.web.vote.service.services.external.net.prive.serveur.ServeurPriveNetVoteService;
-import fr.pacifista.api.web.vote.service.services.external.net.serveurs.top.TopServeursNetVoteService;
-import fr.pacifista.api.web.vote.service.services.external.org.minecraft.serveur.ServeurMinecraftOrgVoteService;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class VoteCheckerService {
 
-    private final Map<VoteWebsite, ExternalVoteService> externalVoteServices;
-
-    public VoteCheckerService(ServeurMinecraftComVoteService serveurMinecraftComVoteService,
-                              ServeurMinecraftOrgVoteService serveurMinecraftOrgVoteService,
-                              ServeurPriveNetVoteService serveurPriveNetVoteService,
-                              TopServeursNetVoteService topServeursNetVoteService) {
-        this.externalVoteServices = Map.of(
-                VoteWebsite.SERVEUR_MINECRAFT_COM, serveurMinecraftComVoteService,
-                VoteWebsite.SERVEUR_MINECRAFT_ORG, serveurMinecraftOrgVoteService,
-                VoteWebsite.SERVEUR_PRIVE_NET, serveurPriveNetVoteService,
-                VoteWebsite.TOP_SERVEURS_NET, topServeursNetVoteService
-        );
-    }
-
-    public boolean hasVoted(@NonNull VoteWebsite voteWebsite, @NonNull String userIp) {
-        if (Boolean.FALSE.equals(voteWebsite.isEnabled())) return false;
-
-        final ExternalVoteService externalVoteService = this.externalVoteServices.get(voteWebsite);
-
-        if (externalVoteService != null) {
-            return externalVoteService.checkVote(userIp);
-        } else {
-            return false;
-        }
+    public boolean hasVoted(@NonNull VoteWebsite voteWebsite, @NonNull Instant createdAt) {
+        return voteWebsite.isEnabled() && createdAt.plus(10, ChronoUnit.SECONDS).isBefore(Instant.now());
     }
 
 }

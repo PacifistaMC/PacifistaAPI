@@ -12,7 +12,6 @@ public interface VoteMapper extends ApiMapper<Vote, VoteDTO> {
     @Override
     @Mapping(target = "uuid", source = "id")
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "playerIp", ignore = true)
     @Mapping(target = "yearVote", ignore = true)
     @Mapping(target = "monthVote", ignore = true)
     Vote toEntity(VoteDTO dto);

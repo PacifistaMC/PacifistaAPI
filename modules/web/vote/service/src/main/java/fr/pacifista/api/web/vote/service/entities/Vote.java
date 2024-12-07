@@ -1,9 +1,11 @@
 package fr.pacifista.api.web.vote.service.entities;
 
-import com.funixproductions.api.encryption.client.utils.EncryptionString;
 import com.funixproductions.core.crud.entities.ApiEntity;
 import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,12 +40,5 @@ public class Vote extends ApiEntity {
 
     @Column(name = "next_vote_date")
     private Date nextVoteDate;
-
-    /**
-     * The IP address of the player who voted. This field is encrypted to protect user IP address. Not available in DTO. The ip is replaced after a vote is validated.
-     */
-    @Convert(converter = EncryptionString.class)
-    @Column(name = "player_ip", nullable = false)
-    private String playerIp;
 
 }

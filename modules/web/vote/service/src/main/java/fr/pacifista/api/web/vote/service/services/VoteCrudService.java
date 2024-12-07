@@ -6,7 +6,6 @@ import com.funixproductions.core.crud.enums.SearchOperation;
 import com.funixproductions.core.crud.services.ApiService;
 import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiException;
-import com.funixproductions.core.tools.network.IPUtils;
 import feign.FeignException;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
@@ -15,7 +14,6 @@ import fr.pacifista.api.web.vote.client.enums.VoteWebsite;
 import fr.pacifista.api.web.vote.service.entities.Vote;
 import fr.pacifista.api.web.vote.service.mappers.VoteMapper;
 import fr.pacifista.api.web.vote.service.repositories.VoteRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import kotlin.Pair;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +21,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,8 +36,6 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
     private final VoteCheckerService voteCheckerService;
     private final VoteValidatedSuccessService rewardService;
 
-    private final HttpServletRequest servletRequest;
-    private final IPUtils ipUtils;
     private final CurrentSession currentSession;
     private final PacifistaWebUserLinkInternalClient pacifistaWebUserLinkInternalClient;
 
@@ -49,33 +43,20 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
                            VoteMapper mapper,
                            VoteCheckerService voteCheckerService,
                            VoteValidatedSuccessService rewardService,
-                           HttpServletRequest servletRequest,
-                           IPUtils ipUtils,
                            CurrentSession currentSession,
                            PacifistaWebUserLinkInternalClient pacifistaWebUserLinkInternalClient) {
         super(repository, mapper);
         this.voteCheckerService = voteCheckerService;
         this.rewardService = rewardService;
-        this.servletRequest = servletRequest;
-        this.ipUtils = ipUtils;
         this.currentSession = currentSession;
         this.pacifistaWebUserLinkInternalClient = pacifistaWebUserLinkInternalClient;
     }
 
     @Override
     public void beforeSavingEntity(@NonNull Iterable<Vote> entity) {
-        final String ip = ipUtils.getClientIp(servletRequest);
-        if (Boolean.FALSE.equals(isIPV4(ip))) {
-            throw new ApiBadRequestException("Votre IP n'est pas une adresse IPv4. Veuillez suivre les instructions pour voter sur pacifista.fr/vote (en bas de la page).");
-        }
-
         final Pair<Integer, Integer> monthAndYear = getActualMonthAndYear();
 
         for (final Vote vote : entity) {
-            if (vote.getPlayerIp() == null) {
-                vote.setPlayerIp(ip);
-            }
-
             if (vote.getMonthVote() == null) {
                 vote.setMonthVote(monthAndYear.getFirst());
             }
@@ -86,10 +67,6 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
 
             if (vote.getUsername() != null) {
                 vote.setUsername(vote.getUsername().toLowerCase());
-            }
-
-            if (vote.getId() == null) {
-                log.info("New vote from ip {} for website {}.", ip, vote.getVoteWebsite());
             }
         }
     }
@@ -122,7 +99,7 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
         final List<Vote> successVotes = new ArrayList<>();
 
         this.fetchAllPendingVotes().forEach(vote -> {
-            if (this.voteCheckerService.hasVoted(vote.getVoteWebsite(), vote.getPlayerIp())) {
+            if (this.voteCheckerService.hasVoted(vote.getVoteWebsite(), vote.getCreatedAt().toInstant())) {
                 vote.setVoteValidationDate(new Date());
                 vote.setNextVoteDate(vote.getVoteWebsite().getNextVoteDate());
                 log.info("Vote validated for user {} website {}", vote.getUsername(), vote.getVoteWebsite());
@@ -180,15 +157,6 @@ public class VoteCrudService extends ApiService<VoteDTO, Vote, VoteMapper, VoteR
             }
         } catch (FeignException e) {
             throw new ApiException("Erreur interne lors de la récupération de votre compte Minecraft lié.");
-        }
-    }
-
-    private boolean isIPV4(String ip) throws ApiBadRequestException {
-        try {
-            final InetAddress inetAddress = InetAddress.getByName(ip);
-            return inetAddress instanceof Inet4Address;
-        } catch (Exception e) {
-            throw new ApiBadRequestException("Votre IP n'est pas valide.");
         }
     }
 
