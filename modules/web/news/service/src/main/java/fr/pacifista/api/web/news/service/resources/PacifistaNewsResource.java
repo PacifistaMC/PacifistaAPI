@@ -90,21 +90,36 @@ public class PacifistaNewsResource implements PacifistaNewsClient {
     @Override
     @Transactional
     public PacifistaNewsDTO getNewsByName(String newsName) {
-        PacifistaNews news = this.newsService.getRepository().findByNameIgnoreCase(newsName).orElseThrow(() -> new ApiNotFoundException("News introuvable"));
-        if (Boolean.TRUE.equals(news.getDraft()) && !this.newsService.isCurrentUserStaff()) {
-            throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
+        final String search = String.format(
+                "name:%s:%s",
+                SearchOperation.EQUALS_IGNORE_CASE.getOperation(),
+                newsName
+        );
+        try {
+            final PacifistaNewsDTO news = this.newsService.getAll(
+                    "0",
+                    "1",
+                    search,
+                    "createdAt:desc"
+            ).getContent().getFirst();
+
+            if (Boolean.TRUE.equals(news.getDraft()) && !this.newsService.isCurrentUserStaff()) {
+                throw new ApiForbiddenException("Vous n'avez pas la permission de voir les brouillons.");
+            }
+
+            final String ip = this.ipUtils.getClientIp(this.servletRequest);
+
+            if (!news.getId().toString().equals(viewIpCount.getIfPresent(ip))) {
+                news.setViews(news.getViews() + 1);
+
+                this.newsService.setNewsViewsAmount(news.getId(), news.getViews());
+                this.viewIpCount.put(ip, news.getId().toString());
+            }
+
+            return news;
+        } catch (NoSuchElementException e) {
+            throw new ApiNotFoundException("News introuvable");
         }
-
-        final String ip = this.ipUtils.getClientIp(this.servletRequest);
-
-        if (!news.getUuid().toString().equals(viewIpCount.getIfPresent(ip))) {
-            news.setViews(news.getViews() + 1);
-
-            this.newsService.setNewsViewsAmount(news.getUuid(), news.getViews());
-            this.viewIpCount.put(ip, news.getUuid().toString());
-        }
-
-        return this.newsService.getMapper().toDto(news);
     }
 
     @Override
