@@ -24,7 +24,7 @@ public class GoogleCaptchaServiceChecker {
         }
 
         try {
-            recaptchaClient.verify("POST-COMMENT-PACIFISTA", recaptchaToken, ipUtils.getClientIp(request));
+            recaptchaClient.verify("POST_COMMENT_PACIFISTA", recaptchaToken, ipUtils.getClientIp(request));
         } catch (FeignException e) {
             throw new ApiBadRequestException("Token google invalide");
         }
