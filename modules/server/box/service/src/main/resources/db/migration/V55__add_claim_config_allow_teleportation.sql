@@ -1,0 +1,1 @@
+ALTER TABLE claim_data_config ADD COLUMN allow_teleportation BOOLEAN NOT NULL DEFAULT TRUE;

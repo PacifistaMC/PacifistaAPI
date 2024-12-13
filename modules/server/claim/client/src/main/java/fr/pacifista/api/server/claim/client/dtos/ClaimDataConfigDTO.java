@@ -46,6 +46,9 @@ public class ClaimDataConfigDTO extends ApiDTO {
     @NotNull
     private Boolean griefProtection;
 
+    @NotNull
+    private Boolean allowTeleportation;
+
     public ClaimDataConfigDTO(final ClaimDataDTO dto,
                               final Boolean explosionEnabled,
                               final Boolean fireSpreadEnabled,
@@ -56,7 +59,8 @@ public class ClaimDataConfigDTO extends ApiDTO {
                               final Boolean publicInteractDoorsTrapDoors,
                               final Boolean publicInteractChests,
                               final Boolean animalProtection,
-                              final Boolean griefProtection) {
+                              final Boolean griefProtection,
+                              final Boolean allowTeleportation) {
         this.claimDataId = dto.getId();
         this.explosionEnabled = explosionEnabled;
         this.fireSpreadEnabled = fireSpreadEnabled;
@@ -68,6 +72,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
         this.publicInteractChests = publicInteractChests;
         this.animalProtection = animalProtection;
         this.griefProtection = griefProtection;
+        this.allowTeleportation = allowTeleportation;
     }
 
     public ClaimDataConfigDTO(final ClaimDataDTO dto) {
@@ -82,6 +87,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
         this.publicInteractChests = false;
         this.animalProtection = true;
         this.griefProtection = true;
+        this.allowTeleportation = true;
     }
 
     public String getClaimDataId() {
@@ -113,7 +119,8 @@ public class ClaimDataConfigDTO extends ApiDTO {
                     this.publicInteractDoorsTrapDoors.equals(other.publicInteractDoorsTrapDoors) &&
                     this.publicInteractChests.equals(other.publicInteractChests) &&
                     this.animalProtection.equals(other.animalProtection) &&
-                    this.griefProtection.equals(other.griefProtection);
+                    this.griefProtection.equals(other.griefProtection) &&
+                    this.allowTeleportation.equals(other.allowTeleportation);
             final UUID id = getId();
 
             if (id == null) {
@@ -141,6 +148,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
                 this.publicInteractChests.hashCode() +
                 this.animalProtection.hashCode() +
                 this.griefProtection.hashCode() +
+                this.allowTeleportation.hashCode() +
                 hash;
     }
 
@@ -158,6 +166,7 @@ public class ClaimDataConfigDTO extends ApiDTO {
                 ", publicInteractChests=" + this.publicInteractChests +
                 ", animalProtection=" + this.animalProtection +
                 ", griefProtection=" + this.griefProtection +
+                ", allowTeleportation=" + this.allowTeleportation +
                 ", id=" + getId() +
                 '}';
     }

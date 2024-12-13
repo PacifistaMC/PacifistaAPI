@@ -47,4 +47,7 @@ public class ClaimDataConfig extends ApiEntity {
     @Column(name = "grief_protection", nullable = false)
     private Boolean griefProtection;
 
+    @Column(name = "allow_teleportation", nullable = false)
+    private Boolean allowTeleportation;
+
 }
