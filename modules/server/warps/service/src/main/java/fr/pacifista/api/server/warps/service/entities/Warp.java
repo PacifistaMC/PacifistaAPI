@@ -25,6 +25,9 @@ public class Warp extends Location {
     @OneToOne(mappedBy = "warp")
     private WarpConfig config;
 
+    @Column(name = "staff_comment")
+    private String staffComment;
+
     @Column(nullable = false, name = "player_owner_uuid")
     private String playerOwnerUuid;
 

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 @Getter
@@ -39,6 +40,12 @@ public class WarpDTO extends LocationDTO {
      * Configuration du warp
      */
     private WarpConfigDTO config;
+
+    /**
+     * Commentaire du staff sur le warp quand on refuse un warp pour une raison précise
+     */
+    @Nullable
+    private String staffComment;
 
     /**
      * UUID du joueur qui a créé le warp
