@@ -32,10 +32,10 @@ public class JobPlayerTask extends JobPlayerEntity {
     private Boolean isTaskCompleted;
 
     /**
-     * Indique si les objets de la tâche ont été collectés
+     * Indique le nombre d'items qui ont été récupéré par le joueur qui a lancé la tâche
      */
     @Column(name = "collected_task_items", nullable = false)
-    private Boolean collectedTaskItems;
+    private Integer collectedTaskItems;
 
     /**
      * Le nom de la ressource à collecter, nom mojang

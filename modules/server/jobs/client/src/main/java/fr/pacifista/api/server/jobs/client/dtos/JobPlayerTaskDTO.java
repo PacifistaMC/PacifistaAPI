@@ -3,6 +3,7 @@ package fr.pacifista.api.server.jobs.client.dtos;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
@@ -11,6 +12,7 @@ import org.springframework.lang.Nullable;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class JobPlayerTaskDTO extends JobPlayerEntityDTO {
 
     /**
@@ -34,10 +36,10 @@ public class JobPlayerTaskDTO extends JobPlayerEntityDTO {
     private Boolean isTaskCompleted;
 
     /**
-     * Indique si les objets de la tâche ont été collectés
+     * Indique le nombre d'items qui ont été récupéré par le joueur qui a lancé la tâche
      */
-    @NotNull(message = "Les objets de la tâche doivent être collectés ou non")
-    private Boolean collectedTaskItems;
+    @NotNull(message = "Le nombre d'items collectés est requis")
+    private Integer collectedTaskItems;
 
     /**
      * Le nom de la ressource à collecter, nom mojang
