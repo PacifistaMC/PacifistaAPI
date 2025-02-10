@@ -14,9 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PacifistaServerInfoDTO {
 
-    private int onlinePlayers;
+    private Integer onlinePlayers;
 
-    private int playerSlots;
+    private Integer playerSlots;
 
     private List<Server> servers;
 
@@ -29,11 +29,11 @@ public class PacifistaServerInfoDTO {
 
         private String proxyName;
 
-        private boolean isOnline;
+        private Boolean isOnline;
 
-        private int onlinePlayers;
+        private Integer onlinePlayers;
 
-        private int playerSlots;
+        private Integer playerSlots;
 
         private List<HttpPlayerConnected> players;
     }
