@@ -42,6 +42,12 @@ public class JobPlayerTaskDTO extends JobPlayerEntityDTO {
     private Integer collectedTaskItems;
 
     /**
+     * Indique si le joueur a fini de collecter les items
+     */
+    @NotNull(message = "Le joueur a fini de collecter les items ou non")
+    private Boolean doneCollectingItems;
+
+    /**
      * Le nom de la ressource à collecter, nom mojang
      */
     @NotNull(message = "Le nom de la ressource à collecter est requis")

@@ -95,6 +95,7 @@ class JobPlayerTaskWorkerResourceTest {
         jobPlayerTaskDTO.setPlayerUuid(UUID.randomUUID().toString());
         jobPlayerTaskDTO.setGameMode(ServerGameMode.CREATIVE);
         jobPlayerTaskDTO.setJobName("jobName");
+        jobPlayerTaskDTO.setDoneCollectingItems(false);
 
         return jobPlayerTaskService.create(jobPlayerTaskDTO);
     }

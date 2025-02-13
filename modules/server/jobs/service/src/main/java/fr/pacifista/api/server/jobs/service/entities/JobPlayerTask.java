@@ -38,6 +38,12 @@ public class JobPlayerTask extends JobPlayerEntity {
     private Integer collectedTaskItems;
 
     /**
+     * Indique si le joueur a fini de collecter les items
+     */
+    @Column(name = "done_collecting_items", nullable = false)
+    private Boolean doneCollectingItems;
+
+    /**
      * Le nom de la ressource à collecter, nom mojang
      */
     @Column(name = "material_name_to_collect", nullable = false)
