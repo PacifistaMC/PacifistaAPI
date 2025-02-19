@@ -48,7 +48,7 @@ class PacifistaPlayerChatMessageResourceTest extends ResourceTestHandler {
                 .content(jsonHelper.toJson(pacifistaPlayerChatMessageDTO)))
                 .andExpect(status().isOk()).andReturn();
         final PacifistaPlayerChatMessageDTO response = jsonHelper.fromJson(mvcResult.getResponse().getContentAsString(), PacifistaPlayerChatMessageDTO.class);
-        assertEquals(pacifistaPlayerChatMessageDTO.getMinecraftUsername().toLowerCase(), response.getMinecraftUsername());
+        assertEquals(pacifistaPlayerChatMessageDTO.getMinecraftUsername(), response.getMinecraftUsername());
         assertEquals(pacifistaPlayerChatMessageDTO.getMessage(), response.getMessage());
         assertEquals(pacifistaPlayerChatMessageDTO.getIsCommand(), response.getIsCommand());
         assertEquals(pacifistaPlayerChatMessageDTO.getServerType(), response.getServerType());
