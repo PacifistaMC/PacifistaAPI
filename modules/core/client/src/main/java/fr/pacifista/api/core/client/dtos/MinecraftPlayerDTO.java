@@ -29,7 +29,7 @@ public abstract class MinecraftPlayerDTO extends ApiDTO {
         if (minecraftUsername == null) {
             this.minecraftUsername = null;
         } else {
-            this.minecraftUsername = minecraftUsername.toLowerCase();
+            this.minecraftUsername = minecraftUsername;
         }
     }
 
@@ -37,7 +37,7 @@ public abstract class MinecraftPlayerDTO extends ApiDTO {
         if (minecraftUsername == null) {
             return null;
         } else {
-            return minecraftUsername.toLowerCase();
+            return minecraftUsername;
         }
     }
 
