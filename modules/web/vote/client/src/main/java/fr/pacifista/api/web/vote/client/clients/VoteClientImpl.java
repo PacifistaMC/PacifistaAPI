@@ -53,15 +53,6 @@ public class VoteClientImpl implements VoteClient {
     }
 
     @Override
-    public List<VoteDTO> checkVotes(String[] usernames) {
-        try {
-            return this.client.checkVotes(usernames);
-        } catch (FeignException e) {
-            throw FeignImpl.handleFeignException(e);
-        }
-    }
-
-    @Override
     public List<VotesCountDTO> getTop(String month, String year) {
         try {
             return this.client.getTop( month, year);
@@ -72,7 +63,11 @@ public class VoteClientImpl implements VoteClient {
 
     @Override
     public List<VoteWebsiteDTO> getAvailableVoteWebsites() {
-        return List.of();
+        try {
+            return this.client.getAvailableVoteWebsites();
+        } catch (FeignException e) {
+            throw FeignImpl.handleFeignException(e);
+        }
     }
 
     @Override

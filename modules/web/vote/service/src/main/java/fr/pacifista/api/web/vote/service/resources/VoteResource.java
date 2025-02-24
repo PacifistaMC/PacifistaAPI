@@ -33,11 +33,6 @@ public class VoteResource implements VoteClient {
     }
 
     @Override
-    public List<VoteDTO> checkVotes(String[] usernames) {
-        return service.checkVotes(usernames);
-    }
-
-    @Override
     public List<VoteWebsiteDTO> getAvailableVoteWebsites() {
         return service.getAvailableVoteWebsites();
     }
