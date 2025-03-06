@@ -104,7 +104,7 @@ public class PacifistaWebUserLinkService extends ApiService<PacifistaWebUserLink
                     "1",
                     String.format(
                             "minecraftUsername:%s:%s",
-                            SearchOperation.EQUALS.getOperation(),
+                            SearchOperation.EQUALS_IGNORE_CASE.getOperation(),
                             username.toLowerCase()
                     ),
                     ""
