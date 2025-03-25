@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MojangApiImplClient {
-    public static final String MOJANG_MINECRAFT_SERVICES_API_DOMAIN = "https://api.minecraftservices.com/";
+    public static final String MOJANG_MINECRAFT_SERVICES_API_DOMAIN = "https://api.mojang.com/";
     public static final String MOJANG_SESSION_SERVER_API_DOMAIN = "https://sessionserver.mojang.com/";
 
     private final MojangApiProfileClient profileClient;

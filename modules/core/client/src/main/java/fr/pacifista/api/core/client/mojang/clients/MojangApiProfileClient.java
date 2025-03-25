@@ -8,16 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "MojangApiProfileClient", url = MojangApiImplClient.MOJANG_MINECRAFT_SERVICES_API_DOMAIN)
+@FeignClient(
+        name = "MojangApiProfileClient",
+        url = MojangApiImplClient.MOJANG_MINECRAFT_SERVICES_API_DOMAIN
+)
 public interface MojangApiProfileClient {
 
     /**
-     * <a href="https://wiki.vg/Mojang_API#Usernames_to_UUIDs">Documentation route</a>
+     * <a href="https://minecraft.wiki/w/Mojang_API#Query_player_UUIDs_in_batch">Documentation route</a>
      * @param usernames List of usernames
      * @return username and id
      */
     @PostMapping(
-            path = "minecraft/profile/lookup/bulk/byname",
+            path = "profiles/minecraft",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
