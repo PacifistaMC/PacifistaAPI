@@ -1,10 +1,12 @@
 package fr.pacifista.api.web.shop.service.categories.entities;
 
 import com.funixproductions.core.crud.entities.ApiEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import fr.pacifista.api.web.shop.service.articles.entities.ShopArticle;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,5 +21,8 @@ public class ShopCategory extends ApiEntity {
 
     @Column(nullable = false, name = "multi_purchase_allowed")
     private Boolean multiPurchaseAllowed;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<ShopArticle> articles;
 
 }

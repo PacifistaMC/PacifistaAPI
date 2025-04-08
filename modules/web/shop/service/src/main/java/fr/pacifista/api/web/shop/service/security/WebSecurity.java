@@ -18,8 +18,10 @@ public class WebSecurity extends ApiWebSecurity {
     public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> getUrlsMatchers() {
         return ex -> ex
                 .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/kubeinternal/**").permitAll()
                 .requestMatchers("/web/shop").authenticated()
                 .requestMatchers("/web/shop/").authenticated()
+                .requestMatchers("/web/shop/pacifistaplus/**").authenticated()
                 .requestMatchers("/web/shop/capture").authenticated()
                 .requestMatchers(HttpMethod.GET, "/web/shop/articles/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/web/shop/categories/**").permitAll()

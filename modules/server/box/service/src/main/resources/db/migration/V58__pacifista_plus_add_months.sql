@@ -1,0 +1,1 @@
+ALTER TABLE pacifista_plus_subscription ADD COLUMN months INTEGER NOT NULL;

@@ -9,7 +9,9 @@ import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.exceptions.ApiForbiddenException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
+import fr.pacifista.api.core.service.tools.discord.services.DiscordMessagesService;
 import fr.pacifista.api.server.essentials.client.commands_sender.dtos.CommandToSendDTO;
+import fr.pacifista.api.server.players.data.client.dtos.PacifistaPlayerDataDTO;
 import fr.pacifista.api.web.shop.client.payment.clients.ShopPaymentClient;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentRequestDTO;
 import fr.pacifista.api.web.shop.client.payment.dtos.PacifistaShopPaymentResponseDTO;
@@ -42,13 +44,15 @@ public class ShopPaymentService implements ShopPaymentClient {
     private final CommandCreationService commandCreationService;
     private final FetchPlayerDataService fetchPlayerDataService;
 
+    private final DiscordMessagesService discordMessagesService;
+
     @Override
     public PacifistaShopPaymentResponseDTO createOrder(PacifistaShopPaymentRequestDTO request) {
-        final UserDTO currentUser = getCurrentUser();
-        this.fetchPlayerDataService.getPlayerData(currentUser.getId().toString());
+        final UserDTO currentUser = this.getCurrentUser();
+        final PacifistaPlayerDataDTO playerDataDTO = this.fetchPlayerDataService.getPlayerData(currentUser.getId().toString());
 
-        final Map<ShopArticle, Integer> articles = getArticles(request.getArticles());
-        final ShopPayment shopPayment = createDTO(request, currentUser.getId(), articles);
+        final Map<ShopArticle, Integer> articles = this.getArticles(request.getArticles());
+        final ShopPayment shopPayment = this.createDTO(request, currentUser.getId(), articles);
         final PaypalOrderDTO paypalOrderDTO;
 
         if (request.getCreditCard() == null) {
@@ -62,6 +66,11 @@ public class ShopPaymentService implements ShopPaymentClient {
         final PacifistaShopPaymentResponseDTO dto = this.shopPaymentMapper.toDto(this.shopPaymentRepository.save(shopPayment));
         dto.setUrlClientRedirection(paypalOrderDTO.getUrlClientRedirection());
         dto.setOrderPaid(paypalOrderDTO.getStatus() == OrderStatus.COMPLETED);
+
+        if (Boolean.TRUE.equals(dto.getOrderPaid())) {
+            this.sendAlertToDiscord(playerDataDTO.getMinecraftUsername(), shopPayment);
+        }
+
         return dto;
     }
 
@@ -81,6 +90,7 @@ public class ShopPaymentService implements ShopPaymentClient {
     @Override
     public PacifistaShopPaymentResponseDTO capturePayment(String paymentExternalOrderId) {
         final UserDTO currentUser = getCurrentUser();
+        final PacifistaPlayerDataDTO playerDataDTO = this.fetchPlayerDataService.getPlayerData(currentUser.getId().toString());
         final ShopPayment shopPayment = getShopPaymentByUser(paymentExternalOrderId, currentUser);
 
         if (shopPayment.getPaymentType().equals(PaymentType.PAYPAL) || shopPayment.getPaymentType().equals(PaymentType.CREDIT_CARD)) {
@@ -88,6 +98,7 @@ public class ShopPaymentService implements ShopPaymentClient {
 
             try {
                 final PaypalOrderDTO paypalOrderDTO = paypalPaymentService.captureOrder(paymentExternalOrderId);
+                this.sendAlertToDiscord(playerDataDTO.getMinecraftUsername(), shopPayment);
                 return new PacifistaShopPaymentResponseDTO(paypalOrderDTO, currentUser);
             } catch (ApiException e) {
                 commandCreationService.rollbackCreation(commandsCreated);
@@ -116,8 +127,7 @@ public class ShopPaymentService implements ShopPaymentClient {
             articlesIds.add(article.getArticleId());
         }
 
-        final Iterable<ShopArticle> articlesDb = this.shopArticleService.getRepository().findAllByUuidIn(articlesIds);
-        for (final ShopArticle article : articlesDb) {
+        for (final ShopArticle article : this.shopArticleService.getRepository().findAllByUuidIn(articlesIds)) {
             for (final PacifistaShopPaymentRequestDTO.ShopArticleRequest articleRequest : articles) {
                 if (articleRequest.getArticleId().equals(article.getUuid().toString())) {
                     articlesMap.put(article, articleRequest.getQuantity());
@@ -133,8 +143,8 @@ public class ShopPaymentService implements ShopPaymentClient {
     }
 
     private ShopPayment createDTO(@NonNull final PacifistaShopPaymentRequestDTO request,
-                                                      @NonNull final UUID userId,
-                                                      @NonNull final Map<ShopArticle, Integer> articles) {
+                                  @NonNull final UUID userId,
+                                  @NonNull final Map<ShopArticle, Integer> articles) {
         try {
             ShopPayment shopPayment = new ShopPayment();
 
@@ -176,6 +186,11 @@ public class ShopPaymentService implements ShopPaymentClient {
         } else {
             return PaymentType.CREDIT_CARD;
         }
+    }
+
+    private void sendAlertToDiscord(final String minecraftUsername, final ShopPayment shopPayment) {
+        final Discord
+        this.discordMessagesService.sendAlertMessage();
     }
 
 }
