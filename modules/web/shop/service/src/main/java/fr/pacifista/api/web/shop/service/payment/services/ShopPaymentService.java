@@ -9,6 +9,8 @@ import com.funixproductions.core.exceptions.ApiBadRequestException;
 import com.funixproductions.core.exceptions.ApiException;
 import com.funixproductions.core.exceptions.ApiForbiddenException;
 import com.funixproductions.core.exceptions.ApiUnauthorizedException;
+import fr.pacifista.api.core.service.tools.discord.dtos.DiscordSendMessageWebHookDTO;
+import fr.pacifista.api.core.service.tools.discord.dtos.embeds.DiscordEmbed;
 import fr.pacifista.api.core.service.tools.discord.services.DiscordMessagesService;
 import fr.pacifista.api.server.essentials.client.commands_sender.dtos.CommandToSendDTO;
 import fr.pacifista.api.server.players.data.client.dtos.PacifistaPlayerDataDTO;
@@ -189,8 +191,21 @@ public class ShopPaymentService implements ShopPaymentClient {
     }
 
     private void sendAlertToDiscord(final String minecraftUsername, final ShopPayment shopPayment) {
-        final Discord
-        this.discordMessagesService.sendAlertMessage();
+        final DiscordSendMessageWebHookDTO discordSendMessageWebHookDTO = new DiscordSendMessageWebHookDTO();
+        final List<DiscordEmbed> discordEmbeds = new ArrayList<>();
+
+        discordSendMessageWebHookDTO.setContent(String.format("Le joueur %s a effectué un paiement sur la boutique. Voici les achats", minecraftUsername));
+        discordSendMessageWebHookDTO.setUsername("Shop Pacifista");
+
+        for (final ShopArticlePurchase purchase : shopPayment.getPurchases()) {
+            final DiscordEmbed discordEmbed = new DiscordEmbed();
+            discordEmbed.setTitle("Article: " + purchase.getArticle().getName());
+            discordEmbed.setDescription(String.format("Quantité : %s", purchase.getQuantity()));
+            discordEmbeds.add(discordEmbed);
+        }
+        discordSendMessageWebHookDTO.setEmbeds(discordEmbeds);
+
+        this.discordMessagesService.sendAlertMessage(discordSendMessageWebHookDTO);
     }
 
 }

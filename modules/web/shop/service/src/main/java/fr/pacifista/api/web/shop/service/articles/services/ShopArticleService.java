@@ -65,8 +65,6 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
         for (ShopArticle article : entity) {
             this.shopArticlePurchaseRepository.deleteAllByArticle(article);
         }
-
-        super.beforeDeletingEntity(entity);
     }
 
     private List<String> getUuidsFromCategories(@NonNull Iterable<ShopArticle> articles) {
