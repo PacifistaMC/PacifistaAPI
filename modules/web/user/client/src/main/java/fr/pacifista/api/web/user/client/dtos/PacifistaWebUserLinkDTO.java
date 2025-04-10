@@ -96,4 +96,13 @@ public class PacifistaWebUserLinkDTO extends ApiDTO {
                 (minecraftUuid != null ? minecraftUuid.hashCode() : 0) +
                 (linked != null ? linked.hashCode() : 0) + 13;
     }
+
+    @Override
+    public String toString() {
+        return "PacifistaWebUserLinkDTO{" +
+                "funixProdUserId=" + funixProdUserId +
+                ", minecraftUuid=" + minecraftUuid +
+                ", linked=" + linked +
+                '}';
+    }
 }

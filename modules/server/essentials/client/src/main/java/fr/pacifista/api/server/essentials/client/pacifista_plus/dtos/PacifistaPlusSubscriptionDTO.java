@@ -25,6 +25,12 @@ public class PacifistaPlusSubscriptionDTO extends ApiDTO {
     private UUID playerId;
 
     /**
+     * The number of months for the subscription.
+     */
+    @NotNull(message = "months is required")
+    private Integer months;
+
+    /**
      * The date when the subscription expires. If null, the subscription is considered as lifetime.
      */
     @Nullable

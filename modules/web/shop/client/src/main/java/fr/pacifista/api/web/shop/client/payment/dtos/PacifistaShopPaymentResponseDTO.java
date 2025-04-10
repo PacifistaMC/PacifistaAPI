@@ -14,14 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PacifistaShopPaymentResponseDTO extends ApiDTO {
 
-    public PacifistaShopPaymentResponseDTO(PaypalOrderDTO paypalOrderDTO, UserDTO userDTO) {
-        this.paymentExternalOrderId = paypalOrderDTO.getOrderId();
-        this.paymentType = Boolean.TRUE.equals(paypalOrderDTO.getCreditCardPayment()) ? PaymentType.CREDIT_CARD : PaymentType.PAYPAL;
-        this.userId = userDTO.getId().toString();
-        this.orderPaid = OrderStatus.COMPLETED.equals(paypalOrderDTO.getStatus());
-        this.urlClientRedirection = paypalOrderDTO.getUrlClientRedirection();
-    }
-
     private String paymentExternalOrderId;
 
     private PaymentType paymentType;
@@ -33,5 +25,13 @@ public class PacifistaShopPaymentResponseDTO extends ApiDTO {
     private Boolean orderPaid;
 
     private String urlClientRedirection;
+
+    public PacifistaShopPaymentResponseDTO(PaypalOrderDTO paypalOrderDTO, UserDTO userDTO) {
+        this.paymentExternalOrderId = paypalOrderDTO.getOrderId();
+        this.paymentType = Boolean.TRUE.equals(paypalOrderDTO.getCreditCardPayment()) ? PaymentType.CREDIT_CARD : PaymentType.PAYPAL;
+        this.userId = userDTO.getId().toString();
+        this.orderPaid = OrderStatus.COMPLETED.equals(paypalOrderDTO.getStatus());
+        this.urlClientRedirection = paypalOrderDTO.getUrlClientRedirection();
+    }
 
 }

@@ -11,9 +11,9 @@ import fr.pacifista.api.web.user.client.dtos.PacifistaWebLegalDTO;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebLegalUserDTO;
 import fr.pacifista.api.web.user.client.enums.PacifistaLegalDocumentType;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import java.time.Instant;
 import java.util.Collection;
 

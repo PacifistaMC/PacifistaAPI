@@ -12,7 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class FetchPlayerDataService {
         final PacifistaWebUserLinkDTO linkedMinecraftAccount = this.getLinkedMinecraftAccount(userId);
 
         try {
-            final List<PacifistaPlayerDataDTO> data = this.playerDataClient.getAll(
+            return this.playerDataClient.getAll(
                     "0",
                     "1",
                     String.format(
@@ -35,15 +35,11 @@ public class FetchPlayerDataService {
                             linkedMinecraftAccount.getMinecraftUuid()
                     ),
                     ""
-            ).getContent();
-
-            if (data.isEmpty()) {
-                throw new ApiNotFoundException("Le compte Minecraft lié au compte funixproductions ne s'est jamais connecté sur Pacifista.");
-            } else {
-                return data.get(0);
-            }
+            ).getContent().getFirst();
         } catch (ApiException e) {
             throw e;
+        } catch (NoSuchElementException e) {
+            throw new ApiNotFoundException("Le compte Minecraft lié au compte funixproductions ne s'est jamais connecté sur Pacifista.");
         } catch (Exception e) {
             throw new ApiException("Impossible de récupérer les données du joueur.", e);
         }
@@ -51,7 +47,7 @@ public class FetchPlayerDataService {
 
     private PacifistaWebUserLinkDTO getLinkedMinecraftAccount(final String userId) throws ApiException {
         try {
-            final List<PacifistaWebUserLinkDTO> users = this.userLinkClient.getAll(
+            final PacifistaWebUserLinkDTO webUserLinkDTO = this.userLinkClient.getAll(
                     "0",
                     "1",
                     String.format(
@@ -60,21 +56,17 @@ public class FetchPlayerDataService {
                             userId
                     ),
                     ""
-            ).getContent();
+            ).getContent().getFirst();
 
-            if (users.isEmpty()) {
-                throw new ApiNotFoundException("Le compte funixproductions n'est lié à aucun compte Minecraft.");
+            if (Boolean.TRUE.equals(webUserLinkDTO.getLinked())) {
+                return webUserLinkDTO;
             } else {
-                final PacifistaWebUserLinkDTO webUserLinkDTO = users.get(0);
-
-                if (Boolean.TRUE.equals(webUserLinkDTO.getLinked())) {
-                    return webUserLinkDTO;
-                } else {
-                    throw new ApiBadRequestException("Le compte Minecraft n'a pas encore été validé.");
-                }
+                throw new ApiBadRequestException("Le compte Minecraft n'a pas encore été validé.");
             }
         } catch (ApiException e) {
             throw e;
+        } catch (NoSuchElementException e) {
+            throw new ApiNotFoundException("Le compte funixproductions n'est lié à aucun compte Minecraft.");
         } catch (Exception e) {
             throw new ApiException("Impossible de récupérer le lien entre le compte funixproductions et le compte Minecraft de l'utilisateur id : " + userId + ".", e);
         }

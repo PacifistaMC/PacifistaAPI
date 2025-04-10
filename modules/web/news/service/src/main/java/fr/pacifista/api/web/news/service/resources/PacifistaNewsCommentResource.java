@@ -20,10 +20,10 @@ import fr.pacifista.api.web.news.service.services.news.PacifistaNewsCrudService;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Nullable;
 import java.util.NoSuchElementException;
 
 @RestController

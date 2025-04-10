@@ -76,6 +76,16 @@ spec:
                 secretKeyRef:
                   name: sentry-secret-pacifista
                   key: sentry-pacifista-api-key
+            - name: DISCORD_WEBHOOK_ALERTS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: discord-secret-pacifista
+                  key: discord-webhook-alert-id
+            - name: DISCORD_WEBHOOK_ALERTS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-secret-pacifista
+                  key: discord-webhook-alert-token
       volumes:
         - name: pacifista-shop-storage
           hostPath:

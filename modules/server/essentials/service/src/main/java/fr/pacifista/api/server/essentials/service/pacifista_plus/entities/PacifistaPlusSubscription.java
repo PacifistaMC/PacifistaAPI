@@ -16,6 +16,9 @@ public class PacifistaPlusSubscription extends ApiEntity {
     @Column(name = "player_id", nullable = false, unique = true)
     private String playerId;
 
+    @Column(nullable = false)
+    private Integer months;
+
     @Column(name = "expiration_date")
     private Date expirationDate;
 
