@@ -206,7 +206,7 @@ public class PacifistaPlusService {
     }
 
     @Nullable
-    private PaypalPlanDTO getPlan() throws ApiException {
+    public PaypalPlanDTO getPlan() throws ApiException {
         try {
             return this.paypalPlanClient.getAll(
                     "0",

@@ -1,5 +1,6 @@
 package fr.pacifista.api.web.shop.service.articles.resources;
 
+import com.funixproductions.api.payment.paypal.client.dtos.responses.PaypalPlanDTO;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.dtos.PageDTO;
@@ -10,6 +11,7 @@ import fr.pacifista.api.core.tests.services.ResourceTestHandler;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import fr.pacifista.api.web.shop.service.articles.services.ShopArticleService;
+import fr.pacifista.api.web.shop.service.payment.services.PacifistaPlusService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +45,9 @@ class ShopArticleResourceTest extends ResourceTestHandler {
 
     @MockitoBean
     ShopArticleService articleService;
+
+    @MockitoBean
+    PacifistaPlusService pacifistaPlusService;
 
     @Autowired
     MockMvc mockMvc;
@@ -80,6 +85,11 @@ class ShopArticleResourceTest extends ResourceTestHandler {
         when(articleService.create(any(ShopArticleDTO.class))).thenReturn(new ShopArticleDTO());
         when(articleService.update(any(ShopArticleDTO.class))).thenReturn(new ShopArticleDTO());
         doNothing().when(articleService).delete(anyString());
+    }
+
+    @BeforeEach
+    void mockPacifistaPlusService() {
+        when(pacifistaPlusService.getPlan()).thenReturn(new PaypalPlanDTO());
     }
 
     @Test

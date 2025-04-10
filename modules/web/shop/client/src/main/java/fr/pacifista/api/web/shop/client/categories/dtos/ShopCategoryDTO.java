@@ -1,7 +1,6 @@
 package fr.pacifista.api.web.shop.client.categories.dtos;
 
 import com.funixproductions.core.crud.dtos.ApiDTO;
-import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -28,15 +25,5 @@ public class ShopCategoryDTO extends ApiDTO {
 
     @NotNull(message = "Le choix de multi-achat ne peut pas être nul")
     private Boolean multiPurchaseAllowed;
-
-    private Set<ShopArticleDTO> articles;
-
-    public ShopCategoryDTO(final String name,
-                           final String description,
-                           final Boolean multiPurchaseAllowed) {
-        this.name = name;
-        this.description = description;
-        this.multiPurchaseAllowed = multiPurchaseAllowed;
-    }
 
 }

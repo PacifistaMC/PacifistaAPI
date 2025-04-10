@@ -2,6 +2,7 @@ package fr.pacifista.api.web.shop.service.categories.services;
 
 import com.funixproductions.core.crud.services.ApiService;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
+import fr.pacifista.api.web.shop.service.articles.resources.ShopArticleResource;
 import fr.pacifista.api.web.shop.service.articles.services.ShopArticleService;
 import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import fr.pacifista.api.web.shop.service.categories.mappers.ShopCategoryMapper;
@@ -19,9 +20,9 @@ public class ShopCategoryService extends ApiService<ShopCategoryDTO, ShopCategor
 
     public ShopCategoryService(ShopCategoryRepository repository,
                                ShopCategoryMapper mapper,
-                               ShopArticleService shopArticleService) {
+                               ShopArticleResource articleResource) {
         super(repository, mapper);
-        this.shopArticleService = shopArticleService;
+        this.shopArticleService = articleResource.getService();
     }
 
     @Override

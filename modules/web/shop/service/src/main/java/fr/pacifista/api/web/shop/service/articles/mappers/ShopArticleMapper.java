@@ -13,7 +13,5 @@ public interface ShopArticleMapper extends ApiMapper<ShopArticle, ShopArticleDTO
     @Mapping(target = "id", source = "uuid")
     @Mapping(target = "tax", ignore = true)
     @Mapping(target = "priceWithTax", ignore = true)
-    @Mapping(target = "category.articles", ignore = true)
-    @Mapping(target = "category.id", source = "category.uuid")
     ShopArticleDTO toDto(ShopArticle entity);
 }
