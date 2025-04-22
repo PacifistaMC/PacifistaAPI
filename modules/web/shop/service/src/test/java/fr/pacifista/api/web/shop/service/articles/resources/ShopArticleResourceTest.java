@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -222,14 +223,16 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     }
 
     public ShopArticleDTO generateDTO() {
+        final Random random = new Random();
         final ShopArticleDTO shopArticleDTO = new ShopArticleDTO();
         final ShopCategoryDTO categoryDTO = new ShopCategoryDTO();
         categoryDTO.setId(UUID.randomUUID());
         shopArticleDTO.setCategory(categoryDTO);
-        shopArticleDTO.setName(UUID.randomUUID().toString());
+        shopArticleDTO.setName("dd" + random.nextInt(10));
         shopArticleDTO.setDescription(UUID.randomUUID().toString());
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
+        shopArticleDTO.setMarkDownDescription(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         return shopArticleDTO;

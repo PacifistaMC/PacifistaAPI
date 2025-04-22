@@ -191,6 +191,8 @@ public class ShopPaymentService implements ShopPaymentClient {
     }
 
     private void sendAlertToDiscord(final String minecraftUsername, final ShopPayment shopPayment) {
+        if (shopPayment.getPurchases() == null || shopPayment.getPurchases().isEmpty()) return;
+
         final DiscordSendMessageWebHookDTO discordSendMessageWebHookDTO = new DiscordSendMessageWebHookDTO();
         final List<DiscordEmbed> discordEmbeds = new ArrayList<>();
 

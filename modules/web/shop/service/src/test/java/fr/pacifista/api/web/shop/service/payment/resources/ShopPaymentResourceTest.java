@@ -381,6 +381,7 @@ class ShopPaymentResourceTest {
             article.setFileName("testFileName" + i);
             article.setFilePath("testFileUrl" + i);
             article.setFileSize(1000L + i);
+            article.setMarkDownDescription("testMarkDownDescription" + i);
 
             articles.add(article);
         }

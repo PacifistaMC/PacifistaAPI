@@ -25,4 +25,5 @@ public class ShopPayment extends ApiEntity {
 
     @OneToMany(mappedBy = "payment", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<ShopArticlePurchase> purchases;
+
 }

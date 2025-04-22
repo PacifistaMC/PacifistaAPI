@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -142,8 +143,9 @@ class ShopCategoryResourceTest extends ResourceTestHandler {
     }
 
     public ShopCategoryDTO generateDTO() {
+        final Random random = new Random();
         final ShopCategoryDTO shopCategoryDTO = new ShopCategoryDTO();
-        shopCategoryDTO.setName(UUID.randomUUID().toString());
+        shopCategoryDTO.setName("ddd" + random.nextInt(10));
         shopCategoryDTO.setDescription(UUID.randomUUID().toString());
         shopCategoryDTO.setMultiPurchaseAllowed(false);
 

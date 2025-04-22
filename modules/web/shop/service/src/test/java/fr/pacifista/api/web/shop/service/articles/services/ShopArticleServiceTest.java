@@ -55,6 +55,7 @@ class ShopArticleServiceTest {
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
+        shopArticleDTO.setMarkDownDescription(UUID.randomUUID().toString());
 
         assertDoesNotThrow(() -> {
             final ShopArticleDTO created = this.shopArticleService.store(shopArticleDTO, new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[0]));
@@ -82,6 +83,7 @@ class ShopArticleServiceTest {
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
+        shopArticleDTO.setMarkDownDescription(UUID.randomUUID().toString());
 
         final String fileName = "fileNameTest" + UUID.randomUUID();
         final String fileExt = "txt";
