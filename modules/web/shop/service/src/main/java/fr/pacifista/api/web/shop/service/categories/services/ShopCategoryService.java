@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShopCategoryService extends ApiService<ShopCategoryDTO, ShopCategory, ShopCategoryMapper, ShopCategoryRepository> {
 
-    public ShopCategoryService(ShopCategoryRepository repository,
-                               ShopCategoryMapper mapper) {
+    public ShopCategoryService(ShopCategoryRepository repository, ShopCategoryMapper mapper) {
         super(repository, mapper);
     }
 

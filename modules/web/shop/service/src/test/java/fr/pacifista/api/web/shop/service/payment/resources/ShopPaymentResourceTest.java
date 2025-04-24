@@ -3,6 +3,7 @@ package fr.pacifista.api.web.shop.service.payment.resources;
 import com.funixproductions.api.payment.billing.client.enums.PaymentType;
 import com.funixproductions.api.payment.paypal.client.clients.PaypalOrderFeignClient;
 import com.funixproductions.api.payment.paypal.client.dtos.responses.PaypalOrderDTO;
+import com.funixproductions.api.payment.paypal.client.dtos.responses.PaypalPlanDTO;
 import com.funixproductions.api.payment.paypal.client.enums.OrderStatus;
 import com.funixproductions.api.user.client.clients.UserAuthClient;
 import com.funixproductions.api.user.client.dtos.UserDTO;
@@ -23,6 +24,7 @@ import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import fr.pacifista.api.web.shop.service.categories.repositories.ShopCategoryRepository;
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopPaymentRepository;
+import fr.pacifista.api.web.shop.service.payment.services.PacifistaPlusService;
 import fr.pacifista.api.web.user.client.clients.PacifistaWebUserLinkInternalClient;
 import fr.pacifista.api.web.user.client.dtos.PacifistaWebUserLinkDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,6 +87,14 @@ class ShopPaymentResourceTest {
 
     @MockitoBean
     private CommandToSendInternalClient commandToSendInternalClient;
+
+    @MockitoBean
+    PacifistaPlusService pacifistaPlusService;
+
+    @BeforeEach
+    void mockPacifistaPlusService() {
+        when(pacifistaPlusService.getPlan()).thenReturn(new PaypalPlanDTO());
+    }
 
     @Test
     void testCardOrder() throws Exception {
@@ -371,6 +381,7 @@ class ShopPaymentResourceTest {
             article.setFileName("testFileName" + i);
             article.setFilePath("testFileUrl" + i);
             article.setFileSize(1000L + i);
+            article.setMarkDownDescription("testMarkDownDescription" + i);
 
             articles.add(article);
         }

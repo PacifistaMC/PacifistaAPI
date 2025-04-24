@@ -1,5 +1,6 @@
 package fr.pacifista.api.web.shop.service.articles.resources;
 
+import com.funixproductions.api.payment.paypal.client.dtos.responses.PaypalPlanDTO;
 import com.funixproductions.api.user.client.dtos.UserDTO;
 import com.funixproductions.api.user.client.security.CurrentSession;
 import com.funixproductions.core.crud.dtos.PageDTO;
@@ -10,6 +11,7 @@ import fr.pacifista.api.core.tests.services.ResourceTestHandler;
 import fr.pacifista.api.web.shop.client.articles.dtos.ShopArticleDTO;
 import fr.pacifista.api.web.shop.client.categories.dtos.ShopCategoryDTO;
 import fr.pacifista.api.web.shop.service.articles.services.ShopArticleService;
+import fr.pacifista.api.web.shop.service.payment.services.PacifistaPlusService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +46,9 @@ class ShopArticleResourceTest extends ResourceTestHandler {
 
     @MockitoBean
     ShopArticleService articleService;
+
+    @MockitoBean
+    PacifistaPlusService pacifistaPlusService;
 
     @Autowired
     MockMvc mockMvc;
@@ -80,6 +86,11 @@ class ShopArticleResourceTest extends ResourceTestHandler {
         when(articleService.create(any(ShopArticleDTO.class))).thenReturn(new ShopArticleDTO());
         when(articleService.update(any(ShopArticleDTO.class))).thenReturn(new ShopArticleDTO());
         doNothing().when(articleService).delete(anyString());
+    }
+
+    @BeforeEach
+    void mockPacifistaPlusService() {
+        when(pacifistaPlusService.getPlan()).thenReturn(new PaypalPlanDTO());
     }
 
     @Test
@@ -212,14 +223,16 @@ class ShopArticleResourceTest extends ResourceTestHandler {
     }
 
     public ShopArticleDTO generateDTO() {
+        final Random random = new Random();
         final ShopArticleDTO shopArticleDTO = new ShopArticleDTO();
         final ShopCategoryDTO categoryDTO = new ShopCategoryDTO();
         categoryDTO.setId(UUID.randomUUID());
         shopArticleDTO.setCategory(categoryDTO);
-        shopArticleDTO.setName(UUID.randomUUID().toString());
+        shopArticleDTO.setName("dd" + random.nextInt(10));
         shopArticleDTO.setDescription(UUID.randomUUID().toString());
         shopArticleDTO.setPrice(10.0);
         shopArticleDTO.setHtmlDescription(UUID.randomUUID().toString());
+        shopArticleDTO.setMarkDownDescription(UUID.randomUUID().toString());
         shopArticleDTO.setCommandExecuted(UUID.randomUUID().toString());
 
         return shopArticleDTO;

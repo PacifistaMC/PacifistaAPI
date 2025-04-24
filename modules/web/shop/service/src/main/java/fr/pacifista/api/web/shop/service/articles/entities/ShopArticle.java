@@ -23,8 +23,11 @@ public class ShopArticle extends ApiStorageFile {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false, name = "html_description", length = 10000)
+    @Column(nullable = false, name = "html_description", length = 100000)
     private String htmlDescription;
+
+    @Column(nullable = false, name = "markdown_description", length = 100000)
+    private String markDownDescription;
 
     @Column(nullable = false)
     private Double price;
@@ -42,5 +45,35 @@ public class ShopArticle extends ApiStorageFile {
 
     public void setPrice(Double price) {
         this.price = ShopArticleDTO.formatPrice(price);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof final ShopArticle article) {
+            return article.getCategory().equals(this.category) &&
+                    article.getName().equals(this.name) &&
+                    article.getDescription().equals(this.description) &&
+                    article.getHtmlDescription().equals(this.htmlDescription) &&
+                    article.getMarkDownDescription().equals(this.markDownDescription) &&
+                    article.getPrice().equals(this.price) &&
+                    article.getCommandExecuted().equals(this.commandExecuted) &&
+                    article.getServerType() == this.serverType &&
+                    super.equals(obj);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return this.category.hashCode() +
+                this.name.hashCode() +
+                this.description.hashCode() +
+                this.htmlDescription.hashCode() +
+                this.markDownDescription.hashCode() +
+                this.price.hashCode() +
+                this.commandExecuted.hashCode() +
+                (this.serverType != null ? this.serverType.hashCode() : 0) +
+                super.hashCode();
     }
 }

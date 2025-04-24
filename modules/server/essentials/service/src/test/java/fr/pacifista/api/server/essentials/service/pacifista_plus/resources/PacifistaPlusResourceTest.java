@@ -51,7 +51,7 @@ class PacifistaPlusResourceTest {
 
     @Test
     void testCrud() throws Exception {
-        final PacifistaPlusSubscriptionDTO createSubscriptionDTO = new PacifistaPlusSubscriptionDTO(UUID.randomUUID(), null);
+        final PacifistaPlusSubscriptionDTO createSubscriptionDTO = new PacifistaPlusSubscriptionDTO(UUID.randomUUID(), 1, null);
 
         MvcResult res = mockMvc.perform(post(route)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

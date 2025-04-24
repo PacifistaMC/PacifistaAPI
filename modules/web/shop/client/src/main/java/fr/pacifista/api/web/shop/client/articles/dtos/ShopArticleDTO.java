@@ -32,6 +32,9 @@ public class ShopArticleDTO extends ApiStorageFileDTO {
     @NotBlank(message = "La description HTML ne peut pas être vide")
     private String htmlDescription;
 
+    @NotBlank(message = "La description Markdown ne peut pas être vide")
+    private String markDownDescription;
+
     @NotNull(message = "Le prix ne peut pas être nul")
     @Min(value = 0, message = "Le prix ne peut pas être négatif")
     private Double price;
