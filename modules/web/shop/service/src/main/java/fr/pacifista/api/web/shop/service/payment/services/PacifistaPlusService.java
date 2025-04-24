@@ -57,7 +57,7 @@ public class PacifistaPlusService {
     /**
      * Plan Pacifista+ sur PayPal
      */
-    private final PaypalPlanDTO pacifistaPlusPlan;
+    private PaypalPlanDTO pacifistaPlusPlan;
 
     /**
      * Service pour envoyer des messages sur Discord
@@ -81,16 +81,6 @@ public class PacifistaPlusService {
         this.subscriptionClient = subscriptionClient;
         this.paypalPlanClient = paypalPlanClient;
         this.shopConfig = shopConfig;
-
-        final PaypalPlanDTO pacifistaPlusPlan = this.getPlan();
-
-        if (pacifistaPlusPlan == null) {
-            this.pacifistaPlusPlan = this.createPlan();
-            log.info("Le Pacifista+ plan n'existait pas sur PayPal, il a été créé.");
-        } else {
-            this.pacifistaPlusPlan = pacifistaPlusPlan;
-            log.info("Le Pacifista+ plan existe déjà sur PayPal. Récupération réussie.");
-        }
     }
 
     public void onNewPaypalSubscription(final UUID funixProdUserId, final Date expirationDate) {
@@ -131,7 +121,7 @@ public class PacifistaPlusService {
         try {
             final PacifistaWebUserLinkDTO pacifistaWebUserLink = this.userLinkComponent.getLink(funixProdUserId);
             final PaypalSubscriptionDTO subscriptionDTO = this.subscriptionClient.subscribe(new PaypalCreateSubscriptionDTO(
-                    this.pacifistaPlusPlan,
+                    this.getPlan(),
                     funixProdUserId,
                     CANCELLATION_URL,
                     this.shopConfig.getReturnUrl(),
@@ -205,10 +195,14 @@ public class PacifistaPlusService {
         }
     }
 
-    @Nullable
+    @NonNull
     public PaypalPlanDTO getPlan() throws ApiException {
+        if (this.pacifistaPlusPlan != null) {
+            return this.pacifistaPlusPlan;
+        }
+
         try {
-            return this.paypalPlanClient.getAll(
+            final PaypalPlanDTO plan = this.paypalPlanClient.getAll(
                     "0",
                     "1",
                     String.format(
@@ -220,8 +214,16 @@ public class PacifistaPlusService {
                     ),
                     ""
             ).getContent().getFirst();
+
+            log.info("Le Pacifista+ plan existe déjà sur PayPal. Récupération réussie.");
+            this.pacifistaPlusPlan = plan;
+            return plan;
         } catch (NoSuchElementException e) {
-            return null;
+            final PaypalPlanDTO plan = this.createPlan();
+
+            log.info("Le Pacifista+ plan n'existait pas sur PayPal, il a été créé.");
+            this.pacifistaPlusPlan = plan;
+            return plan;
         } catch (Exception e) {
             throw new ApiException("Erreur lors de l'obtention du plan pacifista+.", e);
         }
