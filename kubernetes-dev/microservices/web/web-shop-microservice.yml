@@ -1,3 +1,19 @@
+# web-shop-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pacifista-web-shop-pvc
+  namespace: funixproductions-dev
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 
@@ -88,8 +104,8 @@ spec:
                   key: discord-webhook-alert-token
       volumes:
         - name: pacifista-shop-storage
-          hostPath:
-            path: /root/k3s/data/funixproductions-dev/
+          persistentVolumeClaim:
+            claimName: pacifista-web-shop-pvc
 
 ---
 

@@ -1,3 +1,19 @@
+# web-news-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pacifista-web-news-pvc
+  namespace: funixproductions
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 
@@ -86,8 +102,8 @@ spec:
                   key: discord-webhook-alert-token
       volumes:
         - name: pacifista-news-storage
-          hostPath:
-            path: /root/k3s/data/funixproductions/
+          persistentVolumeClaim:
+            claimName: pacifista-web-news-pvc
 
 ---
 
