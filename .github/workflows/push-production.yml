@@ -116,19 +116,15 @@ jobs:
     needs:
       - build-production-images-service
 
-    runs-on: ubuntu-latest
+    runs-on:
+      - self-hosted
+      - k3s-funixproductions
+
     environment:
       name: production
       url: https://api.pacifista.fr
 
     steps:
-      - name: Set up kubectl
-        uses: azure/k8s-set-context@v4
-        with:
-          kubeconfig: ${{ secrets.KUBECONFIG }}
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
       - name: Checkout source code
         uses: actions/checkout@v4
 
