@@ -9,7 +9,7 @@ spec:
   tls:
     - secretName: pacifista-api-certificate-tls
   rules:
-    - host: dev.api.pacifista.fr
+    - host: dev-api.pacifista.fr
       http:
         paths:
           - path: /box
