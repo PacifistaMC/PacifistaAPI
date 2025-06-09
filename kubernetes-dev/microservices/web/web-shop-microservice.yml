@@ -41,6 +41,7 @@ spec:
     spec:
       containers:
         - name: springboot-web-shop
+          workingDir: /container/app
           image: ghcr.io/pacifistamc/pacifista-api-web-shop:dev
           volumeMounts:
             - mountPath: /container/app/
