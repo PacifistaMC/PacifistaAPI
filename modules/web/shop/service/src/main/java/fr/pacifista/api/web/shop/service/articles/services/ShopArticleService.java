@@ -11,6 +11,7 @@ import fr.pacifista.api.web.shop.service.categories.entities.ShopCategory;
 import fr.pacifista.api.web.shop.service.categories.services.ShopCategoryService;
 import fr.pacifista.api.web.shop.service.payment.repositories.ShopArticlePurchaseRepository;
 import lombok.NonNull;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,8 +27,9 @@ public class ShopArticleService extends ApiStorageService<ShopArticleDTO, ShopAr
     public ShopArticleService(ShopArticleRepository repository,
                               ShopArticleMapper mapper,
                               ShopCategoryService shopCategoryService,
-                              ShopArticlePurchaseRepository shopArticlePurchaseRepository) {
-        super("pacifista_shop_web_articles", repository, mapper);
+                              ShopArticlePurchaseRepository shopArticlePurchaseRepository,
+                              Environment environment) {
+        super("pacifista_shop_web_articles", environment.getProperty("file.storage.base-path"), repository, mapper);
         this.shopCategoryService = shopCategoryService;
         this.shopArticlePurchaseRepository = shopArticlePurchaseRepository;
     }

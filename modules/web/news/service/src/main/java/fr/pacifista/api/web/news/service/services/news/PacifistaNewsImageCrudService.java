@@ -8,6 +8,7 @@ import fr.pacifista.api.web.news.service.mappers.news.PacifistaNewsImageMapper;
 import fr.pacifista.api.web.news.service.repositories.news.PacifistaNewsImageRepository;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +18,9 @@ import java.util.List;
 public class PacifistaNewsImageCrudService extends ApiStorageService<PacifistaNewsImageDTO, PacifistaNewsImage, PacifistaNewsImageMapper, PacifistaNewsImageRepository> {
 
     public PacifistaNewsImageCrudService(PacifistaNewsImageRepository repository,
-                                         PacifistaNewsImageMapper mapper) {
-        super("pacifista-news", repository, mapper);
+                                         PacifistaNewsImageMapper mapper,
+                                         Environment environment) {
+        super("pacifista-news", environment.getProperty("file.storage.base-path"), repository, mapper);
     }
 
     @Transactional

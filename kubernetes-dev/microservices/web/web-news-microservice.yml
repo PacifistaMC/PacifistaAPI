@@ -41,7 +41,6 @@ spec:
     spec:
       containers:
         - name: springboot-web-news
-          workingDir: /container/app
           image: ghcr.io/pacifistamc/pacifista-api-web-news:dev
           volumeMounts:
             - mountPath: /container/app/
