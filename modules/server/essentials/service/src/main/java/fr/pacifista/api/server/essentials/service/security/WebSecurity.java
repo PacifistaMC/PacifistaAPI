@@ -19,6 +19,7 @@ public class WebSecurity extends ApiWebSecurity {
         return ex -> ex
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/kubeinternal/**").permitAll()
+                .requestMatchers(HttpMethod.GET).permitAll()
                 .requestMatchers(HttpMethod.GET, "/essentials/status").permitAll()
                 .anyRequest().hasAuthority(UserRole.PACIFISTA_ADMIN.getRole());
     }
